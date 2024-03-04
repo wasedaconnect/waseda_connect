@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Syllabus.dart';
+import 'screen/Syllabus.dart';
+import 'screen/TimeTable.dart';
 // 必要なページをimportします。例: Syllabus.dart
 
 void main() {
@@ -35,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // ページのリストを定義
   final List<Widget> _pages = [
     // ここにページのウィジェットを追加
-    Center(child: Text('ホーム')),
+    TimeTable(),
     Syllabus(), // 例としてSyllabusページを追加
     // 他のページも同様に追加
   ];
@@ -61,11 +62,11 @@ class _MyHomePageState extends State<MyHomePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'ホーム',
+            label: '時間割',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            label: 'ビジネス',
+            label: 'シラバス',
           ),
           // 他のタブアイテムも同様に追加
         ],
