@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screen/Syllabus.dart';
-import 'screen/TimeTable.dart';
-import 'screen/Test.dart';
+import 'Screen/Syllabus/Syllabus.dart';
+import 'Screen/TimeTable/TimeTable.dart';
+import 'Screen/Test.dart';
 // 必要なページをimportします。例: Syllabus.dart
 
 void main() {
