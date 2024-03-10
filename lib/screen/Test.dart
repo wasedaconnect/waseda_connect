@@ -1,121 +1,62 @@
 import 'package:flutter/material.dart';
+import '../Screen/Syllabus/SyllabusSearchResult.dart';
 
-class Test extends StatelessWidget {
-  final List<String> weekdays = ['月', '火', '水', '木', '金', '土'];
-
+class Test extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    // すべての列の幅を均等にするためにFlexColumnWidthを使用
-    final Map<int, TableColumnWidth> columnWidths = {
-      0: FixedColumnWidth(64.0), // 左上の空白セルと時限数列の幅を固定
-      for (int i = 1; i <= weekdays.length; i++)
-        i: FlexColumnWidth(),
-    };
+  _SyllabusSearchScreenState createState() => _SyllabusSearchScreenState();
+}
 
-    // 境界線のスタイルを定義
-    final TableBorder tableBorder = TableBorder.all(
-      color: Colors.black, // 境界線の色
-      width: 1, // 境界線の太さ
-    );
+class _SyllabusSearchScreenState extends State<Test> {
+  final TextEditingController _controller = TextEditingController();
+  List<String> _searchResults = []; // 検索結果を保持するリスト
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('2024年度春学期'),
-      ),
-      body: Column(
-        children: [
-          // 曜日ヘッダー
-          Container(
-            color: Colors.red,
-            child: Table(
-              columnWidths: columnWidths,
-              border: tableBorder,
-              children: [
-                TableRow(
-                  children: [
-                    SizedBox(width: 64.0), // 左上の空白セルの幅を固定
-                    for (var day in weekdays) 
-                      Center(child: Text(day, style: TextStyle(fontWeight: FontWeight.bold)))
-                  ],
-                ),
-              ],
-            ),
-          ),
-          // 時間割テーブル
-          Expanded(
-            child: SingleChildScrollView(
-              child: Table(
-                columnWidths: columnWidths,
-                border: tableBorder,
-                children: List.generate(6, (index) => _buildTableRow(index + 1, weekdays, context)),
-              ),
-            ),
-          ),
-        ],
+  void _searchSyllabus() {
+  // 検索ロジックを実行し、結果を取得 (ここではダミーの結果を使用)
+    final searchResults = List.generate(10, (index) => '検索結果 $index : ${_controller.text}');
+
+    // 検索結果を表示する新しいページに遷移
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SyllabusSearchResultsScreen(searchResults: searchResults),
       ),
     );
   }
-  TableRow _buildTableRow(int period, List<String> weekdays, BuildContext context) {
-  final startTime = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00'];
-  final endTime = ['8:50', '9:50', '10:50', '11:50', '12:50', '13:50'];
 
-  return TableRow(
-    children: [
-      Container(
-          height: MediaQuery.of(context).size.height * 0.11,
-          color: Colors.grey[300],
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(startTime[period - 1], style: TextStyle(fontSize: 12)),
-                Text('第$period時限', style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(endTime[period - 1], style: TextStyle(fontSize: 12)),
-              ],
-            ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('シラバス検索'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: TextFormField(
+              controller: _controller,
+              decoration: InputDecoration(
+                labelText: '検索',
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: _searchSyllabus,
+                    ),
           ),
+          onFieldSubmitted: (value) => _searchSyllabus(),
         ),
-
-      // 以下の部分で各授業セルをInkWellでラップしてタップ可能にします
-      for (int i = 0; i < weekdays.length; i++)
-        InkWell(
-          onTap: () {
-            // タップ時に編集モーダルを表示
-            _showEditModal(context, period, weekdays[i]);
+      ),
+      Expanded(
+        child: ListView.builder(
+          itemCount: _searchResults.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(_searchResults[index]),
+              // ここに検索結果の詳細画面へのリンクなど、必要に応じて他のウィジェットを追加できます。
+            );
           },
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.11,
-            child: Center(child: Text('授業 $period-${weekdays[i]}')),
-          ),
         ),
+      ),
     ],
-  );
+  ),
+);
 }
-
-void _showEditModal(BuildContext context, int period, String weekday) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      // Dialogの外観をカスタマイズ
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), // この行でダイアログのボーダーを丸くする
-        child: Container(
-          height: 200, // モーダルの高さを指定
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("授業を編集", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              // 編集用のフォームフィールドやボタンをここに配置
-              // 例: TextFormField(), ElevatedButton() など
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
-
-  
 }
