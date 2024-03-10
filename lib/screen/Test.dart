@@ -20,7 +20,7 @@ class Test extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('時間割'),
+        title: Text('2024年度春学期'),
       ),
       body: Column(
         children: [
@@ -62,7 +62,7 @@ class Test extends StatelessWidget {
   return TableRow(
     children: [
       Container(
-          height: 60,
+          height: MediaQuery.of(context).size.height * 0.11,
           color: Colors.grey[300],
           child: Center(
             child: Column(
@@ -84,7 +84,7 @@ class Test extends StatelessWidget {
             _showEditModal(context, period, weekdays[i]);
           },
           child: Container(
-            height: 60,
+            height: MediaQuery.of(context).size.height * 0.11,
             child: Center(child: Text('授業 $period-${weekdays[i]}')),
           ),
         ),
@@ -93,24 +93,29 @@ class Test extends StatelessWidget {
 }
 
 void _showEditModal(BuildContext context, int period, String weekday) {
-  showModalBottomSheet(
+  showDialog(
     context: context,
     builder: (BuildContext context) {
-      return Container(
-        height: 200,
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("授業を編集", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            // 編集用のフォームフィールドやボタンをここに配置
-            // 例: TextFormField(), RaisedButton() など
-          ],
+      // Dialogの外観をカスタマイズ
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)), // この行でダイアログのボーダーを丸くする
+        child: Container(
+          height: 200, // モーダルの高さを指定
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text("授業を編集", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              // 編集用のフォームフィールドやボタンをここに配置
+              // 例: TextFormField(), ElevatedButton() など
+            ],
+          ),
         ),
       );
     },
   );
 }
+
 
   
 }
