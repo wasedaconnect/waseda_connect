@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 class SyllabusSearchResultsScreen extends StatelessWidget {
   final List<String> searchResults;
 
-  SyllabusSearchResultsScreen({Key? key, required this.searchResults}) : super(key: key);
+  SyllabusSearchResultsScreen({Key? key, required this.searchResults})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,4 +23,3 @@ class SyllabusSearchResultsScreen extends StatelessWidget {
     );
   }
 }
-
