@@ -20,9 +20,13 @@ Task-[人の名前]-タスクナンバー-[そのタスクの概要]
 例：Task-dai-1-create-member-information
 
 ## デバッグ方法
-1.web版
-    flutter run
-他のバージョンはどうするのか。web版で確認出来たら、確認する必要がないのか。
+
+1.クローム版
+    flutter run -d chrome
+    これでは残念ながらデータベースが使えない。
+
+2.android stadio版
+    flutter run -d emulator-5554
 
 ## 変数名
 キャメルケース
@@ -30,12 +34,38 @@ Task-[人の名前]-タスクナンバー-[そのタスクの概要]
 〇 getClassData
 ×　get-class-data
 ×　getclassdata
+※flutterはキャメルを推奨していないらしいｗ
 
 ## データベース構成
 https://docs.google.com/presentation/d/1Oyn8XtQDgYXBIrew6IH6SYVhs1smf11sE_Pn4rhUnGg/edit?usp=sharing
 
 ## フォルダ構成
-これも追々
+lib/
+├── models/              # データモデルクラス
+│   └── user.dart
+├── utils/               # ヘルパークラスやユーティリティ関数
+│   └── database_helper.dart
+├── screens/             # 画面ごとのウィジェット
+│   ├── home_screen.dart
+│   └── detail_screen.dart
+└── main.dart 
+
+
+##　使用パッケージ
+    pubspec.yamlに記載
+    
+    flutter pub add [パッケージ名]
+
+    flutter pub get 更新
+
+##　フォーマッター
+    dart format lib
+
+## テスト
+/test内にdartファイルを記述
+flutter test
+
+
 
 
 

@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _pages = [
     // ここにページのウィジェットを追加
     TimeTable(),
-    Syllabus(), 
+    Syllabus(),
     Test(),
   ];
 
