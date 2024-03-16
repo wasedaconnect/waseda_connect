@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../constants/Dict.dart';
 
 class TimeTable extends StatelessWidget {
-  final List<String> weekdays = ['月', '火', '水', '木', '金', '土'];
-
   @override
   Widget build(BuildContext context) {
     // すべての列の幅を均等にするためにFlexColumnWidthを使用
