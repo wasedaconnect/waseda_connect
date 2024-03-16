@@ -23,7 +23,8 @@ Task-[人の名前]-タスクナンバー-[そのタスクの概要]
 
 1.クローム版
     flutter run -d chrome
-    これでは残念ながらデータベースが使えない。
+    これでは残念ながらデータベースが使えないが、shared preferrence使える。
+    さくっと確認したいときにおすすめ
 
 2.android stadio版
     flutter run -d emulator-5554
@@ -41,14 +42,17 @@ https://docs.google.com/presentation/d/1Oyn8XtQDgYXBIrew6IH6SYVhs1smf11sE_Pn4rhU
 
 ## フォルダ構成
 lib/
+├── components/          # 再利用可能なUIコンポーネント、入力フォームなど
+├── constants/           # アプリ全体で使用する定数
 ├── models/              # データモデルクラス
 │   └── user.dart
-├── utils/               # ヘルパークラスやユーティリティ関数
-│   └── database_helper.dart
 ├── screens/             # 画面ごとのウィジェット
-│   ├── home_screen.dart
+│   ├── home_screen.dart　# 一例
 │   └── detail_screen.dart
-└── main.dart 
+├── utils/               # ヘルパークラスやユーティリティ関数
+│   └── database_helper.dart #データベースの初期化
+└── main.dart
+
 
 
 ##　使用パッケージ

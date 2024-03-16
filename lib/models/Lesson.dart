@@ -25,6 +25,7 @@ class Lesson {
     };
   }
 }
+//lessonに関するwidgetがある。
 
 class LessonLogic {
   final DatabaseHelper _dbHelper = DatabaseHelper();

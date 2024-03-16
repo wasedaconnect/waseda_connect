@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'Screen/Syllabus/Syllabus.dart';
 import 'Screen/TimeTable/TimeTable.dart';
 import 'Screen/Test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'Screen/Tutorial/Tutorial.dart';
 // 必要なページをimportします。例: Syllabus.dart
 
 void main() {
@@ -34,6 +36,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _checkAndShowTutorial();
+  }
+
+  Future<void> _checkAndShowTutorial() async {
+    final prefs = await SharedPreferences.getInstance();
+    final tutorialShown = prefs.getBool('tutorialShown') ?? false;
+    if (!tutorialShown) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => Tutorial()),
+      );
+    }
+  }
+
   // ページのリストを定義
   final List<Widget> _pages = [
     // ここにページのウィジェットを追加
@@ -42,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Test(),
   ];
 
-  void _onItemTapped(int index) {
+  Future<void> _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });

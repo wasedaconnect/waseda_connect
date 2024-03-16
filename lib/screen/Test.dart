@@ -11,13 +11,15 @@ class _SyllabusSearchScreenState extends State<Test> {
   List<String> _searchResults = []; // 検索結果を保持するリスト
 
   void _searchSyllabus() {
-  // 検索ロジックを実行し、結果を取得 (ここではダミーの結果を使用)
-    final searchResults = List.generate(10, (index) => '検索結果 $index : ${_controller.text}');
+    // 検索ロジックを実行し、結果を取得 (ここではダミーの結果を使用)
+    final searchResults =
+        List.generate(10, (index) => '検索結果 $index : ${_controller.text}');
 
     // 検索結果を表示する新しいページに遷移
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => SyllabusSearchResultsScreen(searchResults: searchResults),
+        builder: (context) =>
+            SyllabusSearchResultsScreen(searchResults: searchResults),
       ),
     );
   }
@@ -39,24 +41,24 @@ class _SyllabusSearchScreenState extends State<Test> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search),
                   onPressed: _searchSyllabus,
-                    ),
+                ),
+              ),
+              onFieldSubmitted: (value) => _searchSyllabus(),
+            ),
           ),
-          onFieldSubmitted: (value) => _searchSyllabus(),
-        ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _searchResults.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_searchResults[index]),
+                  // ここに検索結果の詳細画面へのリンクなど、必要に応じて他のウィジェットを追加できます。
+                );
+              },
+            ),
+          ),
+        ],
       ),
-      Expanded(
-        child: ListView.builder(
-          itemCount: _searchResults.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(_searchResults[index]),
-              // ここに検索結果の詳細画面へのリンクなど、必要に応じて他のウィジェットを追加できます。
-            );
-          },
-        ),
-      ),
-    ],
-  ),
-);
-}
+    );
+  }
 }
