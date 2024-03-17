@@ -37,11 +37,11 @@ class _TimeTableState extends State<TimeTable> {
         title: Text('マイスケジュール'),
       ),
       body: TimeTableComponent(
-          lessonData: lessonData,
-          timeTableData: timeTableData,
-          selectedLessonData: selectedLessonData,
-          onSelected: _onFacultyChanged,
-          ),
+        lessonData: lessonData,
+        timeTableData: timeTableData,
+        selectedLessonData: selectedLessonData,
+        onSelected: _onFacultyChanged,
+      ),
     );
   }
 }

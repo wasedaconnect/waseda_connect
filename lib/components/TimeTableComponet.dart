@@ -44,7 +44,9 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                 children: [
                   SizedBox(width: 64.0),
                   for (var day in weekdays)
-                    Center(child: Text(day, style: TextStyle(fontWeight: FontWeight.bold))),
+                    Center(
+                        child: Text(day,
+                            style: TextStyle(fontWeight: FontWeight.bold))),
                 ],
               ),
             ],
@@ -66,7 +68,8 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
     );
   }
 
-  TableRow _buildTableRow(int period, List<String> weekdays, BuildContext context) {
+  TableRow _buildTableRow(
+      int period, List<String> weekdays, BuildContext context) {
     return TableRow(
       children: [
         Container(
@@ -79,7 +82,8 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                 // ここではstartTimeとendTimeを直接指定していますが、
                 // 実際にはwidget.timeTableDataから取得する必要があります
                 Text('08:00', style: TextStyle(fontSize: 12)),
-                Text('第$period時限', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('第$period時限',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 Text('09:00', style: TextStyle(fontSize: 12)),
               ],
             ),
