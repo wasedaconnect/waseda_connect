@@ -117,7 +117,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
         color: isSelected ? Colors.blue[100] : null, // 選択された授業をハイライト
         child: Center(
           child: Text(
-            lesson.isNotEmpty ? lesson['name'] : '空きコマ',
+            lesson.isNotEmpty ? lesson['name'] : '',
             style: TextStyle(
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),

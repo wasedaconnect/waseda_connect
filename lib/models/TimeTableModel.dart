@@ -62,7 +62,6 @@ class TimeTableLogic {
     final List<Map<String, dynamic>> maps = await db.query(
       'timeTables',
       orderBy: 'createdAt DESC',
-      limit: 1,
     );
 
     return List.generate(maps.length, (i) {
@@ -83,6 +82,28 @@ class TimeTableLogic {
       'timeTables',
       orderBy: 'createdAt DESC',
       limit: 1,
+    );
+
+    if (maps.isNotEmpty) {
+      return TimeTableModel(
+        id: maps[0]['id'],
+        grade: maps[0]['grade'],
+        createdAt: maps[0]['createdAt'],
+        semester: maps[0]['semester'],
+        year: maps[0]['year'],
+      );
+    } else {
+      return null; // データが存在しない場合はnullを返す
+    }
+  }
+  
+//IDに紐づいて時間割を返す。
+  Future<TimeTableModel?> getTimeTable(String id) async {
+    final db = await _dbHelper.timeTableDatabase;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'timeTables',
+      where: 'id = ?', // 指定されたIDに一致するレコードを検索する
+      whereArgs: [id], // where句のプレースホルダーに渡す値
     );
 
     if (maps.isNotEmpty) {

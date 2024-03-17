@@ -29,6 +29,9 @@ Task-[人の名前]-タスクナンバー-[そのタスクの概要]
 2.android stadio版
     flutter run -d emulator-5554
 
+3.r 
+flutter run中に　r を入力すると変更が反映される。
+
 ## 変数名
 キャメルケース
 例:

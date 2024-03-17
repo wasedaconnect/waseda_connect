@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waseda_connect/components/ListForm.dart';
+import 'package:waseda_connect/main.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
 
 class Tutorial2 extends StatefulWidget {
@@ -75,8 +77,13 @@ class _Tutorial2State extends State<Tutorial2> {
 
                   // newTimeTableをデータベースに挿入する処理を呼び出す
                   await instance.insertTimeTable(newTimeTable);
-
-                  Navigator.popUntil(context, (route) => route.isFirst);
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('tutorialShown', true);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyHomePage(title: "tilte")),
+                  );
                 },
               ),
             ],

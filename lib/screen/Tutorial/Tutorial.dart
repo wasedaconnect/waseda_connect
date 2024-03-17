@@ -74,7 +74,7 @@ class _TutorialState extends State<Tutorial> {
                       await prefs.setString('department', selectedDepartment!);
                     }
                     // チュートリアルが表示されたことを保存
-                    await prefs.setBool('tutorialShown', true);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Tutorial2()),
