@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../../constants/Dict.dart'; // 必要に応じてパスを調整してください
 
 class TimeTableComponent extends StatefulWidget {
-  final List<Map<String, dynamic>> lessonData;
-  final Map<String, dynamic> selectedLessonData;
-  final Map<String, dynamic> timeTableData;
+  final List<Map<String, dynamic>>? lessonData;
+  final Map<String, dynamic>? selectedLessonData;
+  final Map<String, dynamic>? timeTableData;
   final Function(String?)? onSelected;
 
   const TimeTableComponent({
@@ -96,13 +96,19 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
   }
 
   Widget _buildLessonCell(int period, String day) {
+    // lessonDataがnullの場合は空のリストを使用
+    final lessonData = widget.lessonData ?? [];
+
     // lessonDataから特定の曜日と時限に対応する授業を検索
-    var lesson = widget.lessonData.firstWhere(
+    var lesson = lessonData.firstWhere(
       (lesson) => lesson['day'] == day && lesson['period'] == period,
       orElse: () => {},
     );
 
-    bool isSelected = widget.selectedLessonData['id'] == lesson['id'];
+    // selectedLessonDataがnullの場合は空のマップを使用
+    final selectedLessonData = widget.selectedLessonData ?? {};
+
+    bool isSelected = selectedLessonData['id'] == lesson['id'];
 
     return InkWell(
       onTap: () => widget.onSelected?.call(lesson['id']),

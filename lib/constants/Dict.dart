@@ -108,3 +108,6 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
 List<String> weekdays = ['月', '火', '水', '木', '金', '土'];
 final startTime = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00'];
 final endTime = ['8:50', '9:50', '10:50', '11:50', '12:50', '13:50'];
+final List<String> semesters = ['春', '秋'];
+final List<int> grades = [1, 2, 3, 4];
+final List<int> years = [5, 6];

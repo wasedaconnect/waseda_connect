@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:waseda_connect/components/ListForm.dart';
 import 'package:waseda_connect/constants/Dict.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:waseda_connect/screen/Tutorial/Tutorial2.dart';
 
 class Tutorial extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class _TutorialState extends State<Tutorial> {
   String? selectedDepartment;
   String? selectedGrade;
   List<String>? departmentDict;
-  void _onFacultyChanged(String? newFaculty) {
+  void _onFacultyChanged(dynamic newFaculty) {
     setState(() {
       selectedFaculty = newFaculty;
       // 学部が変更されたら、学科の選択をリセット
@@ -22,7 +23,7 @@ class _TutorialState extends State<Tutorial> {
     });
   }
 
-  void _onDepartmentChanged(String? newDepartment) {
+  void _onDepartmentChanged(dynamic newDepartment) {
     setState(() {
       selectedDepartment = newDepartment;
     });
@@ -32,7 +33,7 @@ class _TutorialState extends State<Tutorial> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('2024年度春学期'),
+        title: Text('学年と学科を選択'),
       ),
       body: Center(
         // 全体を中央に配置
@@ -42,26 +43,28 @@ class _TutorialState extends State<Tutorial> {
             mainAxisAlignment: MainAxisAlignment.center, // 子ウィジェットを中央に配置
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(8.0), // 余白を追加
+                padding: const EdgeInsets.all(15), // 余白を追加
                 child: ListForm(
-                  items: wasedaFacultiesAndDepartmentsDict.keys.toList(),
-                  selectedItem: selectedFaculty,
-                  onSelected: _onFacultyChanged,
-                ),
+                    items: wasedaFacultiesAndDepartmentsDict.keys.toList(),
+                    selectedItem: selectedFaculty,
+                    onSelected: _onFacultyChanged,
+                    text: "学部を選択してください"),
               ),
               // 学部が選択されている場合のみ学科を表示
-              Padding(
-                padding: const EdgeInsets.all(8.0), // 余白を追加
-                child: ListForm(
-                  items: departmentDict,
-                  selectedItem: selectedDepartment,
-                  onSelected: _onDepartmentChanged,
+              if (selectedFaculty != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  // 余白を追加
+                  child: ListForm(
+                      items: departmentDict,
+                      selectedItem: selectedDepartment,
+                      onSelected: _onDepartmentChanged,
+                      text: "学科を選択してください"),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0), // 上下の余白を追加
                 child: ElevatedButton(
-                  child: Text('保存'),
+                  child: Text('次へ'),
                   onPressed: () async {
                     final prefs = await SharedPreferences.getInstance();
                     if (selectedFaculty != null) {
@@ -72,7 +75,10 @@ class _TutorialState extends State<Tutorial> {
                     }
                     // チュートリアルが表示されたことを保存
                     await prefs.setBool('tutorialShown', true);
-                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Tutorial2()),
+                    );
                   },
                 ),
               ),

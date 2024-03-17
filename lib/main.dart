@@ -38,8 +38,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    super.initState();
     _checkAndShowTutorial();
+    super.initState();
   }
 
   Future<void> _checkAndShowTutorial() async {
