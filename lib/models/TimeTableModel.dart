@@ -53,7 +53,7 @@ class TimeTableLogic {
     await prefs.setString('defaultId', idWithUlid);
     await prefs.setInt('defaultGrade', timeTable.grade);
     await prefs.setString('defaultSemester', timeTable.semester);
-    await prefs.setInt('defalutYear', timeTable.year);
+    await prefs.setInt('defaultYear', timeTable.year);
   }
 
   //時間割をすべて取り出す
