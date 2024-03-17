@@ -63,14 +63,13 @@ class DatabaseHelper {
 
   ///データベースの初期化をSQL文で記述
   void _createTimeTableDb(Database db, int newVersion) async {
-    await db.execute('CREATE TABLE lessons ('
+    await db.execute('CREATE TABLE timeTables ('
         'id TEXT PRIMARY KEY, '
-        'name TEXT, '
-        'timeTableId TEXT, '
+        'grade INTEGER, '
         'createdAt TEXT, '
-        'day TEXT, '
-        'period INTEGER'
+        'semester TEXT, '
+        'year INTEGER'
         ')');
   }
-  //</lessonDB>
+  //</timeTableDB>
 }

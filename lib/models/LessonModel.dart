@@ -58,8 +58,8 @@ class LessonLogic {
       timeTableId: lesson.timeTableId,
       createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
           .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
-      day: 'Monday', // 例として「Monday」を設定
-      period: 1, // 例として「1」を設定
+      day: lesson.day,
+      period: lesson.period,
     );
     await db.insert(
       'lessons',
