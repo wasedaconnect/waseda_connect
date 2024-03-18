@@ -133,7 +133,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       ),
     );
   }
-
+  
+//ドロップバーの表示。
   void _showTitleOptions(BuildContext context) {
     showMenu<String>(
       context: context,

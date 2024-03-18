@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'Screen/Syllabus/Syllabus.dart';
+import 'Screen/displaySyllabus/syllabus.dart';
 import 'Screen/TimeTable/TimeTable.dart';
 import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _pages = [
     // ここにページのウィジェットを追加
     TimeTable(),
-    Syllabus(),
+    DisplaySyllabus(),
     Test(),
   ];
 
