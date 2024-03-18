@@ -96,7 +96,7 @@ class TimeTableLogic {
       return null; // データが存在しない場合はnullを返す
     }
   }
-  
+
 //IDに紐づいて時間割を返す。
   Future<TimeTableModel?> getTimeTable(String id) async {
     final db = await _dbHelper.timeTableDatabase;
@@ -117,5 +117,16 @@ class TimeTableLogic {
     } else {
       return null; // データが存在しない場合はnullを返す
     }
+  }
+  // 既存のメソッド...
+
+  // 時間割を削除する
+  Future<void> deleteTimeTable(String id) async {
+    final db = await _dbHelper.timeTableDatabase;
+    await db.delete(
+      'timeTables',
+      where: 'id = ?', // 指定されたIDに一致するレコードを検索する
+      whereArgs: [id], // where句のプレースホルダーに渡す値
+    );
   }
 }

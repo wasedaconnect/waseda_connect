@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'Screen/Syllabus/Syllabus.dart';
 import 'Screen/TimeTable/TimeTable.dart';
 import 'Screen/Test.dart';
@@ -7,7 +8,11 @@ import 'Screen/Tutorial/Tutorial.dart';
 // 必要なページをimportします。例: Syllabus.dart
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

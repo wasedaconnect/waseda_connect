@@ -52,7 +52,7 @@ class _ListFormState extends State<ListForm> {
         DropdownButton<dynamic>(
           value: _selectedItem,
           icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
+          elevation: 8,
           style: const TextStyle(color: Colors.deepPurple),
           underline: Container(
             height: 2,

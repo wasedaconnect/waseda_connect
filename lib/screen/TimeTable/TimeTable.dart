@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:waseda_connect/components/Modal.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
+
 import 'package:waseda_connect/screen/Tutorial/Tutorial2.dart';
 import '../../components/TimeTableComponet.dart'; // 正しいパスに置き換えてください
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TimeTable extends StatefulWidget {
+class TimeTable extends ConsumerStatefulWidget {
   @override
   _TimeTableState createState() => _TimeTableState();
 }
 
-class _TimeTableState extends State<TimeTable> {
+class _TimeTableState extends ConsumerState<TimeTable> {
   @override
   void initState() {
     super.initState();
@@ -77,9 +80,11 @@ class _TimeTableState extends State<TimeTable> {
       await prefs.setInt('defaultYear', newTimeTableData.year);
       await prefs.setString('defaultSemester', newTimeTableData.semester);
       await prefs.setInt('defaultGrade', newTimeTableData.grade);
+      await prefs.setString('defaultId', newTimeTableData.id);
     }
   }
 
+//時間割追加というなの入力画面への遷移
   Future<void> _addNewTimeTable() async {
     Navigator.push(
       context,
@@ -87,6 +92,26 @@ class _TimeTableState extends State<TimeTable> {
     );
   }
 
+  //時間割消去
+  Future<bool> _deleteTimeTable(String id, WidgetRef ref) async {
+    final prefs = await SharedPreferences.getInstance();
+    final defaultId = prefs.getString('defaultId');
+    if (defaultId != id) {
+      final TimeTableLogic instance = TimeTableLogic();
+      await instance.deleteTimeTable(id);
+      var newTimeTablesData = await instance.getAllTimeTables();
+      setState(() {
+        allTimeTablesData = newTimeTablesData;
+      });
+
+      return true;
+    } else {
+      print("消去できない");
+      return false;
+    }
+  }
+
+//じかんわり
   @override
   Widget build(BuildContext context) {
     var appBarText =
@@ -129,8 +154,38 @@ class _TimeTableState extends State<TimeTable> {
                       IconButton(
                         icon: Icon(Icons.delete, size: 20.0),
                         onPressed: () {
-                          // 時間割の消去処理をここに記述
-                          // 注意: このコンテキストでは直接状態を変更できないため、適切なコールバックを使用する
+                          print(allTimeTablesData!.length);
+                          showDialog(
+                            context: context, // showDialogにはBuildContextが必要です
+                            builder: (BuildContext context) {
+                              return ConfirmDialog(
+                                title: '削除の確認',
+                                content: 'この項目を削除してもよろしいですか？',
+                                onConfirm: () async {
+                                  if (allTimeTablesData!.length != 1) {
+                                    print("a");
+                                    var complete = await _deleteTimeTable(
+                                        timeTableData.id, ref);
+                                    if (complete) {
+                                      print("成功");
+                                    } else
+                                      print("失敗");
+
+                                    // ユーザーに警告するなどの処理
+                                    print('最後の項目は削除できません。');
+                                  }
+                                  Navigator.of(context)
+                                      .pop(); // ConfirmDialog内でNavigator.popを呼び出す代わりにここで呼び出す
+                                },
+                                onCancel: () {
+                                  // ユーザーがキャンセルした場合の処理
+                                  print('削除がキャンセルされました。');
+                                  Navigator.of(context)
+                                      .pop(); // ConfirmDialog内でNavigator.popを呼び出す代わりにここで呼び出す
+                                },
+                              );
+                            },
+                          );
                         },
                       ),
                     ],
