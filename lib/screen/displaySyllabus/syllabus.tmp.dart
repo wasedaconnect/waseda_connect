@@ -58,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
+      print(jsonData);
       final List<String> syllabusList = List<String>.from(jsonData['data']);
 
       setState(() {

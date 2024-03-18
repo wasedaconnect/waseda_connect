@@ -1,6 +1,9 @@
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'Screen/displaySyllabus/syllabus.dart';
+import 'package:waseda_connect/models/ClassModel.dart';
+import 'Screen/displaySyllabus/syllabus.tmp.dart';
 import 'Screen/TimeTable/TimeTable.dart';
 import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +20,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,8 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    _checkAndShowTutorial();
     super.initState();
+    _checkAndShowTutorial();
+    _loadCsvData();
   }
 
   Future<void> _checkAndShowTutorial() async {
@@ -55,6 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
         MaterialPageRoute(builder: (context) => Tutorial()),
       );
     }
+  }
+
+  Future<void> _loadCsvData() async {
+      //ロードに一分かかるデータベース。
+    final ClassLogic instance = ClassLogic();
+    await instance.insertClass();
+    print("完了");
+    // newTimeTableをデータベースに挿入する処理を呼び出
   }
 
   // ページのリストを定義

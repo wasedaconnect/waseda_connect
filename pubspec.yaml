@@ -44,6 +44,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
   http: ^1.2.1
   dio: ^5.4.1
+  csv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -97,7 +98,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-assets:
-   - .env.development
-   - .env.production
-
+  assets:
+    - assets/

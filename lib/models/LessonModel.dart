@@ -10,25 +10,26 @@ class LessonModel {
   final String createdAt; // 作成日時（ISO 8601形式の文字列を想定）
   final String day; // 曜日
   final int period; // 時限（1-7）
+  final String code; //早稲田が提供する授業コード
 
-  LessonModel({
-    required this.id,
-    required this.name,
-    required this.timeTableId,
-    required this.createdAt,
-    required this.day,
-    required this.period,
-  });
+  LessonModel(
+      {required this.id,
+      required this.name,
+      required this.timeTableId,
+      required this.createdAt,
+      required this.day,
+      required this.period,
+      required this.code});
 
   factory LessonModel.fromMap(Map<String, dynamic> map) {
     return LessonModel(
-      id: map['id'],
-      name: map['name'],
-      timeTableId: map['timeTableId'],
-      createdAt: map['createdAt'],
-      day: map['day'],
-      period: map['period'],
-    );
+        id: map['id'],
+        name: map['name'],
+        timeTableId: map['timeTableId'],
+        createdAt: map['createdAt'],
+        day: map['day'],
+        period: map['period'],
+        code: map['code']);
   }
 
   Map<String, dynamic> toMap() {
@@ -39,6 +40,7 @@ class LessonModel {
       'createdAt': createdAt,
       'day': day,
       'period': period,
+      'code': code
     };
   }
 }
@@ -53,14 +55,14 @@ class LessonLogic {
     final db = await _dbHelper.lessonDatabase;
     // ULIDを生成
     var lessonWithUlid = LessonModel(
-      id: Ulid().toString(), // ULIDを生成して文字列に変換
-      name: lesson.name,
-      timeTableId: lesson.timeTableId,
-      createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
-          .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
-      day: lesson.day,
-      period: lesson.period,
-    );
+        id: Ulid().toString(), // ULIDを生成して文字列に変換
+        name: lesson.name,
+        timeTableId: lesson.timeTableId,
+        createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
+            .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
+        day: lesson.day,
+        period: lesson.period,
+        code: lesson.code);
     await db.insert(
       'lessons',
       lessonWithUlid.toMap(),
