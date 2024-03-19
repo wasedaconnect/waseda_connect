@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waseda_connect/models/ClassModel.dart';
 import '../Screen/Syllabus/SyllabusSearchResult.dart';
 
 class Test extends StatefulWidget {
@@ -7,22 +8,18 @@ class Test extends StatefulWidget {
 }
 
 class _SyllabusSearchScreenState extends State<Test> {
-  final TextEditingController _controller = TextEditingController();
-  List<String> _searchResults = []; // 検索結果を保持するリスト
+  List<ClassModel>? allSyllabusData;
 
-  void _searchSyllabus() {
-    // 検索ロジックを実行し、結果を取得 (ここではダミーの結果を使用)
-    final searchResults =
-        List.generate(10, (index) => '検索結果 $index : ${_controller.text}');
-
-    // 検索結果を表示する新しいページに遷移
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) =>
-            SyllabusSearchResultsScreen(searchResults: searchResults),
-      ),
-    );
+  Future<void> _searchSyllabus(String value) async {
+    // ここにテキストフィールドの入力値が変化したときの処理を記述
+    final ClassLogic instance = ClassLogic();
+    final newAllSyllabusData = await instance.searchClassesByName(value);
+    setState(() {
+      allSyllabusData = newAllSyllabusData;
+    });
+    print(allSyllabusData!.length);
   }
+  // 検索結果を保持するリスト
 
   @override
   Widget build(BuildContext context) {
@@ -35,30 +32,40 @@ class _SyllabusSearchScreenState extends State<Test> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
-              controller: _controller,
-              decoration: InputDecoration(
-                labelText: '検索',
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: _searchSyllabus,
-                ),
-              ),
-              onFieldSubmitted: (value) => _searchSyllabus(),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _searchResults.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_searchResults[index]),
-                  // ここに検索結果の詳細画面へのリンクなど、必要に応じて他のウィジェットを追加できます。
-                );
+              onChanged: (value) async {
+                await _searchSyllabus(value); // テキストフィールドの入力が変化するたびに実行
               },
             ),
           ),
+          Expanded(
+            child: allSyllabusData != null && allSyllabusData!.isNotEmpty
+                ? ListView.builder(
+                    itemCount: allSyllabusData!.length, // リストのアイテム数
+                    itemBuilder: (context, index) {
+                      // 各アイテムに対するウィジェットを構築
+                      final classData = allSyllabusData![index];
+                      return SyllabusItemWidget(
+                          classData: classData); // カスタムウィジェット
+                    },
+                  )
+                : Container(), // allSyllabusDataが空の場合は何も表示しない
+          ),
         ],
       ),
+    );
+  }
+}
+
+class SyllabusItemWidget extends StatelessWidget {
+  final ClassModel classData;
+
+  const SyllabusItemWidget({Key? key, required this.classData})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(classData.courseName),
     );
   }
 }

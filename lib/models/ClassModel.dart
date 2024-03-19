@@ -135,13 +135,14 @@ class ClassLogic {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
   Future<void> insertClass() async {
-    final rawData = await rootBundle.loadString('assets/ClassDataTest.csv');//テスト用
+    final rawData = await rootBundle.loadString('assets/ClassData.csv'); //テスト用
     // CSVデータをリストに変換（ヘッダーをスキップ）
     List<List<dynamic>> listData =
         CsvToListConverter(eol: '\n', shouldParseNumbers: false)
             .convert(rawData)
             .skip(1)
             .toList();
+
     int i = 0;
 
     final db = await _dbHelper.classDatabase;
@@ -187,16 +188,56 @@ class ClassLogic {
     await batch.commit(noResult: true); // バッチ処理のコミット
   }
 
+//コースネームでlike検索。
   Future<List<ClassModel>> searchClassesByName(String courseName) async {
     final db = await _dbHelper.classDatabase;
     final List<Map<String, dynamic>> maps = await db.query(
       'classes',
       where: 'courseName LIKE ?',
       whereArgs: ['%$courseName%'],
+      limit: 10,
     );
 
     return List.generate(maps.length, (i) {
       return ClassModel.fromMap(maps[i]);
     });
+  }
+
+  Future<List<ClassModel>> searchClasses(
+      int? day, int? time, int? teachingMethod, int? department) async {
+    final db = await _dbHelper.classDatabase;
+    List<String> whereClauses = [];
+    List<dynamic> whereArgs = [];
+
+    // 条件を動的に構築
+    if (day != null) {
+      whereClauses.add('(classDay1 = ? OR classDay2 = ?)');
+      whereArgs.addAll([day, day]);
+    }
+    if (time != null) {
+      whereClauses.add('(classStart1 = ? OR classStart2 = ?)');
+      whereArgs.addAll([time, time]);
+    }
+    if (teachingMethod != null) {
+      whereClauses.add('teachingMethod = ?');
+      whereArgs.add(teachingMethod);
+    }
+    if (department != null) {
+      whereClauses.add('department = ?');
+      whereArgs.add(department);
+    }
+
+    // WHERE句を組み立て
+    String? whereClause =
+        whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null;
+
+    // クエリ実行
+    final List<Map<String, dynamic>> maps = await db.query('classes',
+        where: whereClause,
+        whereArgs: whereArgs.isNotEmpty ? whereArgs : null,
+        limit: 10);
+
+    // 結果をClassModelのリストに変換
+    return List<ClassModel>.from(maps.map((map) => ClassModel.fromMap(map)));
   }
 }
