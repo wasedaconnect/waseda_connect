@@ -9,6 +9,11 @@ import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screen/Tutorial/Tutorial.dart';
 // 必要なページをimportします。例: Syllabus.dart
+//やること
+//ロード中画面を創る
+//popで戻って着火するようにする。
+//ポップアップメッセージ機能を創る
+//終わったら、classデータとlessonデータを紐づける。
 
 void main() {
   runApp(
@@ -49,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _checkAndShowTutorial();
-    _loadCsvData();
+    _loadCsvData(); //ロードしていることをユーザーに知らせるものを作りたい。
   }
 
   Future<void> _checkAndShowTutorial() async {
@@ -63,10 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _loadCsvData() async {
-      //ロードに一分かかるデータベース。
+    // final prefs = await SharedPreferences.getInstance();
+    // final isGetClassData = prefs.getBool('getClassData') ?? false;
+    // if (isGetClassData){
+    //ロードに一分かかるデータベース。
     final ClassLogic instance = ClassLogic();
     await instance.insertClass();
     print("完了");
+    // }
+    // await prefs.setBool('getClassData',true);
     // newTimeTableをデータベースに挿入する処理を呼び出
   }
 

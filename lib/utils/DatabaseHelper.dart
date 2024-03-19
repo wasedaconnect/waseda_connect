@@ -39,8 +39,13 @@ class DatabaseHelper {
         'name TEXT, '
         'timeTableId TEXT, '
         'createdAt TEXT, '
-        'day TEXT, '
-        'period INTEGER'
+        'day1 INTEGER, '
+        'start INTEGER,'
+        'time1 INTEGER,'
+        'day2 INTEGER,'
+        'start2 INTEGER,'
+        'time2 INTEGER,'
+        'classId TEXT'
         ')');
   }
 
@@ -75,6 +80,7 @@ class DatabaseHelper {
   //</timeTableDB>
 
   //<class> 早稲田公式の授業データ
+  //DBがすでに存在するとき、それを消して新しいものを作るようにしたい。
   Future<Database> get classDatabase async {
     _classDatabase ??= await initializeclassDatabase();
     return _classDatabase!;

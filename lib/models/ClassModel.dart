@@ -5,9 +5,9 @@ import 'package:sqflite/sqflite.dart';
 import '../utils/DatabaseHelper.dart';
 
 class ClassModel {
-  final String academicYear;
-  final String department;
-  final String courseName;
+  final String academicYear; //学年
+  final String department; //学部
+  final String courseName; //コースの名前
   final String instructor;
   final String semester;
   final String classTime;
@@ -27,9 +27,10 @@ class ClassModel {
   final String level;
   final String classFormat;
   // 新しい属性を追加
-  final int classDay1;
-  final int classStart1;
-  final int classTime1;
+  final int classDay1; //何曜日か（月曜日：1、火曜日：２　のように入っている
+  final int classStart1; //スタートする時限（オンデマンドや無の時は10か11が入っている。）
+  final int classTime1; //何時間分のコマか
+  //コマが週に二個あるときの２
   final int classDay2;
   final int classStart2;
   final int classTime2;

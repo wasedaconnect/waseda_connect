@@ -8,18 +8,26 @@ class LessonModel {
   final String name; // 授業名
   final String timeTableId; // 割り当てられた時間割ID
   final String createdAt; // 作成日時（ISO 8601形式の文字列を想定）
-  final String day; // 曜日
-  final int period; // 時限（1-7）
-  final String code; //早稲田が提供する授業コード
+  final int day1; // 一つ目の時間の曜日
+  final int start1; // 時限（1-7）
+  final int time1;
+  final int day2; //一週間ににこある授業のため。
+  final int start2;
+  final int time2;
+  final String classId; //早稲田が提供する授業コード,classと紐づけたい
 
   LessonModel(
       {required this.id,
       required this.name,
       required this.timeTableId,
       required this.createdAt,
-      required this.day,
-      required this.period,
-      required this.code});
+      required this.day1,
+      required this.start1,
+      required this.time1,
+      required this.day2,
+      required this.start2,
+      required this.time2,
+      required this.classId});
 
   factory LessonModel.fromMap(Map<String, dynamic> map) {
     return LessonModel(
@@ -27,9 +35,13 @@ class LessonModel {
         name: map['name'],
         timeTableId: map['timeTableId'],
         createdAt: map['createdAt'],
-        day: map['day'],
-        period: map['period'],
-        code: map['code']);
+        day1: map['day1'],
+        start1: map['start1'],
+        time1: map['time1'],
+        day2: map['day2'],
+        start2: map['start2'],
+        time2: map['time2'],
+        classId: map['classId']);
   }
 
   Map<String, dynamic> toMap() {
@@ -38,9 +50,13 @@ class LessonModel {
       'name': name,
       'timeTableId': timeTableId,
       'createdAt': createdAt,
-      'day': day,
-      'period': period,
-      'code': code
+      'day1': day1,
+      'start1': start1,
+      'time1': time1,
+      'day2': day2,
+      'start2': start2,
+      'time2': time2,
+      'classId': classId
     };
   }
 }
@@ -60,9 +76,13 @@ class LessonLogic {
         timeTableId: lesson.timeTableId,
         createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
             .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
-        day: lesson.day,
-        period: lesson.period,
-        code: lesson.code);
+        day1: lesson.day1,
+        start1:lesson.start1,
+        time1: lesson.time1,
+        day2: lesson.day2,
+        start2: lesson.start2,
+        time2: lesson.time2,
+        classId: lesson.classId);
     await db.insert(
       'lessons',
       lessonWithUlid.toMap(),
