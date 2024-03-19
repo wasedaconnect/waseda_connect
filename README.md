@@ -15,30 +15,64 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+##　ブランチの名前
+Task-[人の名前]-タスクナンバー-[そのタスクの概要]
+例：Task-dai-1-create-member-information
 
----
+## デバッグ方法
 
-## Branch: shohei
+1.クローム版
+    flutter run -d chrome
+    これでは残念ながらデータベースが使えないが、shared preferrence使える。
+    さくっと確認したいときにおすすめ
 
-### Logs
-- `lib/screen/displaySyllabus/syllabus.dart`を追加
-- `lib/main.dart`を一部追記
-- `pubspec.yaml`を一部追記
-  - GETリクエスト用`http`を追加
-  - GETリクエスト用`dio`を追加
+2.android stadio版
+    flutter run -d emulator-5554
 
-### Usage
-1. `しらばす2`のフッタータブにアクセス
-2. 上記の検索バーより以下を入力
-   1. SILS
-   2. PSE
-   3. CSE
-   4. FSE
-   5. ASE
-   6. SSS
-   7. LAW
-   8. HSS
-   9. ... など
-3. 下にそれぞれのシラバスが表示される
+3.r 
+flutter run中に　r を入力すると変更が反映される。
 
-**「学部選択のボタン」「絞り込み機能」については未実装**
+## 変数名
+キャメルケース
+例:
+〇 getClassData
+×　get-class-data
+×　getclassdata
+※flutterはキャメルを推奨していないらしいｗ
+
+## データベース構成
+https://docs.google.com/presentation/d/1Oyn8XtQDgYXBIrew6IH6SYVhs1smf11sE_Pn4rhUnGg/edit?usp=sharing
+
+## フォルダ構成
+lib/
+├── components/          # 再利用可能なUIコンポーネント、入力フォームなど
+├── constants/           # アプリ全体で使用する定数
+├── models/              # データモデルクラス
+│   └── user.dart
+├── screens/             # 画面ごとのウィジェット
+│   ├── home_screen.dart　# 一例
+│   └── detail_screen.dart
+├── utils/               # ヘルパークラスやユーティリティ関数
+│   └── database_helper.dart #データベースの初期化
+└── main.dart
+
+
+
+##　使用パッケージ
+    pubspec.yamlに記載
+    
+    flutter pub add [パッケージ名]
+
+    flutter pub get 更新
+
+##　フォーマッター
+    dart format lib
+
+## テスト
+/test内にdartファイルを記述
+flutter test
+
+
+
+
+
