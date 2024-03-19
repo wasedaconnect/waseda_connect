@@ -1,6 +1,4 @@
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
 import 'Screen/displaySyllabus/syllabus.tmp.dart';
@@ -71,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // final prefs = await SharedPreferences.getInstance();
     // final isGetClassData = prefs.getBool('getClassData') ?? false;
     // if (isGetClassData){
-    //ロードに一分かかるデータベース。
+    // ロードに一分かかるデータベース。
     final ClassLogic instance = ClassLogic();
     await instance.insertClass();
     print("完了");

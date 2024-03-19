@@ -5,30 +5,32 @@ import 'package:sqflite/sqflite.dart';
 import '../utils/DatabaseHelper.dart';
 
 class ClassModel {
-  final String academicYear; //学年
-  final String department; //学部
+  final String pKey; //キーとして追加
+  // final String academicYear; //年度
+  final int department; //学部
   final String courseName; //コースの名前
-  final String instructor;
-  final String semester;
-  final String classTime;
-  final String courseCategory;
-  final String assignedYear;
-  final String credits;
-  final String classroom;
-  final String campus;
-  final String courseKey;
-  final String classCode;
+  final String instructor; //教師名
+  final int semester; //学期
+  // final String classTime 時間
+  final String courseCategory; //授業カテゴリー
+  final int assignedYear; //割り当て年
+  final int credits; //単位数
+  final String classroom; //教室
+  final String campus; //キャンパス
+  // final String courseKey;//こーづコード
+  // final String classCode;//クラスコード
   final String languageUsed;
-  final String teachingMethod;
-  final String courseCode;
-  final String majorField;
-  final String subField;
-  final String minorField;
-  final String level;
-  final String classFormat;
+  final int teachingMethod; //オンラインか対面か
+  final String courseCode; //コースのコード、学科とかわかるかも
+  final String majorField; //大分類
+  final String subField; //中分類
+  final String minorField; //小分類
+  final String level; //レベル
+  final String classFormat; //形式
+  final int isOpened;
   // 新しい属性を追加
   final int classDay1; //何曜日か（月曜日：1、火曜日：２　のように入っている
-  final int classStart1; //スタートする時限（オンデマンドや無の時は10か11が入っている。）
+  final int classStart1; //スタートする時限（フルオンデマンドやその他の時は10か11が入っている。）
   final int classTime1; //何時間分のコマか
   //コマが週に二個あるときの２
   final int classDay2;
@@ -36,19 +38,16 @@ class ClassModel {
   final int classTime2;
 
   ClassModel({
-    required this.academicYear,
+    required this.pKey,
     required this.department,
     required this.courseName,
     required this.instructor,
     required this.semester,
-    required this.classTime,
     required this.courseCategory,
     required this.assignedYear,
     required this.credits,
     required this.classroom,
     required this.campus,
-    required this.courseKey,
-    required this.classCode,
     required this.languageUsed,
     required this.teachingMethod,
     required this.courseCode,
@@ -64,56 +63,54 @@ class ClassModel {
     required this.classDay2,
     required this.classStart2,
     required this.classTime2,
+    required this.isOpened,
   });
 
   factory ClassModel.fromMap(Map<String, dynamic> map) {
     return ClassModel(
-      academicYear: map['academicYear'],
-      department: map['department'],
-      courseName: map['courseName'],
-      instructor: map['instructor'],
-      semester: map['semester'],
-      classTime: map['classTime'],
-      courseCategory: map['courseCategory'],
-      assignedYear: map['assignedYear'],
-      credits: map['credits'],
-      classroom: map['classroom'],
-      campus: map['campus'],
-      courseKey: map['courseKey'],
-      classCode: map['classCode'],
-      languageUsed: map['languageUsed'],
-      teachingMethod: map['teachingMethod'],
-      courseCode: map['courseCode'],
-      majorField: map['majorField'],
-      subField: map['subField'],
-      minorField: map['minorField'],
-      level: map['level'],
-      classFormat: map['classFormat'],
-      // 新しい属性をマップから読み込む
-      classDay1: map['classDay1'],
-      classStart1: map['classStart1'],
-      classTime1: map['classTime1'],
-      classDay2: map['classDay2'],
-      classStart2: map['classStart2'],
-      classTime2: map['classTime2'],
-    );
+        pKey: map['pKey'],
+        department: map['department'],
+        courseName: map['courseName'],
+        instructor: map['instructor'],
+        semester: map['semester'],
+        courseCategory: map['courseCategory'],
+        assignedYear: map['assignedYear'],
+        credits: map['credits'],
+        classroom: map['classroom'],
+        campus: map['campus'],
+        languageUsed: map['languageUsed'],
+        teachingMethod: map['teachingMethod'],
+        courseCode: map['courseCode'],
+        majorField: map['majorField'],
+        subField: map['subField'],
+        minorField: map['minorField'],
+        level: map['level'],
+        classFormat: map['classFormat'],
+        // 新しい属性をマップから読み込む
+        classDay1: map['classDay1'],
+        classStart1: map['classStart1'],
+        classTime1: map['classTime1'],
+        classDay2: map['classDay2'],
+        classStart2: map['classStart2'],
+        classTime2: map['classTime2'],
+        isOpened: map['isOpened']);
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'academicYear': academicYear,
+      'pKey': pKey,
+
       'department': department,
       'courseName': courseName,
       'instructor': instructor,
       'semester': semester,
-      'classTime': classTime,
+
       'courseCategory': courseCategory,
       'assignedYear': assignedYear,
       'credits': credits,
       'classroom': classroom,
       'campus': campus,
-      'courseKey': courseKey,
-      'classCode': classCode,
+
       'languageUsed': languageUsed,
       'teachingMethod': teachingMethod,
       'courseCode': courseCode,
@@ -129,6 +126,7 @@ class ClassModel {
       'classDay2': classDay2,
       'classStart2': classStart2,
       'classTime2': classTime2,
+      'isOpened': isOpened
     };
   }
 }
@@ -137,7 +135,7 @@ class ClassLogic {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
   Future<void> insertClass() async {
-    final rawData = await rootBundle.loadString('assets/ClassData.csv');
+    final rawData = await rootBundle.loadString('assets/ClassDataTest.csv');//テスト用
     // CSVデータをリストに変換（ヘッダーをスキップ）
     List<List<dynamic>> listData =
         CsvToListConverter(eol: '\n', shouldParseNumbers: false)
@@ -150,35 +148,32 @@ class ClassLogic {
     var batch = db.batch(); // バッチ処理の開始
     for (var rowData in listData) {
       var classData = ClassModel(
-        academicYear: rowData[0],
-        department: rowData[1],
-        courseName: rowData[2],
-        instructor: rowData[3],
-        semester: rowData[4],
-        classTime: rowData[5],
-        courseCategory: rowData[6],
-        assignedYear: rowData[7],
-        credits: rowData[8],
-        classroom: rowData[9],
-        campus: rowData[10],
-        courseKey: rowData[11],
-        classCode: rowData[12],
-        languageUsed: rowData[13],
-        teachingMethod: rowData[14],
-        courseCode: rowData[15],
-        majorField: rowData[16],
-        subField: rowData[17],
-        minorField: rowData[18],
-        level: rowData[19],
-        classFormat: rowData[20],
-        // 新しい属性
-        classDay1: int.parse(rowData[22]) ?? 0,
-        classStart1: int.parse(rowData[23]) ?? 0,
-        classTime1: int.parse(rowData[24]) ?? 0,
-        classDay2: int.parse(rowData[25]) ?? 0,
-        classStart2: int.parse(rowData[26]) ?? 0,
-        classTime2: int.parse(rowData[27]) ?? 0,
-      );
+          department: int.parse(rowData[1]) ?? 0,
+          courseName: rowData[2],
+          instructor: rowData[3],
+          semester: int.parse(rowData[4]) ?? 0,
+          courseCategory: rowData[6],
+          assignedYear: int.parse(rowData[7]) ?? 0,
+          credits: int.parse(rowData[8]) ?? 0,
+          classroom: rowData[9],
+          campus: rowData[10],
+          languageUsed: rowData[13],
+          teachingMethod: int.parse(rowData[14]) ?? 0,
+          courseCode: rowData[15],
+          majorField: rowData[16],
+          subField: rowData[17],
+          minorField: rowData[18],
+          level: rowData[19],
+          classFormat: rowData[20],
+          isOpened: int.parse(rowData[21]) ?? 0,
+          // 新しい属性
+          classDay1: int.parse(rowData[22]) ?? 0,
+          classStart1: int.parse(rowData[23]) ?? 0,
+          classTime1: int.parse(rowData[24]) ?? 0,
+          classDay2: int.parse(rowData[25]) ?? 0,
+          classStart2: int.parse(rowData[26]) ?? 0,
+          classTime2: int.parse(rowData[27]) ?? 0,
+          pKey: rowData[28]);
 
       batch.insert(
         'classes',
