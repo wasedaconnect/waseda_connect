@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../Syllabus/SyllabusSearchResult.dart';
+import '../../constants/Dict.dart';
+
 import 'package:waseda_connect/models/ClassModel.dart';
+import '../../components/ClassListViewComponent.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -33,8 +35,8 @@ class _SearchPageState extends State<SearchPage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          SearchForm1(),
-          SearchForm2(),
+          SearchFormWithSelect(),
+          SearchFormWithText(),
         ],
       ),
     );
@@ -47,15 +49,49 @@ class _SearchPageState extends State<SearchPage>
   }
 }
 
-class SearchForm1 extends StatefulWidget {
+// 1つ目の検索方法
+// プルダウンのSelectから値を変更し検索する
+// 検索結果はページ遷移した先で表示する
+class SearchFormWithSelect extends StatefulWidget {
   @override
-  _SearchForm1State createState() => _SearchForm1State();
+  _SyllabusSearchSelectState createState() => _SyllabusSearchSelectState();
 }
 
-class _SearchForm1State extends State<SearchForm1> {
-  String selectedSemester = '春';
-  String selectedDay = '月';
-  String selectedPeriod = '1';
+class _SyllabusSearchSelectState extends State<SearchFormWithSelect> {
+  List<ClassModel>? SearchSelectResult;
+
+  final Map<int, String> numToPeriod = {
+    1: '1',
+    2: '2',
+    3: '3',
+    4: '4',
+    5: '5',
+    6: '6',
+    7: '7',
+    0: 'その他'
+  };
+  int selectedSemester = 1;
+  int selectedDay = 1;
+  int selectedPeriod = 1;
+
+  Future<void> _searchSyllabus(
+      int selectedSemester, int selectedDay, int selectedPeriod) async {
+    final ClassLogic instance = ClassLogic();
+    final newAllSyllabusData = await instance.searchClasses(
+        semester: selectedSemester, day: selectedDay, time: selectedPeriod);
+    setState(() {
+      SearchSelectResult = newAllSyllabusData;
+    });
+    print(SearchSelectResult!.length);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            SearchSelectResultPage(searchResult: SearchSelectResult!),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,49 +101,58 @@ class _SearchForm1State extends State<SearchForm1> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            DropdownButtonFormField<String>(
-              value: selectedSemester,
+            DropdownButtonFormField<int>(
+              value: termMap.keys.firstWhere(
+                  (key) => termMap[key] == selectedSemester,
+                  orElse: () => 0),
               decoration: InputDecoration(labelText: '学期'),
-              items: ['春', '秋', 'その他'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+              items: termMap.keys.map((int key) {
+                return DropdownMenuItem<int>(
+                  value: key,
+                  child: Text(termMap[key]!),
                 );
               }).toList(),
               onChanged: (value) {
                 setState(() {
+                  print(value);
                   selectedSemester = value!;
                 });
               },
             ),
             SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: selectedDay,
+            DropdownButtonFormField<int>(
+              value: numToDay.keys.firstWhere(
+                  (key) => numToDay[key] == selectedDay,
+                  orElse: () => 0),
               decoration: InputDecoration(labelText: '曜日'),
-              items: ['月', '火', '水', '木', '金', '土', 'その他'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+              items: numToDay.keys.map((int key) {
+                return DropdownMenuItem<int>(
+                  value: key,
+                  child: Text(numToDay[key]!),
                 );
               }).toList(),
               onChanged: (value) {
                 setState(() {
+                  print(value);
                   selectedDay = value!;
                 });
               },
             ),
             SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: selectedPeriod,
-              decoration: InputDecoration(labelText: '時間'),
-              items: ['1', '2', '3', '4', '5', '6', 'その他'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+            DropdownButtonFormField<int>(
+              value: numToPeriod.keys.firstWhere(
+                  (key) => numToPeriod[key] == selectedDay,
+                  orElse: () => 0),
+              decoration: InputDecoration(labelText: '曜日'),
+              items: numToPeriod.keys.map((int key) {
+                return DropdownMenuItem<int>(
+                  value: key,
+                  child: Text(numToPeriod[key]!),
                 );
               }).toList(),
               onChanged: (value) {
                 setState(() {
+                  print(value);
                   selectedPeriod = value!;
                 });
               },
@@ -116,9 +161,7 @@ class _SearchForm1State extends State<SearchForm1> {
             ElevatedButton(
               onPressed: () {
                 // Perform search with selectedSemester, selectedDay, and selectedPeriod
-                print(selectedSemester);
-                print(selectedDay);
-                print(selectedPeriod);
+                _searchSyllabus(selectedSemester, selectedDay, selectedPeriod);
               },
               child: Text('検索'),
             ),
@@ -129,12 +172,30 @@ class _SearchForm1State extends State<SearchForm1> {
   }
 }
 
-class SearchForm2 extends StatefulWidget {
+class SearchSelectResultPage extends StatelessWidget {
+  final List<ClassModel> searchResult;
+
+  const SearchSelectResultPage({required this.searchResult});
+
   @override
-  _SyllabusSearchScreenState createState() => _SyllabusSearchScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Search Results'),
+        ),
+        body: ClassListViewComponent(allSyllabusData: searchResult));
+  }
 }
 
-class _SyllabusSearchScreenState extends State<SearchForm2> {
+// 2つ目の検索方法
+// テキストフォームに文字列を入力し検索する
+// 検索結果は直下に表示される。
+class SearchFormWithText extends StatefulWidget {
+  @override
+  _SyllabusSearchTextState createState() => _SyllabusSearchTextState();
+}
+
+class _SyllabusSearchTextState extends State<SearchFormWithText> {
   List<ClassModel>? allSyllabusData;
 
   Future<void> _searchSyllabus(String value) async {
@@ -166,33 +227,11 @@ class _SyllabusSearchScreenState extends State<SearchForm2> {
           ),
           Expanded(
             child: allSyllabusData != null && allSyllabusData!.isNotEmpty
-                ? ListView.builder(
-                    itemCount: allSyllabusData!.length, // リストのアイテム数
-                    itemBuilder: (context, index) {
-                      // 各アイテムに対するウィジェットを構築
-                      final classData = allSyllabusData![index];
-                      return SyllabusItemWidget(
-                          classData: classData); // カスタムウィジェット
-                    },
-                  )
+                ? ClassListViewComponent(allSyllabusData: allSyllabusData)
                 : Container(), // allSyllabusDataが空の場合は何も表示しない
           ),
         ],
       ),
-    );
-  }
-}
-
-class SyllabusItemWidget extends StatelessWidget {
-  final ClassModel classData;
-
-  const SyllabusItemWidget({Key? key, required this.classData})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(classData.courseName),
     );
   }
 }

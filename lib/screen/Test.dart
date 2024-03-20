@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:waseda_connect/components/ModalComponent.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
+
 import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/provider/provider.dart';
 import '../Screen/Syllabus/SyllabusSearchResult.dart';
+
+import '../screen/Syllabus/SyllabusSearchResult.dart';
 
 class Test extends StatefulWidget {
   @override
