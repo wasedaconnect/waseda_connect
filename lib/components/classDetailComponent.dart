@@ -6,6 +6,9 @@ import 'package:waseda_connect/components/ModalComponent.dart';
 import 'package:waseda_connect/screen/TimeTable/TimeTable.dart';
 import 'package:waseda_connect/provider/provider.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 class ClassDetailComponent extends StatefulWidget {
   final String classId;
 
@@ -67,7 +70,7 @@ class _ClassDetailComponentState extends State<ClassDetailComponent> {
         title: Text('授業詳細'),
         actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.settings),
+              icon: Icon(Icons.launch),
               onPressed: () {
                 // ここにアイコンボタンがタップされたときの処理を記述
                 print('設定アイコンがタップされました');
