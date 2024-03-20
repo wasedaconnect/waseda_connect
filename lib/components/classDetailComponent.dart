@@ -76,7 +76,7 @@ class _ClassDetailComponentState extends State<ClassDetailComponent> {
               icon: Icon(Icons.launch),
               onPressed: () {
                 // ここにアイコンボタンがタップされたときの処理を記述
-                final url = "https://www.wsl.waseda.jp/syllabus/JAA104.php?pKey=${classData!.pKey}";
+                final url = "https://www.wsl.waseda.jp/syllabus/JAA104.php?pKey=${classData!.pKey.replaceAll(RegExp(r'\r'), "")}";
                 print(url);
                 _urlLaunchWithUri.launchUrlWithUri(context, url);
               },

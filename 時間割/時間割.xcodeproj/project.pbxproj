@@ -1,0 +1,626 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		81673B9C2BAB222D0035C603 /* ___App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81673B9B2BAB222D0035C603 /* ___App.swift */; };
+		81673B9E2BAB222D0035C603 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81673B9D2BAB222D0035C603 /* ContentView.swift */; };
+		81673BA02BAB222D0035C603 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81673B9F2BAB222D0035C603 /* Item.swift */; };
+		81673BA22BAB22300035C603 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81673BA12BAB22300035C603 /* Assets.xcassets */; };
+		81673BA62BAB22300035C603 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81673BA52BAB22300035C603 /* Preview Assets.xcassets */; };
+		81673BB02BAB22300035C603 /* ___Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81673BAF2BAB22300035C603 /* ___Tests.swift */; };
+		81673BBA2BAB22300035C603 /* ___UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81673BB92BAB22300035C603 /* ___UITests.swift */; };
+		81673BBC2BAB22300035C603 /* ___UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81673BBB2BAB22300035C603 /* ___UITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		81673BAC2BAB22300035C603 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 81673B902BAB222D0035C603 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 81673B972BAB222D0035C603;
+			remoteInfo = "時間割";
+		};
+		81673BB62BAB22300035C603 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 81673B902BAB222D0035C603 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 81673B972BAB222D0035C603;
+			remoteInfo = "時間割";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		81673B982BAB222D0035C603 /* 時間割.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "時間割.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81673B9B2BAB222D0035C603 /* ___App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "___App.swift"; sourceTree = "<group>"; };
+		81673B9D2BAB222D0035C603 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		81673B9F2BAB222D0035C603 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		81673BA12BAB22300035C603 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		81673BA32BAB22300035C603 /* ___.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "___.entitlements"; sourceTree = "<group>"; };
+		81673BA52BAB22300035C603 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		81673BAB2BAB22300035C603 /* 時間割Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "時間割Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81673BAF2BAB22300035C603 /* ___Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "___Tests.swift"; sourceTree = "<group>"; };
+		81673BB52BAB22300035C603 /* 時間割UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "時間割UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81673BB92BAB22300035C603 /* ___UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "___UITests.swift"; sourceTree = "<group>"; };
+		81673BBB2BAB22300035C603 /* ___UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "___UITestsLaunchTests.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		81673B952BAB222D0035C603 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81673BA82BAB22300035C603 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81673BB22BAB22300035C603 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		81673B8F2BAB222D0035C603 = {
+			isa = PBXGroup;
+			children = (
+				81673B9A2BAB222D0035C603 /* 時間割 */,
+				81673BAE2BAB22300035C603 /* 時間割Tests */,
+				81673BB82BAB22300035C603 /* 時間割UITests */,
+				81673B992BAB222D0035C603 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		81673B992BAB222D0035C603 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				81673B982BAB222D0035C603 /* 時間割.app */,
+				81673BAB2BAB22300035C603 /* 時間割Tests.xctest */,
+				81673BB52BAB22300035C603 /* 時間割UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		81673B9A2BAB222D0035C603 /* 時間割 */ = {
+			isa = PBXGroup;
+			children = (
+				81673B9B2BAB222D0035C603 /* ___App.swift */,
+				81673B9D2BAB222D0035C603 /* ContentView.swift */,
+				81673B9F2BAB222D0035C603 /* Item.swift */,
+				81673BA12BAB22300035C603 /* Assets.xcassets */,
+				81673BA32BAB22300035C603 /* ___.entitlements */,
+				81673BA42BAB22300035C603 /* Preview Content */,
+			);
+			path = "時間割";
+			sourceTree = "<group>";
+		};
+		81673BA42BAB22300035C603 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				81673BA52BAB22300035C603 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		81673BAE2BAB22300035C603 /* 時間割Tests */ = {
+			isa = PBXGroup;
+			children = (
+				81673BAF2BAB22300035C603 /* ___Tests.swift */,
+			);
+			path = "時間割Tests";
+			sourceTree = "<group>";
+		};
+		81673BB82BAB22300035C603 /* 時間割UITests */ = {
+			isa = PBXGroup;
+			children = (
+				81673BB92BAB22300035C603 /* ___UITests.swift */,
+				81673BBB2BAB22300035C603 /* ___UITestsLaunchTests.swift */,
+			);
+			path = "時間割UITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		81673B972BAB222D0035C603 /* 時間割 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81673BBF2BAB22300035C603 /* Build configuration list for PBXNativeTarget "時間割" */;
+			buildPhases = (
+				81673B942BAB222D0035C603 /* Sources */,
+				81673B952BAB222D0035C603 /* Frameworks */,
+				81673B962BAB222D0035C603 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "時間割";
+			productName = "時間割";
+			productReference = 81673B982BAB222D0035C603 /* 時間割.app */;
+			productType = "com.apple.product-type.application";
+		};
+		81673BAA2BAB22300035C603 /* 時間割Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81673BC22BAB22300035C603 /* Build configuration list for PBXNativeTarget "時間割Tests" */;
+			buildPhases = (
+				81673BA72BAB22300035C603 /* Sources */,
+				81673BA82BAB22300035C603 /* Frameworks */,
+				81673BA92BAB22300035C603 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				81673BAD2BAB22300035C603 /* PBXTargetDependency */,
+			);
+			name = "時間割Tests";
+			productName = "時間割Tests";
+			productReference = 81673BAB2BAB22300035C603 /* 時間割Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		81673BB42BAB22300035C603 /* 時間割UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81673BC52BAB22300035C603 /* Build configuration list for PBXNativeTarget "時間割UITests" */;
+			buildPhases = (
+				81673BB12BAB22300035C603 /* Sources */,
+				81673BB22BAB22300035C603 /* Frameworks */,
+				81673BB32BAB22300035C603 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				81673BB72BAB22300035C603 /* PBXTargetDependency */,
+			);
+			name = "時間割UITests";
+			productName = "時間割UITests";
+			productReference = 81673BB52BAB22300035C603 /* 時間割UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		81673B902BAB222D0035C603 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					81673B972BAB222D0035C603 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					81673BAA2BAB22300035C603 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = 81673B972BAB222D0035C603;
+					};
+					81673BB42BAB22300035C603 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = 81673B972BAB222D0035C603;
+					};
+				};
+			};
+			buildConfigurationList = 81673B932BAB222D0035C603 /* Build configuration list for PBXProject "時間割" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 81673B8F2BAB222D0035C603;
+			productRefGroup = 81673B992BAB222D0035C603 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				81673B972BAB222D0035C603 /* 時間割 */,
+				81673BAA2BAB22300035C603 /* 時間割Tests */,
+				81673BB42BAB22300035C603 /* 時間割UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		81673B962BAB222D0035C603 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81673BA62BAB22300035C603 /* Preview Assets.xcassets in Resources */,
+				81673BA22BAB22300035C603 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81673BA92BAB22300035C603 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81673BB32BAB22300035C603 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		81673B942BAB222D0035C603 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81673B9E2BAB222D0035C603 /* ContentView.swift in Sources */,
+				81673BA02BAB222D0035C603 /* Item.swift in Sources */,
+				81673B9C2BAB222D0035C603 /* ___App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81673BA72BAB22300035C603 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81673BB02BAB22300035C603 /* ___Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81673BB12BAB22300035C603 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81673BBC2BAB22300035C603 /* ___UITestsLaunchTests.swift in Sources */,
+				81673BBA2BAB22300035C603 /* ___UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		81673BAD2BAB22300035C603 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 81673B972BAB222D0035C603 /* 時間割 */;
+			targetProxy = 81673BAC2BAB22300035C603 /* PBXContainerItemProxy */;
+		};
+		81673BB72BAB22300035C603 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 81673B972BAB222D0035C603 /* 時間割 */;
+			targetProxy = 81673BB62BAB22300035C603 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		81673BBD2BAB22300035C603 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		81673BBE2BAB22300035C603 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		81673BC02BAB22300035C603 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "時間割/___.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"時間割/Preview Content\"";
+				DEVELOPMENT_TEAM = 467P965G8J;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "personal.zikan.---";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		81673BC12BAB22300035C603 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "時間割/___.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"時間割/Preview Content\"";
+				DEVELOPMENT_TEAM = 467P965G8J;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "personal.zikan.---";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		81673BC32BAB22300035C603 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 467P965G8J;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "personal.zikan.---Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/時間割.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/時間割";
+			};
+			name = Debug;
+		};
+		81673BC42BAB22300035C603 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 467P965G8J;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "personal.zikan.---Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/時間割.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/時間割";
+			};
+			name = Release;
+		};
+		81673BC62BAB22300035C603 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 467P965G8J;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "personal.zikan.---UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "時間割";
+			};
+			name = Debug;
+		};
+		81673BC72BAB22300035C603 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 467P965G8J;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "personal.zikan.---UITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "時間割";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		81673B932BAB222D0035C603 /* Build configuration list for PBXProject "時間割" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81673BBD2BAB22300035C603 /* Debug */,
+				81673BBE2BAB22300035C603 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81673BBF2BAB22300035C603 /* Build configuration list for PBXNativeTarget "時間割" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81673BC02BAB22300035C603 /* Debug */,
+				81673BC12BAB22300035C603 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81673BC22BAB22300035C603 /* Build configuration list for PBXNativeTarget "時間割Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81673BC32BAB22300035C603 /* Debug */,
+				81673BC42BAB22300035C603 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81673BC52BAB22300035C603 /* Build configuration list for PBXNativeTarget "時間割UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81673BC62BAB22300035C603 /* Debug */,
+				81673BC72BAB22300035C603 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 81673B902BAB222D0035C603 /* Project object */;
+}
