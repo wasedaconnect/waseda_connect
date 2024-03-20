@@ -55,6 +55,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
               int count = 0;
               Navigator.popUntil(context, (_) => count++ >= 2);
               print("削除");
+
               _deleteLessonById(classData!.pKey);
               ref.read(updateTimeTableProvider.notifier).state = true;
             },

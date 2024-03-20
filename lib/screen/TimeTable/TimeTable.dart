@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:waseda_connect/components/ModalComponent.dart';
+import 'package:waseda_connect/components/FormModalComponent.dart';
 import 'package:waseda_connect/components/classDetailComponent.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
@@ -63,14 +64,53 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       allTimeTablesData = newTimeTablesData;
       allLessonData = newAllLessonData;
     });
-    print(allLessonData);
-    print(allTimeTablesData);
+    // print(allLessonData.length);
+    // print(allTimeTablesData.length);
     print("よんだよね");
   }
 
-  void _onFacultyChanged(String? selected) {
+  Future<void> _addDummyLesson(String name, int day, int period) async {
+    final LessonLogic instance = LessonLogic();
+    await instance.insertDummyLesson(name, day, period);
+  }
+
+  void _showAddLessonModal(int day, int period) {
+    showDialog(
+        context: context, // showDialogにはBuildContextが必要です
+        builder: (BuildContext context) {
+          TextEditingController _textFieldController = TextEditingController();
+          return FormModalComponent(
+            title: '授業の登録',
+            content: TextField(
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: "授業名を入力してください"),
+            ),
+            onConfirm: () {
+              // int count = 0;
+              // Navigator.popUntil(context, (_) => count++ >= 2);
+              _addDummyLesson(_textFieldController.text, day, period);
+              print("追加");
+              ref.read(updateTimeTableProvider.notifier).state = true;
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+            onCancel: () {
+              print("キャンセル");
+              Navigator.pop(context);
+            },
+            yesText: "追加する",
+          );
+        });
+  }
+
+  void _onFacultyChanged(String? selected, int day, int period) {
     // 選択された項目に基づいて何かアクションを行う
     print(selected);
+    print(day);
+    print(period);
+    if (selected == "") {
+      //空の場合
+      _showAddLessonModal(day, period);
+    }
     if (selected != null && selected != "") {
       print("a${selected}a");
       Navigator.push(

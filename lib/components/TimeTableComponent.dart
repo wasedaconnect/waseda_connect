@@ -6,8 +6,10 @@ import '../../constants/Dict.dart'; // 必要に応じてパスを調整して�
 class TimeTableComponent extends StatefulWidget {
   final List<LessonModel>? lessonData;
   final Map<String, dynamic>? selectedLessonData;
+
   final TimeTableModel? timeTableData;
-  final Function(String?)? onSelected;
+
+  final Function(String?, int, int)? onSelected;
 
   const TimeTableComponent({
     Key? key,
@@ -125,8 +127,9 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
 
     bool isSelected = selectedLessonData['id'] == lesson.id;
 
+  
     return InkWell(
-      onTap: () => widget.onSelected?.call(lesson.classId),
+      onTap: () => widget.onSelected?.call(lesson.classId, day, period),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.11,
         margin: EdgeInsets.all(4.0),
