@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:waseda_connect/components/Modal.dart';
+
+import 'package:waseda_connect/components/ModalComponent.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/provider/provider.dart';
@@ -78,19 +79,20 @@ class SyllabusItemWidget extends ConsumerWidget {
       onTap: () => showDialog(
         context: context, // showDialogにはBuildContextが必要です
         builder: (BuildContext context) {
-          return ConfirmDialog(
+          return ModalComponent(
             title: '${classData.courseName}を追加しますか',
             content: '${classData.courseName}をついかしますか',
             onConfirm: () async {
               onItemTap(classData.pKey);
               ref.read(updateTimeTableProvider.notifier).state = true;
-              // Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
             onCancel: () {
               print("キャンセル");
               ref.read(updateTimeTableProvider.notifier).state = true;
-              // Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
+            yesText: "追加",
           );
         },
       ), // タップされたときの処理

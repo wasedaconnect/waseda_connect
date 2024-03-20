@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
-class ConfirmDialog extends StatelessWidget {
+class ModalComponent extends StatelessWidget {
   final String title;
   final String content;
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
+  final String yesText;
 
-  const ConfirmDialog({
+  const ModalComponent({
     Key? key,
     required this.title,
     required this.content,
     required this.onConfirm,
     required this.onCancel,
+    required this.yesText,
   }) : super(key: key);
 
   @override
@@ -23,16 +25,15 @@ class ConfirmDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             onCancel();
-            Navigator.of(context).pop(); // ダイアログを閉じる
+            // ダイアログを閉じる
           },
           child: Text('キャンセル'),
         ),
         TextButton(
           onPressed: () {
-            onConfirm();
-            Navigator.of(context).pop(); // ダイアログを閉じる
+            onConfirm(); // ダイアログを閉じる
           },
-          child: Text('削除'),
+          child: Text(yesText),
         ),
       ],
     );

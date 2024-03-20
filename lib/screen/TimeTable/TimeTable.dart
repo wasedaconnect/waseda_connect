@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:waseda_connect/components/Modal.dart';
+
+import 'package:waseda_connect/components/ModalComponent.dart';
 import 'package:waseda_connect/components/classDetailComponent.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
@@ -61,8 +62,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
   void _onFacultyChanged(String? selected) {
     // 選択された項目に基づいて何かアクションを行う
-
-    if (selected != null && selected!="") {
+    print(selected);
+    if (selected != null && selected != "") {
       print("a${selected}a");
       Navigator.push(
         context,
@@ -176,7 +177,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                           showDialog(
                             context: context, // showDialogにはBuildContextが必要です
                             builder: (BuildContext context) {
-                              return ConfirmDialog(
+                              return ModalComponent(
                                 title: '削除の確認',
                                 content: 'この項目を削除してもよろしいですか？',
                                 onConfirm: () async {
@@ -186,11 +187,14 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                                         timeTableData.id, ref);
                                     if (complete) {
                                       print("成功");
-                                    } else
+                                      Navigator.of(context).pop();
+                                    } else {
                                       print("失敗");
-
+                                      Navigator.of(context).pop();
+                                    }
                                     // ユーザーに警告するなどの処理
                                     print('最後の項目は削除できません。');
+                                    Navigator.of(context).pop();
                                   }
                                   Navigator.of(context)
                                       .pop(); // ConfirmDialog内でNavigator.popを呼び出す代わりにここで呼び出す
@@ -201,6 +205,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                                   Navigator.of(context)
                                       .pop(); // ConfirmDialog内でNavigator.popを呼び出す代わりにここで呼び出す
                                 },
+                                yesText: "消去",
                               );
                             },
                           );
