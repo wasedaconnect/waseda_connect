@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:waseda_connect/components/ListForm.dart';
 import 'package:waseda_connect/constants/Dict.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:waseda_connect/provider/provider.dart';
 import 'package:waseda_connect/screen/Tutorial/Tutorial2.dart';
 
-class Tutorial extends StatefulWidget {
+class Tutorial extends ConsumerStatefulWidget {
   @override
   _TutorialState createState() => _TutorialState();
 }
 
-class _TutorialState extends State<Tutorial> {
+class _TutorialState extends ConsumerState<Tutorial> {
   String? selectedFaculty;
   String? selectedDepartment;
   String? selectedGrade;
@@ -75,10 +77,9 @@ class _TutorialState extends State<Tutorial> {
                     }
                     // チュートリアルが表示されたことを保存
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Tutorial2()),
-                    );
+                    await prefs.setBool('tutorialShown', true);
+                    ref.read(updateTimeTableProvider.notifier).state = true;
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                 ),
               ),

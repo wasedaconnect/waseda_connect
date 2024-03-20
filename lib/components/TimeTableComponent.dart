@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
+import 'package:waseda_connect/models/TimeTableModel.dart';
 import '../../constants/Dict.dart'; // 必要に応じてパスを調整してください
 
 class TimeTableComponent extends StatefulWidget {
   final List<LessonModel>? lessonData;
   final Map<String, dynamic>? selectedLessonData;
-  final Map<String, dynamic>? timeTableData;
+  final TimeTableModel? timeTableData;
   final Function(String?)? onSelected;
 
   const TimeTableComponent({
@@ -117,7 +118,8 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
           start2: 0,
           time2: 0,
           classroom: "",
-          classId: ""),
+          classId: "",
+          color: 0),
     );
 
     // selectedLessonDataがnullの場合は空のマップを使用

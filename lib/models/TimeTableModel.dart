@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:ulid/ulid.dart';
+import 'package:waseda_connect/constants/Dict.dart';
 import '../utils/DatabaseHelper.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TimeTableModel {
   final String id; // IDはulidで入れる
   final int grade; //学年
-  final String semester; //学期
+  final int semester; //学期
   final int year; //学年
   final String createdAt; // 作成日時（ISO 8601形式の文字列を想定）
 
@@ -52,8 +53,53 @@ class TimeTableLogic {
     // 各フィールドをデフォルトの時間割に設定。
     await prefs.setString('defaultId', idWithUlid);
     await prefs.setInt('defaultGrade', timeTable.grade);
-    await prefs.setString('defaultSemester', timeTable.semester);
+    await prefs.setInt('defaultSemester', timeTable.semester);
     await prefs.setInt('defaultYear', timeTable.year);
+  }
+
+  Future<void> initInsertTimeTable() async {
+    final db = await _dbHelper.timeTableDatabase;
+    final yearsList = [2021, 2022, 2023, 2024, 2025];
+    final semseterList = [1, 2, 3, 4];
+    for (var yearData in yearsList) {
+      for (var semesterData in semseterList) {
+        final idWithUlid = Ulid().toString();
+        final nowTime =
+            DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now());
+        var timeTableWithUlid = TimeTableModel(
+          id: idWithUlid,
+          grade: 1,
+          createdAt: nowTime,
+          semester: semesterData,
+          year: yearData,
+        );
+        await db.insert(
+          'timeTables',
+          timeTableWithUlid.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+    }
+  }
+
+  Future<List<TimeTableModel>> getTimeTablesByYear(int targetYear) async {
+    final db = await _dbHelper.timeTableDatabase;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'timeTables',
+      where: 'year = ?', // 特定の年に一致するレコードのみをフィルタリング
+      whereArgs: [targetYear],
+      orderBy: 'year DESC', // 念のため、年で降順に並び替え（必要に応じて）
+    );
+
+    return List.generate(maps.length, (i) {
+      return TimeTableModel(
+        id: maps[i]['id'],
+        grade: maps[i]['grade'],
+        createdAt: maps[i]['createdAt'],
+        semester: maps[i]['semester'],
+        year: maps[i]['year'],
+      );
+    });
   }
 
   //時間割をすべて取り出す

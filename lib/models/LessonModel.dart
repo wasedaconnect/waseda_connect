@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:ulid/ulid.dart';
+import 'package:waseda_connect/Screen/TimeTable/TimeTable.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
 import '../utils/DatabaseHelper.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,7 @@ class LessonModel {
   final int time2;
   final String classroom;
   final String classId; //早稲田が提供する授業コード,classと紐づけたい
+  final int color;
 
   LessonModel(
       {required this.id,
@@ -31,7 +33,8 @@ class LessonModel {
       required this.start2,
       required this.time2,
       required this.classroom,
-      required this.classId});
+      required this.classId,
+      required this.color});
 
   factory LessonModel.fromMap(Map<String, dynamic> map) {
     return LessonModel(
@@ -46,7 +49,8 @@ class LessonModel {
         start2: map['start2'],
         time2: map['time2'],
         classroom: map['classroom'],
-        classId: map['classId']);
+        classId: map['classId'],
+        color: map['color']);
   }
 
   Map<String, dynamic> toMap() {
@@ -62,7 +66,8 @@ class LessonModel {
       'start2': start2,
       'time2': time2,
       'classroom': classroom,
-      'classId': classId
+      'classId': classId,
+      'color': color
     };
   }
 }
@@ -94,7 +99,8 @@ class LessonLogic {
         start2: classData.classStart2,
         time2: classData.classTime2,
         classroom: classData.classroom,
-        classId: classId);
+        classId: classId,
+        color: 1);
 
     await db.insert(
       'lessons',
@@ -113,6 +119,22 @@ class LessonLogic {
       where: 'timeTableId = ?',
       whereArgs: [timeTableId],
     );
+    return List.generate(maps.length, (i) {
+      return LessonModel.fromMap(maps[i]);
+    });
+  }
+
+  //
+  Future<List<LessonModel>> getLessonsByTimeTableId(String timeTableId) async {
+    final db = await _dbHelper.lessonDatabase;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'lessons',
+      where: 'timeTableId = ?',
+      whereArgs: [timeTableId],
+    );
+
+    // 結果が空の場合はnullを返す
+
     return List.generate(maps.length, (i) {
       return LessonModel.fromMap(maps[i]);
     });

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
+import 'package:waseda_connect/models/TimeTableModel.dart';
 
 import 'Screen/displaySyllabus/SearchForm.dart';
 
@@ -59,15 +60,21 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _checkAndShowTutorial();
-    _copyDatabaseToDocumentDirectory().then((_) {
+    _checkAndShowTutorial(); //チュートリアル表示
+    _initLoad().then((_) {
+      //初めてアプリをダウンロードした人へ
       setState(() {
         _isLoading = false; // ロード完了
       });
-      ;
-    }); //ロードしていることをユーザーに知らせるものを作りたい。
+    });
+    // _updateLoad().then((_) {
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
+    // });
   }
 
+//最初にチュートリアル表示。
   Future<void> _checkAndShowTutorial() async {
     final prefs = await SharedPreferences.getInstance();
     final tutorialShown = prefs.getBool('tutorialShown') ?? false;
@@ -78,33 +85,47 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<void> _loadCsvData() async {
-    // final prefs = await SharedPreferences.getInstance();
-    // final isGetClassData = prefs.getBool('getClassData') ?? false;
-    // if (isGetClassData){
-    // ロードに一分かかるデータベース。
-    final ClassLogic instance = ClassLogic();
-    await instance.insertClass();
-    print("完了");
-    // }
-    // await prefs.setBool('getClassData',true);
-    // newTimeTableをデータベースに挿入する処理を呼び出
+//CSVから、DBファイルへ今使っていない
+  // Future<void> _loadCsvData() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final isGetClassData = prefs.getBool('getClassData') ?? false;
+  //   if (isGetClassData){
+  //   final ClassLogic instance = ClassLogic();
+  //   await instance.insertClass();
+  //   print("データベース完了");
+  //   }
+  //   await prefs.setBool('getClassData',true);
+  // }
+
+//初めてアプリをダウンロードした人へ
+  Future<void> _initLoad() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isGetInitData = prefs.getBool('getInitData') ?? false;
+    if (!isGetInitData) {
+      //１データベース初期化
+      final dbPath = path.join(
+          (await getApplicationDocumentsDirectory()).path, 'Class.db');
+      // データベースファイルが既に存在するか確認
+      await deleteDatabase(dbPath);
+      // アセットからデータを読み込む
+      final data = await rootBundle.load('assets/Class.db');
+      final bytes = data.buffer.asUint8List();
+      // ファイルを書き込む
+      await File(dbPath).writeAsBytes(bytes);
+      await prefs.setBool('getInitData', true);
+      //２タイムテーブル生成
+      final TimeTableLogic instance = TimeTableLogic();
+      await instance.initInsertTimeTable();
+      print("初期データ完了");
+    }
+    print("初期データ済み");
   }
 
-  Future<void> _copyDatabaseToDocumentDirectory() async {
-    final dbPath =
-        path.join((await getApplicationDocumentsDirectory()).path, 'Class.db');
-    // データベースファイルが既に存在するか確認
-    await deleteDatabase(dbPath);
-    // アセットからデータを読み込む
-    final data = await rootBundle.load('assets/Class.db');
-    final bytes = data.buffer.asUint8List();
-    // ファイルを書き込む
-    await File(dbPath).writeAsBytes(bytes);
-    print("完了");
-  }
+// //アプリのversionが変化したとき。
+//   Future<void> _updateLoad() async {
+//     }
 
-  // ページのリストを定義
+//   // ページのリストを定義
   final List<Widget> _pages = [
     // ここにページのウィジェットを追加
     TimeTable(),

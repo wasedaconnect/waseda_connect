@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,7 +26,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   }
 
   // ダミーデータの定義
-  List<LessonModel>? lessonData;
+  List<List<LessonModel>>? allLessonData;
 
   Map<String, dynamic> selectedLessonData = {
     "id": "1",
@@ -35,28 +37,36 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   Map<String, dynamic>? timeTableData;
 
   int? defaultYear;
-  String? defaultSemester;
+  int? defaultSemester;
   int? defaultGrade;
   List<TimeTableModel>? allTimeTablesData;
+  int nowYear = 2024;
 
   Future<void> _fetchData() async {
     final prefs = await SharedPreferences.getInstance();
+    //時間割
     final TimeTableLogic instance = TimeTableLogic();
-    var newTimeTablesData = await instance.getAllTimeTables();
-    final LessonLogic LessonInstance = LessonLogic();
-    final List<LessonModel> newAllLessonData =
-        await LessonInstance.getAllLessons();
+    var newTimeTablesData = await instance.getTimeTablesByYear(nowYear);
+    //授業データ
+    final LessonLogic lessonInstance = LessonLogic();
+    List<List<LessonModel>> newAllLessonData = [];
+    for (var timeTableData in newTimeTablesData) {
+      var newLessonData =
+          await lessonInstance.getLessonsByTimeTableId(timeTableData.id);
+      newAllLessonData.add(newLessonData);
+    }
+
     // SharedPreferencesからデータを読み込む
     // 値が存在しない場合はnullを許容
     setState(() {
       defaultYear = prefs.getInt('defaultYear');
-      defaultSemester = prefs.getString('defaultSemester');
+      defaultSemester = prefs.getInt('defaultSemester');
       defaultGrade = prefs.getInt('defaultGrade');
       allTimeTablesData = newTimeTablesData;
-      lessonData = newAllLessonData;
+      allLessonData = newAllLessonData;
     });
-
-    print(lessonData!.length);
+    print(allLessonData);
+    print(allTimeTablesData);
     print("よんだよね");
   }
 
@@ -87,7 +97,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       });
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('defaultYear', newTimeTableData.year);
-      await prefs.setString('defaultSemester', newTimeTableData.semester);
+      await prefs.setInt('defaultSemester', newTimeTableData.semester);
       await prefs.setInt('defaultGrade', newTimeTableData.grade);
       await prefs.setString('defaultId', newTimeTableData.id);
     }
@@ -124,119 +134,68 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   @override
   Widget build(BuildContext context) {
     var appBarText =
-        "令和${defaultYear ?? ""}年度　${defaultSemester ?? ""}学期　${defaultGrade ?? ""}年";
-    final pageTransition = ref.watch(updateTimeTableProvider);
-    if (pageTransition) {
-      // ページ遷移が検知された場合に実行する関数
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await _fetchData();
-        // 必要に応じて、状態をリセット
-        ref.read(updateTimeTableProvider.notifier).state = false;
-      });
-    }
+        "${nowYear ?? ""}年度";
+
+    // 仮定: timeTableDatasとlessonDatasはあらかじめ定義されているとします
+    // 例えば、List<TimeTableData> timeTableDatas = [...]; と List<List<LessonData>> lessonDatas = [...];
+    // ここで、lessonDatasは各タイムテーブルに対応するレッスンのリストのリストです
+
     return Scaffold(
-      appBar: AppBar(title: Text(appBarText), actions: <Widget>[
-        IconButton(
-          onPressed: () {
-            _showTitleOptions(context);
-          },
-          icon: Icon(Icons.add),
+        appBar: AppBar(
+          title: Text(appBarText),
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                _showTitleOptions(context);
+              },
+              icon: Icon(Icons.add),
+            ),
+          ],
         ),
-      ]),
-      body: TimeTableComponent(
-        lessonData: lessonData,
-        timeTableData: timeTableData,
-        selectedLessonData: selectedLessonData,
-        onSelected: _onFacultyChanged,
-      ),
-    );
+        body: PageView.builder(
+          itemCount: 4, // 生成するページ数
+          itemBuilder: (context, index) {
+            // indexは0から始まり、ページ数-1までの値を取ります
+            // ここで、各ページのヘッダータイトルやその他のデータを設定できます
+            String appBarText = "ページ ${index + 1} のタイトル";
+
+            // allLessonDataとallTimeTablesDataは、各ページに対応するデータのリストを想定
+            // selectedLessonDataは、選択されたレッスンデータを想定（ページごとに異なる場合は、これもリストで管理する）
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(appBarText),
+          
+              ),
+              body: TimeTableComponent(
+                lessonData:
+                    allLessonData?[index], // index番目のタイムテーブルに対応するレッスンデータ
+                timeTableData: allTimeTablesData?[index], // index番目のタイムテーブルデータ
+                selectedLessonData: selectedLessonData, // 選択されたレッスンデータ
+                onSelected: _onFacultyChanged,
+              ),
+            );
+          },
+        ));
   }
 
-//ドロップバーの表示。
   void _showTitleOptions(BuildContext context) {
     showMenu<String>(
       context: context,
       position: RelativeRect.fromLTRB(100, 80, 0, 20), // メニューの位置を調整
       items: [
-        ...?allTimeTablesData
-                ?.map<PopupMenuEntry<String>>((dynamic timeTableData) {
-              // PopupMenuItemの型を<String>に指定し、childにRowウィジェットを使用
-              return PopupMenuItem<String>(
-                value: timeTableData.id, // valueにはString型のIDを指定
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: 200),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          "令和${timeTableData.year ?? ""}年度　${timeTableData.semester ?? ""}学期　${timeTableData.grade ?? ""}年"), // childにはTextウィジェットを使用してnameを表示
-                      IconButton(
-                        icon: Icon(Icons.delete, size: 20.0),
-                        onPressed: () {
-                          print(allTimeTablesData!.length);
-                          showDialog(
-                            context: context, // showDialogにはBuildContextが必要です
-                            builder: (BuildContext context) {
-                              return ModalComponent(
-                                title: '削除の確認',
-                                content: 'この項目を削除してもよろしいですか？',
-                                onConfirm: () async {
-                                  if (allTimeTablesData!.length != 1) {
-                                    print("a");
-                                    var complete = await _deleteTimeTable(
-                                        timeTableData.id, ref);
-                                    if (complete) {
-                                      print("成功");
-                                      Navigator.of(context).pop();
-                                    } else {
-                                      print("失敗");
-                                      Navigator.of(context).pop();
-                                    }
-                                    // ユーザーに警告するなどの処理
-                                    print('最後の項目は削除できません。');
-                                    Navigator.of(context).pop();
-                                  }
-                                  Navigator.of(context)
-                                      .pop(); // ConfirmDialog内でNavigator.popを呼び出す代わりにここで呼び出す
-                                },
-                                onCancel: () {
-                                  // ユーザーがキャンセルした場合の処理
-                                  print('削除がキャンセルされました。');
-                                  Navigator.of(context)
-                                      .pop(); // ConfirmDialog内でNavigator.popを呼び出す代わりにここで呼び出す
-                                },
-                                yesText: "消去",
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList() ??
-            [],
-        PopupMenuItem<String>(
-          value: 'add_new', // 新しい時間割を追加するための特別な値
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.add, size: 24.0),
-              Text('時間割を追加'),
-            ],
-          ),
-        ),
+        // 2021年から2025年までの数字をリストとして生成し、それぞれの年に対してPopupMenuEntryを作成
+        ...List.generate(5, (index) {
+          int year = 2021 + index; // 2021年からスタート
+          return PopupMenuItem<String>(
+            value: year.toString(), // valueには年を文字列として設定
+            child: Text('$year年'),
+          );
+        }),
       ],
     ).then((String? newValue) {
       if (newValue != null) {
-        if (newValue == 'add_new') {
-          // 新しい時間割を追加する処理
-          _addNewTimeTable();
-        } else {
-          ref.read(updateTimeTableProvider.notifier).state = true;
-          _setTimeTable(newValue);
-        }
+        // 選択された年に対する処理
+        _setTimeTable(newValue);
       }
     });
   }

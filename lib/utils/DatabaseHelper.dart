@@ -25,14 +25,19 @@ class DatabaseHelper {
   ///データベースの初期化
   Future<Database> initializeLessonDatabase() async {
     var documentsDirectory =
-        await getApplicationDocumentsDirectory(); //アプリの保存する場所
-    String path = join(documentsDirectory.path, 'lesson.db'); //パスの作成
-    var lessonDatabase =
-        await openDatabase(path, version: 1, onCreate: _createLessonDb);
+        await getApplicationDocumentsDirectory(); // アプリの保存場所
+    String path = join(documentsDirectory.path, 'lesson.db'); // パスの作成
+    var lessonDatabase = await openDatabase(
+      path,
+      version: 2, // データベースのバージョンを更新
+      onCreate: _createLessonDb,
+      onUpgrade: _onUpgradeLessonDb, // マイグレーション処理を追加
+    );
+
     return lessonDatabase;
   }
 
-  ///データベースの初期化をSQL文で記述
+  /// データベースの初期化をSQL文で記述
   void _createLessonDb(Database db, int newVersion) async {
     await db.execute('''
   CREATE TABLE lessons (
@@ -48,10 +53,21 @@ class DatabaseHelper {
     time2 INTEGER,
     classroom TEXT,
     classId TEXT,
+    color INTEGER,
     FOREIGN KEY (timeTableId) REFERENCES timeTables(id),
     FOREIGN KEY (classId) REFERENCES classes(pKey)
   )
 ''');
+  }
+
+  /// データベースのマイグレーション処理
+  void _onUpgradeLessonDb(Database db, int oldVersion, int newVersion) async {
+    print(oldVersion);
+    if (oldVersion < 2) {
+      // 例: バージョン1から2へのマイグレーションで新しいカラムを追加
+      // await db.execute('ALTER TABLE lessons ADD COLUMN color INTEGER');
+    }
+    // さらに新しいバージョンへのマイグレーションが必要な場合は、ここに追加
   }
 
   //</lessonDB>
@@ -65,22 +81,36 @@ class DatabaseHelper {
   ///データベースの初期化
   Future<Database> initializeTimeTableDatabase() async {
     var documentsDirectory =
-        await getApplicationDocumentsDirectory(); //アプリの保存する場所
-    String path = join(documentsDirectory.path, 'TimeTable.db'); //パスの作成
-    var TimeTableDatabase =
-        await openDatabase(path, version: 1, onCreate: _createTimeTableDb);
+        await getApplicationDocumentsDirectory(); // アプリの保存場所
+    String path = join(documentsDirectory.path, 'TimeTable.db'); // パスの作成
+
+    var TimeTableDatabase = await openDatabase(
+      path,
+      version: 2, // バージョンを更新した場合はここを変更
+      onCreate: _createTimeTableDb,
+      onUpgrade: _onUpgrade, // マイグレーション処理を追加
+    );
     return TimeTableDatabase;
   }
 
-  ///データベースの初期化をSQL文で記述
+  /// データベースの初期化をSQL文で記述
   void _createTimeTableDb(Database db, int newVersion) async {
     await db.execute('CREATE TABLE timeTables ('
         'id TEXT PRIMARY KEY, '
         'grade INTEGER, '
         'createdAt TEXT, '
-        'semester TEXT, '
+        'semester INTEGER, '
         'year INTEGER'
         ')');
+  }
+
+  /// データベースのマイグレーション処理
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // バージョン1から2へのマイグレーション
+    if (oldVersion < 2) {
+      // await db.execute('ALTER TABLE timeTables ADD COLUMN updatedAt TEXT');
+    }
+    // さらに新しいバージョンへのマイグレーションが必要な場合は、ここに追加
   }
   //</timeTableDB>
 
