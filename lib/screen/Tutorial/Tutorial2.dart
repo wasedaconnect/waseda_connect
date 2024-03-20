@@ -12,7 +12,7 @@ class Tutorial2 extends ConsumerStatefulWidget {
 }
 
 class _Tutorial2State extends ConsumerState<Tutorial2> {
-  String? selectedSemester;
+  int? selectedSemester;
   int? selectedYear;
   int? selectedGrade;
   final List<String> semesters = ['春', '秋'];

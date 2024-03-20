@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
+import 'package:waseda_connect/models/TimeTableModel.dart';
 import '../../constants/Dict.dart'; // 必要に応じてパスを調整してください
 
 class TimeTableComponent extends StatefulWidget {
   final List<LessonModel>? lessonData;
   final Map<String, dynamic>? selectedLessonData;
-  final Map<String, dynamic>? timeTableData;
+
+  final TimeTableModel? timeTableData;
+
   final Function(String?, int, int)? onSelected;
 
   const TimeTableComponent({
@@ -106,20 +109,17 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
 
     // lessonDataから特定の曜日と時限に対応する授業を検索
     var lesson = lessonData.firstWhere(
-      (lesson) => lesson.day1 == day && lesson.start1 == period,
+      (lesson) => lesson.day == day && lesson.period == period,
       orElse: () => LessonModel(
           id: "",
           name: "",
           timeTableId: "",
           createdAt: "",
-          day1: 0,
-          start1: 0,
-          time1: 0,
-          day2: 0,
-          start2: 0,
-          time2: 0,
+          day: 0,
+          period: 0,
           classroom: "",
-          classId: ""),
+          classId: "",
+          color: 0),
     );
 
     // selectedLessonDataがnullの場合は空のマップを使用
@@ -127,7 +127,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
 
     bool isSelected = selectedLessonData['id'] == lesson.id;
 
-    print(lesson);
+  
     return InkWell(
       onTap: () => widget.onSelected?.call(lesson.classId, day, period),
       child: Container(
