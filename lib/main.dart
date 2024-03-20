@@ -108,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
     TimeTable(),
     DisplaySyllabus(),
     Test(),
+    DisplaySyllabus()
   ];
 
   Future<void> _onItemTapped(int index) async {
