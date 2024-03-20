@@ -78,7 +78,6 @@ class DatabaseHelper {
         'semester TEXT, '
         'year INTEGER'
         ')');
-   
   }
   //</timeTableDB>
 
