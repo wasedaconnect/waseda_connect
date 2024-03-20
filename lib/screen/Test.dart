@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
-import '../Screen/Syllabus/SyllabusSearchResult.dart';
+import '../screen/Syllabus/SyllabusSearchResult.dart';
 
 class Test extends StatefulWidget {
   @override
