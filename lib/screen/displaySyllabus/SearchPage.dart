@@ -59,17 +59,6 @@ class SearchFormWithSelect extends StatefulWidget {
 
 class _SyllabusSearchSelectState extends State<SearchFormWithSelect> {
   List<ClassModel>? SearchSelectResult;
-
-  final Map<int, String> numToPeriod = {
-    1: '1',
-    2: '2',
-    3: '3',
-    4: '4',
-    5: '5',
-    6: '6',
-    7: '7',
-    0: 'その他'
-  };
   int selectedSemester = 1;
   int selectedDay = 1;
   int selectedPeriod = 1;
@@ -140,14 +129,14 @@ class _SyllabusSearchSelectState extends State<SearchFormWithSelect> {
             ),
             SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              value: numToPeriod.keys.firstWhere(
-                  (key) => numToPeriod[key] == selectedDay,
+              value: periodMap.keys.firstWhere(
+                  (key) => periodMap[key] == selectedDay,
                   orElse: () => 0),
               decoration: InputDecoration(labelText: '曜日'),
-              items: numToPeriod.keys.map((int key) {
+              items: periodMap.keys.map((int key) {
                 return DropdownMenuItem<int>(
                   value: key,
-                  child: Text(numToPeriod[key]!),
+                  child: Text(periodMap[key]!),
                 );
               }).toList(),
               onChanged: (value) {
