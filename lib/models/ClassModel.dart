@@ -212,6 +212,37 @@ class ClassLogic {
       whereArgs: [pKey], // pKeyの値をwhere句の?に渡す
       limit: 1,
     );
+    print("maps");
+    if(maps.isEmpty){ //ダミーデータを参照したとき
+      print("ダミーの場合");
+      return ClassModel(
+        pKey: "dummydata", 
+        department: 0, 
+        courseName: "", 
+        instructor: "", 
+        semester: 0, 
+        courseCategory: "", 
+        assignedYear: 0, 
+        credits: 0, 
+        classroom: "", 
+        campus: "", 
+        languageUsed: "", 
+        teachingMethod: 0, 
+        courseCode: "", 
+        majorField: "", 
+        subField: "", 
+        minorField: "", 
+        level: "", 
+        classFormat: "", 
+        classDay1: 0, 
+        classStart1: 0, 
+        classTime1: 0, 
+        classDay2: 0, 
+        classStart2: 0, 
+        classTime2: 0, 
+        isOpened: 0
+      );
+    }
     print(maps[0]['pKey']);
     print(pKey);
     return ClassModel(
