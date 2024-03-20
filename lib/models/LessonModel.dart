@@ -2,7 +2,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:ulid/ulid.dart';
 import 'package:waseda_connect/Screen/TimeTable/TimeTable.dart';
+import 'package:waseda_connect/constants/Dict.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
+import 'package:waseda_connect/models/TimeTableModel.dart';
 import '../utils/DatabaseHelper.dart';
 import 'package:intl/intl.dart';
 
@@ -11,12 +13,9 @@ class LessonModel {
   final String name; // 授業名
   final String timeTableId; // 割り当てられた時間割ID
   final String createdAt; // 作成日時（ISO 8601形式の文字列を想定）
-  final int day1; // 一つ目の時間の曜日
-  final int start1; // 時限（1-7）
-  final int time1;
-  final int day2; //一週間ににこある授業のため。
-  final int start2;
-  final int time2;
+  final int day; // 一つ目の時間の曜日
+  final int period; // 時限（1-7）
+
   final String classroom;
   final String classId; //早稲田が提供する授業コード,classと紐づけたい
   final int color;
@@ -26,12 +25,8 @@ class LessonModel {
       required this.name,
       required this.timeTableId,
       required this.createdAt,
-      required this.day1,
-      required this.start1,
-      required this.time1,
-      required this.day2,
-      required this.start2,
-      required this.time2,
+      required this.day,
+      required this.period,
       required this.classroom,
       required this.classId,
       required this.color});
@@ -42,12 +37,8 @@ class LessonModel {
         name: map['name'],
         timeTableId: map['timeTableId'],
         createdAt: map['createdAt'],
-        day1: map['day1'],
-        start1: map['start1'],
-        time1: map['time1'],
-        day2: map['day2'],
-        start2: map['start2'],
-        time2: map['time2'],
+        day: map['day'],
+        period: map['period'],
         classroom: map['classroom'],
         classId: map['classId'],
         color: map['color']);
@@ -59,12 +50,8 @@ class LessonModel {
       'name': name,
       'timeTableId': timeTableId,
       'createdAt': createdAt,
-      'day1': day1,
-      'start1': start1,
-      'time1': time1,
-      'day2': day2,
-      'start2': start2,
-      'time2': time2,
+      'day': day,
+      'period': period,
       'classroom': classroom,
       'classId': classId,
       'color': color
@@ -77,36 +64,61 @@ class LessonModel {
 class LessonLogic {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
-  // 新しい授業をデータベースに追加するメソッド
+  // 新しい授業をデータベースに追加するメソッド 結構複雑
   Future<void> insertLesson(String classId) async {
     final db = await _dbHelper.lessonDatabase;
     final ClassLogic instance = ClassLogic();
     final classData = await instance.searchClassesByPKey(classId);
     final prefs = await SharedPreferences.getInstance();
-    final String timeTableId = prefs.getString('defaultId') ?? "";
-
-    // ULIDを生成
-    var lessonWithUlid = LessonModel(
-        id: Ulid().toString(), // ULIDを生成して文字列に変換
-        name: classData.courseName,
-        timeTableId: timeTableId,
-        createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
-            .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
-        day1: classData.classDay1,
-        start1: classData.classStart1,
-        time1: classData.classTime1,
-        day2: classData.classDay2,
-        start2: classData.classStart2,
-        time2: classData.classTime2,
-        classroom: classData.classroom,
-        classId: classId,
-        color: 1);
-
-    await db.insert(
-      'lessons',
-      lessonWithUlid.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    final int defaultYear = prefs.getInt('defaultYesr') ?? 2024;
+    final TimeTableLogic timeTableInstance = TimeTableLogic();
+    final timeTableData =
+        await timeTableInstance.getTimeTablesByYear(defaultYear);
+    for (var semesterData in termToSemester[classData.semester]!) {
+      //timetableごとにデータベースに入れる。
+      // ULIDを生成
+      print(semesterData);
+      for (int i = 0; i < classData.classTime1; i++) {
+        var lessonWithUlid = LessonModel(
+            id: Ulid().toString(), // ULIDを生成して文字列に変換
+            name: classData.courseName,
+            timeTableId: timeTableData[semesterData - 1].id,
+            createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
+                .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
+            day: classData.classDay1,
+            period: classData.classStart1 + i,
+            classroom: classData.classroom,
+            classId: classId,
+            color: 1);
+        await db.insert(
+          'lessons',
+          lessonWithUlid.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+      if (classData.classTime2 > 0) {
+        //週に二個以上ある科目かどうか
+      } else {
+        for (int i = 0; i < classData.classTime2; i++) {
+          var lessonWithUlid = LessonModel(
+              id: Ulid().toString(), // ULIDを生成して文字列に変換
+              name: classData.courseName,
+              timeTableId: timeTableData[semesterData - 1].id,
+              createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
+                  .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
+              day: classData.classDay2,
+              period: classData.classStart2 + i,
+              classroom: classData.classroom,
+              classId: classId,
+              color: 1);
+          await db.insert(
+            'lessons',
+            lessonWithUlid.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace,
+          );
+        }
+      }
+    }
   }
 
 //特定の時間割の授業をすべて出力。
@@ -175,12 +187,9 @@ class LessonLogic {
   Future<void> deleteLessonByClassId(String classId) async {
     final db = await _dbHelper.lessonDatabase;
     final prefs = await SharedPreferences.getInstance();
-    final String timeTableId = prefs.getString('defaultId') ?? "";
-    await db.delete(
-      'lessons',
-      where: 'classId = ? AND timeTableId = ?',
-      whereArgs: [classId, timeTableId]
-    );
+    await db.delete('lessons',
+        where: 'classId = ? ',
+        whereArgs: [classId]);
     print("削除できました");
   }
 }

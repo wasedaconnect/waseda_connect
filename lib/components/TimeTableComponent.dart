@@ -107,18 +107,14 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
 
     // lessonDataから特定の曜日と時限に対応する授業を検索
     var lesson = lessonData.firstWhere(
-      (lesson) => lesson.day1 == day && lesson.start1 == period,
+      (lesson) => lesson.day == day && lesson.period == period,
       orElse: () => LessonModel(
           id: "",
           name: "",
           timeTableId: "",
           createdAt: "",
-          day1: 0,
-          start1: 0,
-          time1: 0,
-          day2: 0,
-          start2: 0,
-          time2: 0,
+          day: 0,
+          period: 0,
           classroom: "",
           classId: "",
           color: 0),

@@ -36,17 +36,18 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   };
   Map<String, dynamic>? timeTableData;
 
-  int? defaultYear;
-  int? defaultSemester;
-  int? defaultGrade;
+  int defaultYear = 2024;
+
   List<TimeTableModel>? allTimeTablesData;
-  int nowYear = 2024;
 
   Future<void> _fetchData() async {
     final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      defaultYear = prefs.getInt('defaultYear') ?? 2024;
+    });
     //時間割
     final TimeTableLogic instance = TimeTableLogic();
-    var newTimeTablesData = await instance.getTimeTablesByYear(nowYear);
+    var newTimeTablesData = await instance.getTimeTablesByYear(defaultYear);
     //授業データ
     final LessonLogic lessonInstance = LessonLogic();
     List<List<LessonModel>> newAllLessonData = [];
@@ -59,9 +60,6 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     // SharedPreferencesからデータを読み込む
     // 値が存在しない場合はnullを許容
     setState(() {
-      defaultYear = prefs.getInt('defaultYear');
-      defaultSemester = prefs.getInt('defaultSemester');
-      defaultGrade = prefs.getInt('defaultGrade');
       allTimeTablesData = newTimeTablesData;
       allLessonData = newAllLessonData;
     });
@@ -92,59 +90,29 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   }
 
   //タイムテーブルの遷移。
-  Future<void> _setTimeTable(String id) async {
-    final TimeTableLogic instance = TimeTableLogic();
-    var newTimeTableData = await instance.getTimeTable(id);
-    if (newTimeTableData != null) {
-      setState(() {
-        defaultYear = newTimeTableData.year;
-        defaultSemester = newTimeTableData.semester;
-        defaultGrade = newTimeTableData.grade;
-      });
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt('defaultYear', newTimeTableData.year);
-      await prefs.setInt('defaultSemester', newTimeTableData.semester);
-      await prefs.setInt('defaultGrade', newTimeTableData.grade);
-      await prefs.setString('defaultId', newTimeTableData.id);
-    }
-  }
+  Future<void> _setTimeTable(int year) async {
+    print(year);
 
-//時間割追加というなの入力画面への遷移
-  Future<void> _addNewTimeTable() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Tutorial2()),
-    );
-  }
-
-  //時間割消去
-  Future<bool> _deleteTimeTable(String id, WidgetRef ref) async {
     final prefs = await SharedPreferences.getInstance();
-    final defaultId = prefs.getString('defaultId');
-    if (defaultId != id) {
-      final TimeTableLogic instance = TimeTableLogic();
-      await instance.deleteTimeTable(id);
-      var newTimeTablesData = await instance.getAllTimeTables();
-      setState(() {
-        allTimeTablesData = newTimeTablesData;
-      });
-
-      return true;
-    } else {
-      print("消去できない");
-      return false;
-    }
+    await prefs.setInt('defaultYear', year);
+    setState(() {
+      defaultYear = year;
+    });
   }
 
 //じかんわり
   @override
   Widget build(BuildContext context) {
-    var appBarText =
-        "${nowYear ?? ""}年度";
-
-    // 仮定: timeTableDatasとlessonDatasはあらかじめ定義されているとします
-    // 例えば、List<TimeTableData> timeTableDatas = [...]; と List<List<LessonData>> lessonDatas = [...];
-    // ここで、lessonDatasは各タイムテーブルに対応するレッスンのリストのリストです
+    var appBarText = "${defaultYear ?? ""}年度";
+    final pageTransition = ref.watch(updateTimeTableProvider);
+    if (pageTransition) {
+      // ページ遷移が検知された場合に実行する関数
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _fetchData();
+        // 必要に応じて、状態をリセット
+        ref.read(updateTimeTableProvider.notifier).state = false;
+      });
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -170,7 +138,6 @@ class _TimeTableState extends ConsumerState<TimeTable> {
             return Scaffold(
               appBar: AppBar(
                 title: Text(appBarText),
-          
               ),
               body: TimeTableComponent(
                 lessonData:
@@ -185,23 +152,24 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   }
 
   void _showTitleOptions(BuildContext context) {
-    showMenu<String>(
+    showMenu<int>(
       context: context,
       position: RelativeRect.fromLTRB(100, 80, 0, 20), // メニューの位置を調整
       items: [
         // 2021年から2025年までの数字をリストとして生成し、それぞれの年に対してPopupMenuEntryを作成
         ...List.generate(5, (index) {
           int year = 2021 + index; // 2021年からスタート
-          return PopupMenuItem<String>(
-            value: year.toString(), // valueには年を文字列として設定
+          return PopupMenuItem<int>(
+            value: year, // valueには年を文字列として設定
             child: Text('$year年'),
           );
         }),
       ],
-    ).then((String? newValue) {
+    ).then((int? newValue) {
       if (newValue != null) {
         // 選択された年に対する処理
         _setTimeTable(newValue);
+        ref.read(updateTimeTableProvider.notifier).state = true;
       }
     });
   }
