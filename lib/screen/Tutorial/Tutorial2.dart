@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waseda_connect/components/ListForm.dart';
 import 'package:waseda_connect/main.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
+import 'package:waseda_connect/provider/provider.dart';
 
-class Tutorial2 extends StatefulWidget {
+class Tutorial2 extends ConsumerStatefulWidget {
   @override
   _Tutorial2State createState() => _Tutorial2State();
 }
 
-class _Tutorial2State extends State<Tutorial2> {
+class _Tutorial2State extends ConsumerState<Tutorial2> {
   String? selectedSemester;
   int? selectedYear;
   int? selectedGrade;
@@ -79,11 +81,9 @@ class _Tutorial2State extends State<Tutorial2> {
                   await instance.insertTimeTable(newTimeTable);
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('tutorialShown', true);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyHomePage(title: "tilte")),
-                  );
+                  //プロバイダー変更
+                  ref.read(updateTimeTableProvider.notifier).state = true;
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
               ),
             ],

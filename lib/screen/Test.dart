@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:waseda_connect/components/Modal.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
+import 'package:waseda_connect/provider/provider.dart';
 import '../Screen/Syllabus/SyllabusSearchResult.dart';
 
 class Test extends StatefulWidget {
@@ -58,7 +61,7 @@ class _SyllabusSearchScreenState extends State<Test> {
   }
 }
 
-class SyllabusItemWidget extends StatelessWidget {
+class SyllabusItemWidget extends ConsumerWidget {
   final ClassModel classData;
 
   const SyllabusItemWidget({Key? key, required this.classData})
@@ -70,9 +73,27 @@ class SyllabusItemWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onTap: () => onItemTap(classData.pKey), // タップされたときの処理
+      onTap: () => showDialog(
+        context: context, // showDialogにはBuildContextが必要です
+        builder: (BuildContext context) {
+          return ConfirmDialog(
+            title: '${classData.courseName}を追加しますか',
+            content: '${classData.courseName}をついかしますか',
+            onConfirm: () async {
+              onItemTap(classData.pKey);
+              ref.read(updateTimeTableProvider.notifier).state = true;
+              // Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+            onCancel: () {
+              print("キャンセル");
+              ref.read(updateTimeTableProvider.notifier).state = true;
+              // Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+          );
+        },
+      ), // タップされたときの処理
       child: ListTile(
         title: Text(classData.courseName),
       ),

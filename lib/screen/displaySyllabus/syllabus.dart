@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-
 Widget syllabusToWidget(Syllabus model) {
   return Container(
       padding: const EdgeInsets.all(1), child: Text('syllabusToWidget'));

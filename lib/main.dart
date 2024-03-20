@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
-import 'Screen/displaySyllabus/syllabus.tmp.dart';
+import 'package:waseda_connect/screen/displaySyllabus/SearchForm.dart';
+
 import 'Screen/TimeTable/TimeTable.dart';
 import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -106,9 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _pages = [
     // ここにページのウィジェットを追加
     TimeTable(),
-    DisplaySyllabus(),
+    SearchPage(),
     Test(),
-    DisplaySyllabus()
   ];
 
   Future<void> _onItemTapped(int index) async {

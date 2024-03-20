@@ -106,6 +106,7 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
   ],
 };
 List<String> weekdays = ['月', '火', '水', '木', '金', '土', '他'];
+List<int> weekdays_num = [1, 2, 3, 4, 5, 6, 0];
 final startTime = ['08:50', '10:40', '13:10', '15:05', '17:00', '18:55'];
 final endTime = ['10:30', '12:20', '14:50', '16:45', '18:40', '20:35'];
 final List<String> semesters = ['春', '秋'];
@@ -192,4 +193,15 @@ Map<int, String> termMap = {
   7: '秋クォーター', // 「秋学期（アジア）」も含む
   8: '冬季集中',
   9: '春季集中',
+};
+Map<int, String> periodMap = {
+  1: "１時限",
+  2: "２時限",
+  3: "３時限",
+  4: "４時限",
+  5: "５時限",
+  6: "６時限",
+  7: "７時限",
+  10: "フルオンデマンド",
+  11: "その他"
 };
