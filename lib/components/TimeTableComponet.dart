@@ -21,12 +21,12 @@ class TimeTableComponent extends StatefulWidget {
 
 class _TimeTableComponentState extends State<TimeTableComponent> {
   Map<int, TableColumnWidth> get columnWidths => {
-        0: FixedColumnWidth(64.0),
+        0: FixedColumnWidth(26.0),
         for (int i = 1; i <= weekdays.length; i++) i: FlexColumnWidth(),
       };
 
   TableBorder get tableBorder => TableBorder.all(
-        color: Colors.black,
+        color: Colors.grey[250] ?? Colors.grey,
         width: 1,
       );
 
@@ -35,7 +35,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
     return Column(
       children: [
         Container(
-          color: Colors.red,
+          color: Colors.white,
           child: Table(
             columnWidths: columnWidths,
             border: tableBorder,
@@ -59,7 +59,8 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
               border: tableBorder,
               children: List.generate(
                 6, // 仮定で一日の最大時限数を6とします
-                (index) => _buildTableRow(index + 1, weekdays, context),
+                (index) => _buildTableRow(
+                    index + 1, weekdays, startTime, endTime, context),
               ),
             ),
           ),
@@ -68,23 +69,24 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
     );
   }
 
-  TableRow _buildTableRow(
-      int period, List<String> weekdays, BuildContext context) {
+  TableRow _buildTableRow(int period, List<String> weekdays,
+      List<String> startTime, List<String> endTime, BuildContext context) {
     return TableRow(
       children: [
         Container(
           height: MediaQuery.of(context).size.height * 0.11,
-          color: Colors.grey[300],
+          color: Colors.white,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // ここではstartTimeとendTimeを直接指定していますが、
                 // 実際にはwidget.timeTableDataから取得する必要があります
-                Text('08:00', style: TextStyle(fontSize: 12)),
-                Text('第$period時限',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                Text('09:00', style: TextStyle(fontSize: 12)),
+                Text('${startTime[period - 1]}', style: TextStyle(fontSize: 8)),
+                Text('$period',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text('${endTime[period - 1]}', style: TextStyle(fontSize: 8)),
               ],
             ),
           ),
@@ -114,10 +116,25 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
       onTap: () => widget.onSelected?.call(lesson['id']),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.11,
-        color: isSelected ? Colors.blue[100] : null, // 選択された授業をハイライト
+        margin: EdgeInsets.all(4.0),
+        decoration: BoxDecoration(
+          color: Colors.grey[350], // 授業セルの色
+          // border: Border.all(
+          //   color: Colors.grey, // 枠線の色を設定
+          // ),
+          borderRadius: BorderRadius.circular(10.0), // 角丸
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 1,
+              offset: Offset(0, 2), // 影のオフセット
+            ),
+          ],
+        ),
         child: Center(
           child: Text(
-            lesson.isNotEmpty ? lesson['name'] : '',
+            lesson['name'] ?? '',
             style: TextStyle(
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),

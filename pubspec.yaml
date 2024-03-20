@@ -45,7 +45,6 @@ dependencies:
   http: ^1.2.1
   dio: ^5.4.1
   csv: ^6.0.0
-  dio: ^5.4.1
 
 dev_dependencies:
   flutter_test:

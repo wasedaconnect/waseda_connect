@@ -105,14 +105,22 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
     'スポーツ文化コース',
   ],
 };
-List<String> weekdays = ['月', '火', '水', '木', '金', '土'];
-final startTime = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00'];
-final endTime = ['8:50', '9:50', '10:50', '11:50', '12:50', '13:50'];
+List<String> weekdays = ['月', '火', '水', '木', '金', '土', '他'];
+final startTime = ['08:50', '10:40', '13:10', '15:05', '17:00', '18:55'];
+final endTime = ['10:30', '12:20', '14:50', '16:45', '18:40', '20:35'];
 final List<String> semesters = ['春', '秋'];
 final List<int> grades = [1, 2, 3, 4];
 final List<int> years = [5, 6];
 
-final Map<int, String>numToDay= {1:'月', 2:'火', 3:'水', 4:'木', 5:'金', 6:'土', 0:'無'};
+final Map<int, String> numToDay = {
+  1: '月',
+  2: '火',
+  3: '水',
+  4: '木',
+  5: '金',
+  6: '土',
+  0: '無'
+};
 const Map<int, String> departments = {
   1: '政治経済学部',
   2: '法学部',
@@ -172,6 +180,3 @@ const Map<int, String> classFormatDict = {
   8: '対面',
   0: 'なし', // 追加された「なし」のマッピング
 };
-
-
-

@@ -77,7 +77,7 @@ class LessonLogic {
         createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
             .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
         day1: lesson.day1,
-        start1:lesson.start1,
+        start1: lesson.start1,
         time1: lesson.time1,
         day2: lesson.day2,
         start2: lesson.start2,
