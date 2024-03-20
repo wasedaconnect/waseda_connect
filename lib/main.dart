@@ -1,9 +1,8 @@
 import 'dart:io';
-
+import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
@@ -58,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    // _checkAndShowTutorial();
+    _checkAndShowTutorial();
     _copyDatabaseToDocumentDirectory().then((_) {
       setState(() {
         _isLoading = false; // ロード完了
@@ -71,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final prefs = await SharedPreferences.getInstance();
     final tutorialShown = prefs.getBool('tutorialShown') ?? false;
     if (!tutorialShown) {
-      Navigator.of(context as BuildContext).push(
+      Navigator.of(context ).push(
         MaterialPageRoute(builder: (context) => Tutorial()),
       );
     }
@@ -92,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _copyDatabaseToDocumentDirectory() async {
     final dbPath =
-        join((await getApplicationDocumentsDirectory()).path, 'Class.db');
+        path.join((await getApplicationDocumentsDirectory()).path, 'Class.db');
     // データベースファイルが既に存在するか確認
     await deleteDatabase(dbPath);
     // アセットからデータを読み込む

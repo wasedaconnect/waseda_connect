@@ -191,7 +191,8 @@ class ClassLogic {
 //コースネームでlike検索。
   Future<List<ClassModel>> searchClassesByName(String courseName) async {
     final db = await _dbHelper.classDatabase;
-    final List<Map<String, dynamic>> maps = await db.query(
+    final List<Map<String, dynamic>> maps = await db
+    .query(
       'classes',
       where: 'courseName LIKE ?',
       whereArgs: ['%$courseName%'],

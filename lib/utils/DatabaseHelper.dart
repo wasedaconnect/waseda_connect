@@ -96,9 +96,9 @@ class DatabaseHelper {
     String path = join(documentsDirectory.path, 'Class.db'); // パスの作成
 
     // データベースファイルが存在する場合、削除する
-    if (await databaseExists(path)) {
-      await deleteDatabase(path);
-    }
+    // if (await databaseExists(path)) {
+    //   await deleteDatabase(path);
+    // }
 
     // 新しいデータベースを作成
     return openDatabase(path, version: 1,
