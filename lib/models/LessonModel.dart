@@ -148,4 +148,17 @@ class LessonLogic {
       whereArgs: [id],
     );
   }
+
+// 特定の授業を削除する機能
+  Future<void> deleteLessonByClassId(String classId) async {
+    final db = await _dbHelper.lessonDatabase;
+    final prefs = await SharedPreferences.getInstance();
+    final String timeTableId = prefs.getString('defaultId') ?? "";
+    await db.delete(
+      'lessons',
+      where: 'classId = ? AND timeTableId = ?',
+      whereArgs: [classId, timeTableId]
+    );
+    print("削除できました");
+  }
 }
