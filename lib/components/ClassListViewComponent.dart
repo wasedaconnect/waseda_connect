@@ -48,48 +48,52 @@ class SyllabusItemWidget extends StatelessWidget {
               child: InkWell(
                 child: Row(
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            classData.courseName,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
                             ),
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            classData.instructor,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.grey[700],
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              classData.courseName,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            '${termMap[classData.semester]} ${numToDay[classData.classDay1]} 時限(Dictまだ)${classData.classStart1}',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.grey[700],
+                            SizedBox(height: 8.0),
+                            Text(
+                              classData.instructor,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.grey[700],
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 8.0),
+                            Text(
+                              '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${classData.classStart1}',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
