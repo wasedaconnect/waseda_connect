@@ -195,7 +195,7 @@ class ClassLogic {
       'classes',
       where: 'courseName LIKE ?',
       whereArgs: ['%$courseName%'],
-      limit: 10,
+      limit: 30000,
     );
 
     return List.generate(maps.length, (i) {
@@ -203,6 +203,7 @@ class ClassLogic {
     });
   }
 
+//pKey
   Future<ClassModel> searchClassesByPKey(String pKey) async {
     final db = await _dbHelper.classDatabase;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -243,25 +244,37 @@ class ClassLogic {
   }
 
   Future<List<ClassModel>> searchClasses(
-      int? day, int? time, int? teachingMethod, int? department) async {
+      // 各変数を999で初期化
+      // 引数があれば値を更新し検索条件とする
+      {int semester = 999,
+      int day = 999,
+      int time = 999,
+      int teachingMethod = 999,
+      int department = 999}) async {
     final db = await _dbHelper.classDatabase;
     List<String> whereClauses = [];
     List<dynamic> whereArgs = [];
 
+    print('searchClasses: $semester : $day : $time');
+
     // 条件を動的に構築
-    if (day != null) {
+    if (semester != 999) {
+      whereClauses.add('semester = ?');
+      whereArgs.add(semester);
+    }
+    if (day != 999) {
       whereClauses.add('(classDay1 = ? OR classDay2 = ?)');
       whereArgs.addAll([day, day]);
     }
-    if (time != null) {
+    if (time != 999) {
       whereClauses.add('(classStart1 = ? OR classStart2 = ?)');
       whereArgs.addAll([time, time]);
     }
-    if (teachingMethod != null) {
+    if (teachingMethod != 999) {
       whereClauses.add('teachingMethod = ?');
       whereArgs.add(teachingMethod);
     }
-    if (department != null) {
+    if (department != 999) {
       whereClauses.add('department = ?');
       whereArgs.add(department);
     }
@@ -274,7 +287,7 @@ class ClassLogic {
     final List<Map<String, dynamic>> maps = await db.query('classes',
         where: whereClause,
         whereArgs: whereArgs.isNotEmpty ? whereArgs : null,
-        limit: 10);
+        limit: 30000);
 
     // 結果をClassModelのリストに変換
     return List<ClassModel>.from(maps.map((map) => ClassModel.fromMap(map)));

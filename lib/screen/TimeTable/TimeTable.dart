@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:waseda_connect/components/Modal.dart';
+
+import 'package:waseda_connect/components/ModalComponent.dart';
+import 'package:waseda_connect/components/classDetailComponent.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
+import 'package:waseda_connect/provider/provider.dart';
 
 import 'package:waseda_connect/screen/Tutorial/Tutorial2.dart';
-import '../../components/TimeTableComponet.dart'; // 正しいパスに置き換えてください
+import '../../components/TimeTableComponent.dart'; // 正しいパスに置き換えてください
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TimeTable extends ConsumerStatefulWidget {
@@ -17,13 +20,6 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // 依存関係が変更された（例えば、ページに戻った）ときにデータを再フェッチする
     _fetchData();
   }
 
@@ -42,13 +38,14 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   String? defaultSemester;
   int? defaultGrade;
   List<TimeTableModel>? allTimeTablesData;
+
   Future<void> _fetchData() async {
-    
     final prefs = await SharedPreferences.getInstance();
     final TimeTableLogic instance = TimeTableLogic();
     var newTimeTablesData = await instance.getAllTimeTables();
     final LessonLogic LessonInstance = LessonLogic();
-    final List<LessonModel> newAllLessonData= await LessonInstance.getAllLessons();
+    final List<LessonModel> newAllLessonData =
+        await LessonInstance.getAllLessons();
     // SharedPreferencesからデータを読み込む
     // 値が存在しない場合はnullを許容
     setState(() {
@@ -56,16 +53,26 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       defaultSemester = prefs.getString('defaultSemester');
       defaultGrade = prefs.getInt('defaultGrade');
       allTimeTablesData = newTimeTablesData;
-      timeTableData=newAllLessonData;
+      lessonData = newAllLessonData;
     });
 
-    print(defaultGrade);
+    print(lessonData!.length);
     print("よんだよね");
   }
 
   void _onFacultyChanged(String? selected) {
     // 選択された項目に基づいて何かアクションを行う
-    print("Selected lesson: $selected");
+    print(selected);
+    if (selected != null && selected != "") {
+      print("a${selected}a");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ClassDetailComponent(
+                  classId: selected,
+                )),
+      );
+    }
   }
 
   //タイムテーブルの遷移。
@@ -118,6 +125,15 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   Widget build(BuildContext context) {
     var appBarText =
         "令和${defaultYear ?? ""}年度　${defaultSemester ?? ""}学期　${defaultGrade ?? ""}年";
+    final pageTransition = ref.watch(updateTimeTableProvider);
+    if (pageTransition) {
+      // ページ遷移が検知された場合に実行する関数
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _fetchData();
+        // 必要に応じて、状態をリセット
+        ref.read(updateTimeTableProvider.notifier).state = false;
+      });
+    }
     return Scaffold(
       appBar: AppBar(title: Text(appBarText), actions: <Widget>[
         IconButton(
@@ -161,7 +177,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                           showDialog(
                             context: context, // showDialogにはBuildContextが必要です
                             builder: (BuildContext context) {
-                              return ConfirmDialog(
+                              return ModalComponent(
                                 title: '削除の確認',
                                 content: 'この項目を削除してもよろしいですか？',
                                 onConfirm: () async {
@@ -171,11 +187,14 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                                         timeTableData.id, ref);
                                     if (complete) {
                                       print("成功");
-                                    } else
+                                      Navigator.of(context).pop();
+                                    } else {
                                       print("失敗");
-
+                                      Navigator.of(context).pop();
+                                    }
                                     // ユーザーに警告するなどの処理
                                     print('最後の項目は削除できません。');
+                                    Navigator.of(context).pop();
                                   }
                                   Navigator.of(context)
                                       .pop(); // ConfirmDialog内でNavigator.popを呼び出す代わりにここで呼び出す
@@ -186,6 +205,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                                   Navigator.of(context)
                                       .pop(); // ConfirmDialog内でNavigator.popを呼び出す代わりにここで呼び出す
                                 },
+                                yesText: "消去",
                               );
                             },
                           );
@@ -214,6 +234,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           // 新しい時間割を追加する処理
           _addNewTimeTable();
         } else {
+          ref.read(updateTimeTableProvider.notifier).state = true;
           _setTimeTable(newValue);
         }
       }

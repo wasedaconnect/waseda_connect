@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:waseda_connect/models/LessonModel.dart';
 import '../../constants/Dict.dart'; // 必要に応じてパスを調整してください
 
 class TimeTableComponent extends StatefulWidget {
-  final List<Map<String, dynamic>>? lessonData;
+  final List<LessonModel>? lessonData;
   final Map<String, dynamic>? selectedLessonData;
   final Map<String, dynamic>? timeTableData;
   final Function(String?)? onSelected;
@@ -60,7 +61,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
               children: List.generate(
                 6, // 仮定で一日の最大時限数を6とします
                 (index) => _buildTableRow(
-                    index + 1, weekdays, startTime, endTime, context),
+                    index + 1, weekdays_num, startTime, endTime, context),
               ),
             ),
           ),
@@ -69,7 +70,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
     );
   }
 
-  TableRow _buildTableRow(int period, List<String> weekdays,
+  TableRow _buildTableRow(int period, List<int> weekdays,
       List<String> startTime, List<String> endTime, BuildContext context) {
     return TableRow(
       children: [
@@ -92,28 +93,40 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
           ),
         ),
         for (int i = 0; i < weekdays.length; i++)
-          _buildLessonCell(period, weekdays[i]),
+          _buildLessonCell(period, weekdays_num[i]),
       ],
     );
   }
 
-  Widget _buildLessonCell(int period, String day) {
+  Widget _buildLessonCell(int period, int day) {
     // lessonDataがnullの場合は空のリストを使用
     final lessonData = widget.lessonData ?? [];
 
     // lessonDataから特定の曜日と時限に対応する授業を検索
     var lesson = lessonData.firstWhere(
-      (lesson) => lesson['day'] == day && lesson['period'] == period,
-      orElse: () => {},
+      (lesson) => lesson.day1 == day && lesson.start1 == period,
+      orElse: () => LessonModel(
+          id: "",
+          name: "",
+          timeTableId: "",
+          createdAt: "",
+          day1: 0,
+          start1: 0,
+          time1: 0,
+          day2: 0,
+          start2: 0,
+          time2: 0,
+          classroom: "",
+          classId: ""),
     );
 
     // selectedLessonDataがnullの場合は空のマップを使用
     final selectedLessonData = widget.selectedLessonData ?? {};
 
-    bool isSelected = selectedLessonData['id'] == lesson['id'];
+    bool isSelected = selectedLessonData['id'] == lesson.id;
 
     return InkWell(
-      onTap: () => widget.onSelected?.call(lesson['id']),
+      onTap: () => widget.onSelected?.call(lesson.classId),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.11,
         margin: EdgeInsets.all(4.0),
@@ -134,7 +147,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
         ),
         child: Center(
           child: Text(
-            lesson['name'] ?? '',
+            lesson.name,
             style: TextStyle(
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),

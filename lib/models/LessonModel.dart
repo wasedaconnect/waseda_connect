@@ -108,7 +108,7 @@ class LessonLogic {
     final prefs = await SharedPreferences.getInstance();
     final String timeTableId = prefs.getString('defaultId') ?? "";
     final db = await _dbHelper.lessonDatabase;
-     final List<Map<String, dynamic>> maps = await db.query(
+    final List<Map<String, dynamic>> maps = await db.query(
       'lessons',
       where: 'timeTableId = ?',
       whereArgs: [timeTableId],
@@ -121,7 +121,7 @@ class LessonLogic {
   // 授業をIDから取得するメソッド
   Future<LessonModel?> getLessonById(String id) async {
     final db = await _dbHelper.lessonDatabase;
-    
+
     final List<Map<String, dynamic>> maps = await db.query(
       'lessons',
       where: 'id = ?',
