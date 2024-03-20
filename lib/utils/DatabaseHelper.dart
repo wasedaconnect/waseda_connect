@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -36,19 +34,24 @@ class DatabaseHelper {
 
   ///データベースの初期化をSQL文で記述
   void _createLessonDb(Database db, int newVersion) async {
-    await db.execute('CREATE TABLE lessons ('
-        'id TEXT PRIMARY KEY, '
-        'name TEXT, '
-        'timeTableId TEXT, '
-        'createdAt TEXT, '
-        'day1 INTEGER, '
-        'start INTEGER,'
-        'time1 INTEGER,'
-        'day2 INTEGER,'
-        'start2 INTEGER,'
-        'time2 INTEGER,'
-        'classId TEXT'
-        ')');
+    await db.execute('''
+  CREATE TABLE lessons (
+    id TEXT PRIMARY KEY,
+    name TEXT,
+    timeTableId TEXT,
+    createdAt TEXT,
+    day1 INTEGER,
+    start1 INTEGER,
+    time1 INTEGER,
+    day2 INTEGER,
+    start2 INTEGER,
+    time2 INTEGER,
+    classroom TEXT,
+    classId TEXT,
+    FOREIGN KEY (timeTableId) REFERENCES timeTables(id),
+    FOREIGN KEY (classId) REFERENCES classes(pKey)
+  )
+''');
   }
 
   //</lessonDB>
@@ -78,7 +81,6 @@ class DatabaseHelper {
         'semester TEXT, '
         'year INTEGER'
         ')');
-   
   }
   //</timeTableDB>
 
@@ -96,9 +98,6 @@ class DatabaseHelper {
     String path = join(documentsDirectory.path, 'Class.db'); // パスの作成
 
     // データベースファイルが存在する場合、削除する
-    // if (await databaseExists(path)) {
-    //   await deleteDatabase(path);
-    // }
 
     // 新しいデータベースを作成
     return openDatabase(path, version: 1,

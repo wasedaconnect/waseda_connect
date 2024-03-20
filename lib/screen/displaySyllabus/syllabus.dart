@@ -3,8 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:waseda_connect/screen/Syllabus/Syllabus.dart';
 
-
-
 Widget syllabusToWidget(Syllabus model) {
   return Container(
       padding: const EdgeInsets.all(1), child: Text('syllabusToWidget'));

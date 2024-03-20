@@ -191,8 +191,7 @@ class ClassLogic {
 //コースネームでlike検索。
   Future<List<ClassModel>> searchClassesByName(String courseName) async {
     final db = await _dbHelper.classDatabase;
-    final List<Map<String, dynamic>> maps = await db
-    .query(
+    final List<Map<String, dynamic>> maps = await db.query(
       'classes',
       where: 'courseName LIKE ?',
       whereArgs: ['%$courseName%'],
@@ -202,6 +201,45 @@ class ClassLogic {
     return List.generate(maps.length, (i) {
       return ClassModel.fromMap(maps[i]);
     });
+  }
+
+  Future<ClassModel> searchClassesByPKey(String pKey) async {
+    final db = await _dbHelper.classDatabase;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'classes',
+      where: 'pKey = ?',
+      whereArgs: [pKey], // pKeyの値をwhere句の?に渡す
+      limit: 1,
+    );
+    print(maps[0]['pKey']);
+    print(pKey);
+    return ClassModel(
+      pKey: maps[0]['pKey'],
+      department: maps[0]['department'],
+      courseName: maps[0]['courseName'],
+      instructor: maps[0]['instructor'],
+      semester: maps[0]['semester'],
+      courseCategory: maps[0]['courseCategory'],
+      assignedYear: maps[0]['assignedYear'],
+      credits: maps[0]['credits'],
+      classroom: maps[0]['classroom'],
+      campus: maps[0]['campus'],
+      languageUsed: maps[0]['languageUsed'],
+      teachingMethod: maps[0]['teachingMethod'],
+      courseCode: maps[0]['courseCode'],
+      majorField: maps[0]['majorField'],
+      subField: maps[0]['subField'],
+      minorField: maps[0]['minorField'],
+      level: maps[0]['level'],
+      classFormat: maps[0]['classFormat'],
+      classDay1: maps[0]['classDay1'],
+      classStart1: maps[0]['classStart1'],
+      classTime1: maps[0]['classTime1'],
+      classDay2: maps[0]['classDay2'],
+      classStart2: maps[0]['classStart2'],
+      classTime2: maps[0]['classTime2'],
+      isOpened: maps[0]['isOpened'],
+    );
   }
 
   Future<List<ClassModel>> searchClasses(

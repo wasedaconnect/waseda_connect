@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:waseda_connect/components/Modal.dart';
+import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
 
 import 'package:waseda_connect/screen/Tutorial/Tutorial2.dart';
@@ -27,10 +28,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   }
 
   // ダミーデータの定義
-  List<Map<String, dynamic>> lessonData = [
-    {"id": "1", "name": "数学", "day": "月", "period": 1},
-    {"id": "2", "name": "英語", "day": "火", "period": 2},
-  ];
+  List<LessonModel>? lessonData;
 
   Map<String, dynamic> selectedLessonData = {
     "id": "1",
@@ -45,9 +43,12 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   int? defaultGrade;
   List<TimeTableModel>? allTimeTablesData;
   Future<void> _fetchData() async {
+    
     final prefs = await SharedPreferences.getInstance();
     final TimeTableLogic instance = TimeTableLogic();
     var newTimeTablesData = await instance.getAllTimeTables();
+    final LessonLogic LessonInstance = LessonLogic();
+    final List<LessonModel> newAllLessonData= await LessonInstance.getAllLessons();
     // SharedPreferencesからデータを読み込む
     // 値が存在しない場合はnullを許容
     setState(() {
@@ -55,6 +56,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       defaultSemester = prefs.getString('defaultSemester');
       defaultGrade = prefs.getInt('defaultGrade');
       allTimeTablesData = newTimeTablesData;
+      timeTableData=newAllLessonData;
     });
 
     print(defaultGrade);

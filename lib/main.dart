@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final prefs = await SharedPreferences.getInstance();
     final tutorialShown = prefs.getBool('tutorialShown') ?? false;
     if (!tutorialShown) {
-      Navigator.of(context ).push(
+      Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => Tutorial()),
       );
     }

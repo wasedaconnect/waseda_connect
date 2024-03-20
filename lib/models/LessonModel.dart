@@ -1,5 +1,7 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:ulid/ulid.dart';
+import 'package:waseda_connect/models/ClassModel.dart';
 import '../utils/DatabaseHelper.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +16,7 @@ class LessonModel {
   final int day2; //一週間ににこある授業のため。
   final int start2;
   final int time2;
+  final String classroom;
   final String classId; //早稲田が提供する授業コード,classと紐づけたい
 
   LessonModel(
@@ -27,6 +30,7 @@ class LessonModel {
       required this.day2,
       required this.start2,
       required this.time2,
+      required this.classroom,
       required this.classId});
 
   factory LessonModel.fromMap(Map<String, dynamic> map) {
@@ -41,6 +45,7 @@ class LessonModel {
         day2: map['day2'],
         start2: map['start2'],
         time2: map['time2'],
+        classroom: map['classroom'],
         classId: map['classId']);
   }
 
@@ -56,6 +61,7 @@ class LessonModel {
       'day2': day2,
       'start2': start2,
       'time2': time2,
+      'classroom': classroom,
       'classId': classId
     };
   }
@@ -67,22 +73,29 @@ class LessonLogic {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
   // 新しい授業をデータベースに追加するメソッド
-  Future<void> insertLesson(LessonModel lesson) async {
+  Future<void> insertLesson(String classId) async {
     final db = await _dbHelper.lessonDatabase;
+    final ClassLogic instance = ClassLogic();
+    final classData = await instance.searchClassesByPKey(classId);
+    final prefs = await SharedPreferences.getInstance();
+    final String timeTableId = prefs.getString('defaultId') ?? "";
+
     // ULIDを生成
     var lessonWithUlid = LessonModel(
         id: Ulid().toString(), // ULIDを生成して文字列に変換
-        name: lesson.name,
-        timeTableId: lesson.timeTableId,
+        name: classData.courseName,
+        timeTableId: timeTableId,
         createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
             .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
-        day1: lesson.day1,
-        start1: lesson.start1,
-        time1: lesson.time1,
-        day2: lesson.day2,
-        start2: lesson.start2,
-        time2: lesson.time2,
-        classId: lesson.classId);
+        day1: classData.classDay1,
+        start1: classData.classStart1,
+        time1: classData.classTime1,
+        day2: classData.classDay2,
+        start2: classData.classStart2,
+        time2: classData.classTime2,
+        classroom: classData.classroom,
+        classId: classId);
+
     await db.insert(
       'lessons',
       lessonWithUlid.toMap(),
@@ -90,10 +103,16 @@ class LessonLogic {
     );
   }
 
-//授業をすべて出力。
+//特定の時間割の授業をすべて出力。
   Future<List<LessonModel>> getAllLessons() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String timeTableId = prefs.getString('defaultId') ?? "";
     final db = await _dbHelper.lessonDatabase;
-    final List<Map<String, dynamic>> maps = await db.query('lessons');
+     final List<Map<String, dynamic>> maps = await db.query(
+      'lessons',
+      where: 'timeTableId = ?',
+      whereArgs: [timeTableId],
+    );
     return List.generate(maps.length, (i) {
       return LessonModel.fromMap(maps[i]);
     });
@@ -102,6 +121,7 @@ class LessonLogic {
   // 授業をIDから取得するメソッド
   Future<LessonModel?> getLessonById(String id) async {
     final db = await _dbHelper.lessonDatabase;
+    
     final List<Map<String, dynamic>> maps = await db.query(
       'lessons',
       where: 'id = ?',

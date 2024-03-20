@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
+import 'package:waseda_connect/models/LessonModel.dart';
 import '../Screen/Syllabus/SyllabusSearchResult.dart';
 
 class Test extends StatefulWidget {
@@ -19,6 +20,7 @@ class _SyllabusSearchScreenState extends State<Test> {
     });
     print(allSyllabusData!.length);
   }
+
   // 検索結果を保持するリスト
 
   @override
@@ -61,11 +63,19 @@ class SyllabusItemWidget extends StatelessWidget {
 
   const SyllabusItemWidget({Key? key, required this.classData})
       : super(key: key);
+  Future<void> onItemTap(String pKey) async {
+    final LessonLogic instance = LessonLogic();
+    await instance.insertLesson(pKey);
+    print("完了");
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(classData.courseName),
+    return InkWell(
+      onTap: () => onItemTap(classData.pKey), // タップされたときの処理
+      child: ListTile(
+        title: Text(classData.courseName),
+      ),
     );
   }
 }
