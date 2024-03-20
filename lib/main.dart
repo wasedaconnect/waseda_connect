@@ -8,7 +8,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
 
-import 'Screen/displaySyllabus/SearchForm.dart';
+import 'Screen/displaySyllabus/SearchPage.dart';
 
 import 'Screen/TimeTable/TimeTable.dart';
 import 'Screen/Test.dart';
@@ -168,10 +168,10 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.business),
               label: 'シラバス',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'テスト',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.business),
+            //   label: 'テスト',
+            // ),
             // 他のタブアイテムも同様に追加
           ],
           currentIndex: _selectedIndex,

@@ -81,7 +81,13 @@ class _TimeTableState extends ConsumerState<TimeTable> {
             builder: (context) => ClassDetailComponent(
                   classId: selected,
                 )),
-      );
+      ).then((value) {
+        // 再描画
+        setState(() {
+          _fetchData();
+          print("戻り");
+        });
+      });
     }
   }
 

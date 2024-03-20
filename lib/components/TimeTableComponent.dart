@@ -85,9 +85,11 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                 // ここではstartTimeとendTimeを直接指定していますが、
                 // 実際にはwidget.timeTableDataから取得する必要があります
                 Text('${startTime[period - 1]}', style: TextStyle(fontSize: 8)),
+                SizedBox(height: 20),
                 Text('$period',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                SizedBox(height: 20),
                 Text('${endTime[period - 1]}', style: TextStyle(fontSize: 8)),
               ],
             ),
@@ -148,11 +150,41 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
           ],
         ),
         child: Center(
-          child: Text(
-            lesson.name,
-            style: TextStyle(
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
+          child: Column(
+            // Column内の要素を垂直方向に中央揃えするための設定
+            mainAxisAlignment: MainAxisAlignment.center,
+            // Columnの高さを最小限に設定
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                lesson.name,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  // fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              SizedBox(height: 8),
+              lesson.name.isEmpty
+                  ? Container()
+                  : Container(
+                      margin: EdgeInsets.symmetric(horizontal: 2.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 2.0), // 左右に8ピクセルのパディングを追加
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2.0), // 角丸
+                        color: Colors.white, // 背景色
+                      ),
+                      child: Text(
+                        lesson.classroom,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 8,
+                        ),
+                      ),
+                    ),
+            ],
           ),
         ),
       ),
