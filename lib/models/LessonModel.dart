@@ -103,6 +103,71 @@ class LessonLogic {
     );
   }
 
+  // ダミーデータを登録
+  Future<void> insertDummyLesson(String name, int day, int period) async {
+    final db = await _dbHelper.lessonDatabase;
+    final dbClass = await _dbHelper.classDatabase;
+    final prefs = await SharedPreferences.getInstance();
+    final String timeTableId = prefs.getString('defaultId') ?? "";
+
+    // ULIDを生成
+    var lessonWithUlid = LessonModel(
+        id: Ulid().toString(), // ULIDを生成して文字列に変換
+        name: name,
+        timeTableId: timeTableId,
+        createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
+            .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
+        day1: day,
+        start1: period,
+        time1: 1, //timeが何を表すかわからない
+        day2: 0,
+        start2: 0,
+        time2: 0,
+        classroom: "",
+        classId: "dummydata-${name}");
+
+    var dummyClass = ClassModel(
+        pKey: "dummydata-${name}", 
+        department: 0, 
+        courseName: name, 
+        instructor: "", 
+        semester: 0, 
+        courseCategory: "", 
+        assignedYear: 0, 
+        credits: 0, 
+        classroom: "", 
+        campus: "", 
+        languageUsed: "", 
+        teachingMethod: 0, 
+        courseCode: "", 
+        majorField: "", 
+        subField: "", 
+        minorField: "", 
+        level: "", 
+        classFormat: "", 
+        classDay1: 0, 
+        classStart1: 0, 
+        classTime1: 0, 
+        classDay2: 0, 
+        classStart2: 0, 
+        classTime2: 0, 
+        isOpened: 0
+      );
+
+    await db.insert(
+      'lessons',
+      lessonWithUlid.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    await dbClass.insert(
+      'classes',
+      dummyClass.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+
+
 //特定の時間割の授業をすべて出力。
   Future<List<LessonModel>> getAllLessons() async {
     final prefs = await SharedPreferences.getInstance();
@@ -150,14 +215,14 @@ class LessonLogic {
   }
 
 // 特定の授業を削除する機能
-  Future<void> deleteLessonByClassId(String classId) async {
+  Future<void> deleteLessonByClassId(String classId, int day1, int start1) async {
     final db = await _dbHelper.lessonDatabase;
     final prefs = await SharedPreferences.getInstance();
     final String timeTableId = prefs.getString('defaultId') ?? "";
     await db.delete(
       'lessons',
       where: 'classId = ? AND timeTableId = ?',
-      whereArgs: [classId, timeTableId]
+      whereArgs: [classId, timeTableId, day1, start1]
     );
     print("削除できました");
   }

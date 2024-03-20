@@ -36,9 +36,9 @@ class _ClassDetailComponentState extends State<ClassDetailComponent> {
     });
   }
 
-  Future<void> _deleteLessonById(String id) async{
+  Future<void> _deleteLessonById(String id, int day1, int start1) async{
     final LessonLogic instance = LessonLogic();
-    await instance.deleteLessonByClassId(id);
+    await instance.deleteLessonByClassId(id, day1, start1);
   }
 
   final _urlLaunchWithUri = UrlLaunchWithUri();
@@ -54,7 +54,7 @@ class _ClassDetailComponentState extends State<ClassDetailComponent> {
               int count = 0;
               Navigator.popUntil(context, (_) => count++ >= 2);
               print("削除");
-              _deleteLessonById(classData!.pKey);
+              _deleteLessonById(classData!.pKey, classData!.classDay1, classData!.classStart1);
             },
             onCancel: () {
               print("キャンセル");
