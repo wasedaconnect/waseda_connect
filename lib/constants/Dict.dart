@@ -109,7 +109,7 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
   ],
 };
 List<String> weekdays = ['月', '火', '水', '木', '金', '土', '他'];
-List<int> weekdays_num = [1, 2, 3, 4, 5, 6, 0];
+List<int> weekdays_num = [1, 2, 3, 4, 5, 6, 7];
 final Map<int, String> numToDay = {
   0: '',
   1: '月',

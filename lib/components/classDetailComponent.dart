@@ -55,9 +55,10 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     await instance.deleteLessonByClassId(id);
   }
 
-  Future<void> _addLessonById(String id) async {
+  Future<bool> _addLessonById(String id) async {
     final LessonLogic instance = LessonLogic();
-    await instance.insertLesson(id);
+     return (await instance.insertLesson(id)); 
+    
   }
 
   final _urlLaunchWithUri = UrlLaunchWithUri();
@@ -97,17 +98,16 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
           title: '${classData!.courseName}を追加しますか',
           content: '${classData!.courseName}を追加しますか',
           onConfirm: () async {
-            _addLessonById(classData!.pKey);
+            if (await _addLessonById(classData!.pKey)){
             ref.read(updateTimeTableProvider.notifier).state = true;
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("${classData!.courseName}が追加されました")));
-
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) => MyHomePage()), // NewPageに遷移
-              (Route<dynamic> route) =>
-                  false, // 条件がfalseを返すまで（つまり、すべてのルートを削除するまで）
-            );
+                Navigator.of(context).popUntil((route) => route.isFirst);
+            }else{
+               ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("同じ時間割に授業が存在します")));
+              Navigator.pop(context);
+            }
           },
           onCancel: () {
             print("キャンセル");

@@ -65,7 +65,10 @@ class LessonLogic {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
   // 新しい授業をデータベースに追加するメソッド 結構複雑
-  Future<void> insertLesson(String classId) async {
+  Future<bool> insertLesson(String classId) async {
+    if (await validateLessonData(classId)==false){
+      return false;
+    }
     final db = await _dbHelper.lessonDatabase;
     final ClassLogic instance = ClassLogic();
     final classData = await instance.searchClassesByPKey(classId);
@@ -118,6 +121,7 @@ class LessonLogic {
         }
       }
     }
+    return true;
   }
 
   // ダミーデータを登録
@@ -246,7 +250,52 @@ class LessonLogic {
     final db = await _dbHelper.lessonDatabase;
 
     await db.delete('lessons', where: 'classId = ? ', whereArgs: [classId]);
-
     print("削除できました");
   }
+
+  Future<bool> validateLessonData(String classId) async {
+    final db = await _dbHelper.lessonDatabase;
+    final ClassLogic instance = ClassLogic();
+    final classData = await instance.searchClassesByPKey(classId);
+    final prefs = await SharedPreferences.getInstance();
+    final int defaultYear = prefs.getInt('defaultYesr') ?? 2024;
+    final TimeTableLogic timeTableInstance = TimeTableLogic();
+    final timeTableData =
+        await timeTableInstance.getTimeTablesByYear(defaultYear);
+    for (var semesterData in termToSemester[classData.semester]!) {
+      for (int i = 0; i < classData.classTime1; i++) {
+        final List<Map<String, dynamic>> result = await db.query(
+          'lessons', // ここには検索するテーブル名を指定
+          where: 'period = ? AND day = ? AND timeTableId = ?',
+          whereArgs: [
+            classData.classStart1 + i,
+            classData.classDay1,
+            timeTableData[semesterData - 1].id
+          ],
+        );
+        if (result.isEmpty==false){
+          return false;
+        }
+      }
+      if (classData.classTime2 > 0) {
+        //週に二個以上ある科目かどうか
+        for (int i = 0; i < classData.classTime2; i++) {
+          final List<Map<String, dynamic>> result = await db.query(
+            'lessons', // ここには検索するテーブル名を指定
+            where: 'period = ? AND day = ? AND timeTableId = ?',
+            whereArgs: [
+              classData.classStart2 + i,
+              classData.classDay2,
+              timeTableData[semesterData - 1].id
+            ],
+          );
+           if (result.isEmpty==false){
+          return false;
+        }
+        }
+      }
+    }
+    return true;
+  }
+  
 }
