@@ -75,6 +75,9 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
               print("削除");
 
               _deleteLessonById(classData!.pKey);
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("${classData!.courseName}が消去されました")));
+
               ref.read(updateTimeTableProvider.notifier).state = true;
             },
             onCancel: () {

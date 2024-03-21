@@ -82,6 +82,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
               _addDummyLesson(_textFieldController.text, day, period);
               print("追加");
               ref.read(updateTimeTableProvider.notifier).state = true;
+
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
             onCancel: () {

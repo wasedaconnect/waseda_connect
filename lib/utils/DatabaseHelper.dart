@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:waseda_connect/constants/Version.dart';
+import 'package:waseda_connect/constants/DatabaseVersion.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _databaseHelper =
@@ -128,55 +128,11 @@ class DatabaseHelper {
   //<class> 早稲田公式の授業データ
 
   Future<Database> get classDatabase async {
-    _classDatabase ??= await initializeclassDatabase();
-    return _classDatabase!;
-  }
-
-  /// データベースの初期化
-  Future<Database> initializeclassDatabase() async {
     var documentsDirectory =
         await getApplicationDocumentsDirectory(); // アプリの保存場所
-    String path = join(documentsDirectory.path, 'Class.db'); // パスの作成
-
-    // データベースファイルが存在する場合、削除する
-
-    // 新しいデータベースを作成
-    return openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
-      // テーブルを作成するSQLコマンド
-      await _createClassDb(db, version);
-    });
-  }
-
-  /// データベースの初期化をSQL文で記述
-  Future<void> _createClassDb(Database db, int newVersion) async {
-    await db.execute('CREATE TABLE classes ('
-        'pKey TEXT PRIMARY KEY,'
-        'department INTEGER,'
-        'courseName TEXT,'
-        'instructor TEXT,'
-        'semester INTEGER,'
-        'courseCategory TEXT,'
-        'assignedYear INTEGER,'
-        'credits INTEGER,'
-        'classroom TEXT,'
-        'campus TEXT,'
-        'languageUsed TEXT,'
-        'teachingMethod INTEGER,'
-        'courseCode TEXT,'
-        'majorField TEXT,'
-        'subField TEXT,'
-        'minorField TEXT,'
-        'level TEXT,'
-        'classFormat TEXT,'
-        'classDay1 INTEGER,'
-        'classStart1 INTEGER,'
-        'classTime1 INTEGER,'
-        'classDay2 INTEGER,'
-        'classStart2 INTEGER,'
-        'classTime2 INTEGER,'
-        'isOpened INTEGER'
-        ');');
+    String path = join(documentsDirectory.path, 'Class.db');
+    _classDatabase = await openDatabase(path, version: 1);
+    return _classDatabase!;
   }
 
   //</class>
