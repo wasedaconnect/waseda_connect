@@ -104,7 +104,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                         ),
                       ), // 各曜日の授業セル
                       for (var day in weekdays_num)
-                        if (day == 0)
+                        if (day == 7)
                           _othersBuildLessonCell(period, day)
                         else
                           _normalBuildLessonCell(period, day),

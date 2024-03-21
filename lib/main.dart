@@ -82,12 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
     final tutorialShown = prefs.getBool('tutorialShown') ?? false;
     if (!tutorialShown) {
       Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-           Tutorial(),
-      ),
-    );
+        context,
+        MaterialPageRoute(
+          builder: (context) => Tutorial(),
+        ),
+      );
     }
   }
 

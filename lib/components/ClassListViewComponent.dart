@@ -121,7 +121,6 @@ class SyllabusItemWidget extends ConsumerWidget {
                     ),
                   ],
                 ),
-
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -131,7 +130,6 @@ class SyllabusItemWidget extends ConsumerWidget {
                     ),
                   ),
                 ),
-
               ),
             ),
           ],

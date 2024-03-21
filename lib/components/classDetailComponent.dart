@@ -99,6 +99,8 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
           onConfirm: () async {
             _addLessonById(classData!.pKey);
             ref.read(updateTimeTableProvider.notifier).state = true;
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("${classData!.courseName}が追加されました")));
 
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
@@ -111,7 +113,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
             print("キャンセル");
             ref.read(updateTimeTableProvider.notifier).state = true;
 
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Navigator.pop(context);
           },
           yesText: "追加",
         );

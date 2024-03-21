@@ -7,11 +7,7 @@ import 'package:flutter/material.dart';
 //   '4': '4年生',
 // };
 Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
-  '政治経済学部': [
-    '政治学科',
-    '経済学科',
-    '国際政治経済学科',
-  ],
+  '政治経済学部': ['政治学科', '経済学科', '国際政治経済学科', '未選択'],
   '法学部': [
     '法学科',
   ],
@@ -31,6 +27,7 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
     'ファイナンストラック',
     '保険・リスクマネジメントトラック',
     'ビジネスエコノミクストラック',
+    '未選択'
   ],
   '社会科学部': [
     '社会科学科',
@@ -46,6 +43,7 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
     '文芸・ジャーナリズム論系',
     '現代人間論系',
     '社会構築論系',
+    '未選択'
   ],
   '文学部': [
     '文学科',
@@ -67,6 +65,7 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
     '西洋史コース',
     '考古学コース',
     '中東・イスラーム研究コース',
+    '未選択'
   ],
   '基幹理工学部': [
     '数学科',
@@ -76,6 +75,7 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
     '情報理工学科',
     '情報通信学科',
     '表現工学科',
+    '未選択'
   ],
   '創造理工学部': [
     '建築学科',
@@ -105,6 +105,7 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
     'スポーツコーチングコース',
     'スポーツビジネスコース',
     'スポーツ文化コース',
+    '未選択'
   ],
 };
 List<String> weekdays = ['月', '火', '水', '木', '金', '土', '他'];
@@ -201,7 +202,7 @@ Map<int, String> termMap = {
 };
 
 Map<int, List<int>> termToSemester = {
-  0: [1, 2], //通年に変換
+//通年に変換
   1: [1], //春学期に変換
   2: [2],
   3: [1],
@@ -210,8 +211,10 @@ Map<int, List<int>> termToSemester = {
   6: [2],
   7: [2],
   8: [2],
-  9: [2]
+  9: [2],
+  10: [1, 2],
 };
+
 Map<int, String> periodMap = {
   0: "",
   1: "１時限",
