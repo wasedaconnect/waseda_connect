@@ -57,8 +57,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
 
   Future<bool> _addLessonById(String id) async {
     final LessonLogic instance = LessonLogic();
-     return (await instance.insertLesson(id)); 
-    
+    return (await instance.insertLesson(id));
   }
 
   final _urlLaunchWithUri = UrlLaunchWithUri();
@@ -98,14 +97,14 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
           title: '${classData!.courseName}を追加しますか',
           content: '${classData!.courseName}を追加しますか',
           onConfirm: () async {
-            if (await _addLessonById(classData!.pKey)){
-            ref.read(updateTimeTableProvider.notifier).state = true;
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("${classData!.courseName}が追加されました")));
-                Navigator.of(context).popUntil((route) => route.isFirst);
-            }else{
-               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("同じ時間割に授業が存在します")));
+            if (await _addLessonById(classData!.pKey)) {
+              ref.read(updateTimeTableProvider.notifier).state = true;
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("${classData!.courseName}が追加されました")));
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            } else {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text("同じ時間割に授業が存在します")));
               Navigator.pop(context);
             }
           },
@@ -240,29 +239,25 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                           DataCell(Text(classData!.classFormat)),
                         ]),
                         DataRow(cells: [
-                          DataCell(Text('classDay1')),
-                          DataCell(Text('${classData!.classDay1}')),
+                          DataCell(Text('曜日01')),
+                          DataCell(Text('${numToDay[classData!.classDay1]}')),
                         ]),
                         DataRow(cells: [
-                          DataCell(Text('classStart1')),
-                          DataCell(Text('${classData!.classStart1}')),
+                          DataCell(Text('時限01')),
+                          DataCell(
+                              Text('${periodMap[classData!.classStart1]}')),
                         ]),
-                        DataRow(cells: [
-                          DataCell(Text('classTime1')),
-                          DataCell(Text('${classData!.classTime1}')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('classDay2')),
-                          DataCell(Text('${classData!.classDay2}')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('classStart2')),
-                          DataCell(Text('${classData!.classStart2}')),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('classTime2')),
-                          DataCell(Text('${classData!.classTime2}')),
-                        ]),
+                        if (classData!.classDay2 != 0)
+                          DataRow(cells: [
+                            DataCell(Text('曜日02')),
+                            DataCell(Text('${numToDay[classData!.classDay2]}')),
+                          ]),
+                        if (classData!.classStart2 != 0)
+                          DataRow(cells: [
+                            DataCell(Text('時限02')),
+                            DataCell(
+                                Text('${periodMap[classData!.classStart2]}')),
+                          ]),
                       ],
                     ),
                   ),

@@ -66,7 +66,7 @@ class LessonLogic {
 
   // 新しい授業をデータベースに追加するメソッド 結構複雑
   Future<bool> insertLesson(String classId) async {
-    if (await validateLessonData(classId)==false){
+    if (await validateLessonData(classId) == false) {
       return false;
     }
     final db = await _dbHelper.lessonDatabase;
@@ -125,62 +125,70 @@ class LessonLogic {
   }
 
   // ダミーデータを登録
-  Future<void> insertDummyLesson(String name, int day, int period) async {
+  Future<void> insertDummyLesson(
+      String name, int day, int period, TimeTableModel? timeTableData) async {
     final db = await _dbHelper.lessonDatabase;
     final dbClass = await _dbHelper.classDatabase;
+    final TimeTableLogic timeTableInstance = TimeTableLogic();
     final prefs = await SharedPreferences.getInstance();
-    final String timeTableId = prefs.getString('defaultId') ?? "";
+    final int defaultYear = prefs.getInt('defaultYear') ?? 2024;
+    var newTimeTablesData =
+        await timeTableInstance.getTimeTablesByYear(defaultYear);
+    print("timetableid");
+    print(newTimeTablesData);
+    // final timeTable = await timeTableInstance.getTimeTable(timeTableId);
+    // final int semester = timeTable!.semester;
 
     // ULIDを生成
     var lessonWithUlid = LessonModel(
         id: Ulid().toString(), // ULIDを生成して文字列に変換
         name: name,
-        timeTableId: timeTableId,
+        timeTableId: timeTableData!.id,
         createdAt: DateFormat('yyyy-MM-ddTHH:mm:ss')
             .format(DateTime.now()), // 現在の日時をISO 8601形式の文字列で生成
         day: day,
         period: period,
         color: 1,
         classroom: "",
-        classId: "dummydata-${name}");
+        classId: "dummy");
 
-    var dummyClass = ClassModel(
-        pKey: "dummydata-${name}",
-        department: 0,
-        courseName: name,
-        instructor: "",
-        semester: 0,
-        courseCategory: "",
-        assignedYear: 0,
-        credits: 0,
-        classroom: "",
-        campus: "",
-        languageUsed: "",
-        teachingMethod: 0,
-        courseCode: "",
-        majorField: "",
-        subField: "",
-        minorField: "",
-        level: "",
-        classFormat: "",
-        classDay1: 0,
-        classStart1: 0,
-        classTime1: 0,
-        classDay2: 0,
-        classStart2: 0,
-        classTime2: 0,
-        isOpened: 0);
+    // var dummyClass = ClassModel(
+    //     pKey: "dummydata-${name}",
+    //     department: 0,
+    //     courseName: name,
+    //     instructor: "",
+    //     semester: timeTableData!.semester,
+    //     courseCategory: "",
+    //     assignedYear: 0,
+    //     credits: 0,
+    //     classroom: "",
+    //     campus: "",
+    //     languageUsed: "",
+    //     teachingMethod: 0,
+    //     courseCode: "",
+    //     majorField: "",
+    //     subField: "",
+    //     minorField: "",
+    //     level: "",
+    //     classFormat: "",
+    //     classDay1: day,
+    //     classStart1: period,
+    //     classTime1: 1,
+    //     classDay2: 0,
+    //     classStart2: 0,
+    //     classTime2: 0,
+    //     isOpened: 0);
 
     await db.insert(
       'lessons',
       lessonWithUlid.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    await dbClass.insert(
-      'classes',
-      dummyClass.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    // await dbClass.insert(
+    //   'classes',
+    //   dummyClass.toMap(),
+    //   conflictAlgorithm: ConflictAlgorithm.replace,
+    // );
   }
 
 //特定の時間割の授業をすべて出力。
@@ -264,38 +272,52 @@ class LessonLogic {
         await timeTableInstance.getTimeTablesByYear(defaultYear);
     for (var semesterData in termToSemester[classData.semester]!) {
       for (int i = 0; i < classData.classTime1; i++) {
-        final List<Map<String, dynamic>> result = await db.query(
-          'lessons', // ここには検索するテーブル名を指定
-          where: 'period = ? AND day = ? AND timeTableId = ?',
-          whereArgs: [
-            classData.classStart1 + i,
-            classData.classDay1,
-            timeTableData[semesterData - 1].id
-          ],
-        );
-        if (result.isEmpty==false){
-          return false;
+        var period1 = classData.classStart1 + i;
+        var day1 = classData.classDay1;
+
+        if (!(period1 == 10 || period1 == 11) || day1 != 7) {
+          //オンデマンドを除く
+          final List<Map<String, dynamic>> result = await db.query(
+            'lessons', // ここには検索するテーブル名を指定
+            where: 'period = ? AND day = ? AND timeTableId = ?',
+            whereArgs: [period1, day1, timeTableData[semesterData - 1].id],
+          );
+          if (result.isEmpty == false) {
+            return false;
+          }
         }
       }
       if (classData.classTime2 > 0) {
         //週に二個以上ある科目かどうか
         for (int i = 0; i < classData.classTime2; i++) {
-          final List<Map<String, dynamic>> result = await db.query(
-            'lessons', // ここには検索するテーブル名を指定
-            where: 'period = ? AND day = ? AND timeTableId = ?',
-            whereArgs: [
-              classData.classStart2 + i,
-              classData.classDay2,
-              timeTableData[semesterData - 1].id
-            ],
-          );
-           if (result.isEmpty==false){
-          return false;
-        }
+          var period2 = classData.classStart2 + i;
+          var day2 = classData.classDay2;
+          if (!(period2 == 10 || period2 == 11) || day2 != 7) {
+            //オンデマンドを除く
+            //オンデマンドを除く
+            final List<Map<String, dynamic>> result = await db.query(
+              'lessons', // ここには検索するテーブル名を指定
+              where: 'period = ? AND day = ? AND timeTableId = ?',
+              whereArgs: [period2, day2, timeTableData[semesterData - 1].id],
+            );
+            if (result.isEmpty == false) {
+              return false;
+            }
+          }
         }
       }
     }
     return true;
   }
-  
+
+  Future<void> deleteDummyLesson(
+      int day, int period, TimeTableModel? timeTableData) async {
+    final db = await _dbHelper.lessonDatabase;
+
+    await db.delete('lessons',
+        where: 'classId = ? AND day = ? AND period = ? AND timeTableId = ?',
+        whereArgs: ["dummy", day, period, timeTableData!.id]);
+
+    print("削除できました");
+  }
 }

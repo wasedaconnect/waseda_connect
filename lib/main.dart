@@ -105,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //初めてアプリをダウンロードした人へ
   Future<void> _initLoad() async {
     final prefs = await SharedPreferences.getInstance();
+    // prefs.clear();
     final isGetInitData = prefs.getBool('getInitData') ?? false;
     if (!isGetInitData) {
       //１データベース初期化
