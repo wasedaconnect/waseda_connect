@@ -80,11 +80,10 @@ class _TimeTableState extends ConsumerState<TimeTable> {
             onConfirm: () {
               // int count = 0;
               // Navigator.popUntil(context, (_) => count++ >= 2);
-              _addDummyLesson(_textFieldController.text, day, period, timeTableData);
               print("追加aaa");
               ref.read(updateTimeTableProvider.notifier).state = true;
-
               Navigator.of(context).popUntil((route) => route.isFirst);
+              _addDummyLesson(_textFieldController.text, day, period, timeTableData);
             },
             onCancel: () {
               print("キャンセル");
