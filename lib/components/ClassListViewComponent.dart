@@ -112,20 +112,12 @@ class SyllabusItemWidget extends ConsumerWidget {
                                 color: Colors.grey[700],
                               ),
                             ),
-                            Text(
-                              '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${classData.classStart1}',
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.grey[700],
-                              ),
-                            ),
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
-
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -135,7 +127,6 @@ class SyllabusItemWidget extends ConsumerWidget {
                     ),
                   ),
                 ),
-
               ),
             ),
           ],
