@@ -135,6 +135,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         MaterialPageRoute(
             builder: (context) => ClassDetailComponent(
                   classId: selected,
+                  btnMode: ButtonMode.delete,
                 )),
       ).then((value) {
         // 再描画

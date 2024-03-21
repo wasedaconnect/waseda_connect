@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:waseda_connect/main.dart';
 import 'package:waseda_connect/constants/Dict.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
@@ -11,10 +13,21 @@ import 'package:waseda_connect/hooks/UrlLaunchWithUri.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class ClassDetailComponent extends ConsumerStatefulWidget {
-  final String classId;
+// delete: 時間割から「削除」or add: 時間割に「追加」
+enum ButtonMode {
+  delete,
+  add,
+}
 
-  ClassDetailComponent({Key? key, required this.classId}) : super(key: key);
+class ClassDetailComponent extends ConsumerStatefulWidget {
+  final String classId; // 表示する詳細画面のpKey
+  final ButtonMode btnMode; // 詳細画面におけるボタンの役割 ButtonModeに定義
+
+  ClassDetailComponent({
+    Key? key,
+    required this.classId,
+    required this.btnMode,
+  }) : super(key: key);
 
   @override
   _ClassDetailComponentState createState() => _ClassDetailComponentState();
@@ -40,6 +53,11 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
   Future<void> _deleteLessonById(String id) async {
     final LessonLogic instance = LessonLogic();
     await instance.deleteLessonByClassId(id);
+  }
+
+  Future<void> _addLessonById(String id) async {
+    final LessonLogic instance = LessonLogic();
+    await instance.insertLesson(id);
   }
 
   final _urlLaunchWithUri = UrlLaunchWithUri();
@@ -69,6 +87,60 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
             yesText: "削除する",
           );
         });
+  }
+
+  void _showAddModal() {
+    showDialog(
+      context: context, // showDialogにはBuildContextが必要です
+      builder: (BuildContext context) {
+        return ModalComponent(
+          title: '${classData!.courseName}を追加しますか',
+          content: '${classData!.courseName}を追加しますか',
+          onConfirm: () async {
+            _addLessonById(classData!.pKey);
+            ref.read(updateTimeTableProvider.notifier).state = true;
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => MyHomePage()), // NewPageに遷移
+              (Route<dynamic> route) =>
+                  false, // 条件がfalseを返すまで（つまり、すべてのルートを削除するまで）
+            );
+          },
+          onCancel: () {
+            print("キャンセル");
+            ref.read(updateTimeTableProvider.notifier).state = true;
+
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          },
+          yesText: "追加",
+        );
+      },
+    );
+  }
+
+  Widget _buildButton() {
+    if (widget.btnMode == ButtonMode.delete) {
+      return ElevatedButton(
+        onPressed: () {
+          // 削除機能のロジックを実装
+          print('削除ボタンが押されました');
+          _showDeleteModal(); // 削除モーダルを表示する関数
+        },
+        child: Text('削除'),
+      );
+    } else if (widget.btnMode == ButtonMode.add) {
+      return ElevatedButton(
+        onPressed: () {
+          // 追加機能のロジックを実装
+          print('追加ボタンが押されました');
+          _showAddModal(); // 追加モーダルを表示する関数
+        },
+        child: Text('追加'),
+      );
+    } else {
+      return SizedBox(); // ボタンを非表示にするための空のSizedBox
+    }
   }
 
   @override
@@ -193,17 +265,11 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                     ),
                   ),
                 ),
+                // widget.btnModeがButtonMode.deleteの時以下を
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // ここに削除機能のロジックを実装
-                      print('削除ボタンが押されました');
-                      _showDeleteModal();
-                    },
-                    child: Text('削除'),
-                  ),
-                ),
+                  child: _buildButton(), // 別の関数でボタンを構築する
+                )
               ],
             ),
     );
