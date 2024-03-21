@@ -260,7 +260,7 @@ class LessonLogic {
   Future<void> deleteDummyLesson(int day, int period, TimeTableModel? timeTableData) async {
     final db = await _dbHelper.lessonDatabase;
 
-    await db.delete('lessons', where: 'classId = dummy AND day = ? AND period = ? AND semester = ?', whereArgs: [day, period, timeTableData!.semester]);
+    await db.delete('lessons', where: 'classId = ? AND day = ? AND period = ? AND timeTableId = ?', whereArgs: ["dummy", day, period, timeTableData!.id]);
 
     print("削除できました");
   }

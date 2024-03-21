@@ -81,7 +81,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
               // int count = 0;
               // Navigator.popUntil(context, (_) => count++ >= 2);
               _addDummyLesson(_textFieldController.text, day, period, timeTableData);
-              print("追加");
+              print("追加aaa");
               ref.read(updateTimeTableProvider.notifier).state = true;
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
@@ -163,8 +163,7 @@ void _onLongFacultyChanged(String? id) {
       print('ダミ0');
       _showDeleteDummyLessonModal(day, period, timeTableData);
 
-    }
-    if (selected != null && selected != "") {
+    }else if (selected != null && selected != "") {
       print("a${selected}a");
       Navigator.push(
         context,
