@@ -8,7 +8,7 @@ class TimeTableComponent extends StatefulWidget {
 
   final TimeTableModel? timeTableData;
 
-  final Function(String?, int, int)? onSelected;
+  final Function(String?, int, int, TimeTableModel?)? onSelected;
   final Function(String?)? onLongSelected;
 
   const TimeTableComponent({
@@ -105,9 +105,9 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                       ), // 各曜日の授業セル
                       for (var day in weekdays_num)
                         if (day == 0)
-                          _othersBuildLessonCell(period, day)
+                          _othersBuildLessonCell(period, day, widget.timeTableData)
                         else
-                          _normalBuildLessonCell(period, day),
+                          _normalBuildLessonCell(period, day, widget.timeTableData),
                     ],
                   ),
               ],
@@ -118,7 +118,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
     );
   }
 
-  Widget _normalBuildLessonCell(int period, int day) {
+  Widget _normalBuildLessonCell(int period, int day, TimeTableModel? timeTableData) {
     // lessonDataがnullの場合は空のリストを使用
     final lessonData = widget.lessonData ?? [];
 
@@ -136,10 +136,10 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
           classId: "",
           color: 0),
     );
-    return _buildLessonCell(lesson);
+    return _buildLessonCell(lesson, day, period, timeTableData);
   }
 
-  Widget _othersBuildLessonCell(int period, int day) {
+  Widget _othersBuildLessonCell(int period, int day, TimeTableModel? timeTableData) {
     // lessonDataがnullの場合は空のリストを使用
     final lessonData = widget.lessonData ?? [];
 
@@ -169,14 +169,14 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
     }
 
     // _buildLessonCellメソッドにlessonオブジェクトを渡してウィジェットを構築
-    return _buildLessonCell(lesson);
+    return _buildLessonCell(lesson, day, period, timeTableData);
   }
 
   // selectedLessonDataがnullの場合は空のマップを使用
-  Widget _buildLessonCell(LessonModel lesson) {
+  Widget _buildLessonCell(LessonModel lesson, int day, int period, TimeTableModel? timeTableData) {
     return InkWell(
       onTap: () =>
-          widget.onSelected?.call(lesson.classId, lesson.day, lesson.period),
+          widget.onSelected?.call(lesson.classId, day, period, timeTableData!),
       onLongPress: () => widget.onLongSelected?.call(lesson.id),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.11,

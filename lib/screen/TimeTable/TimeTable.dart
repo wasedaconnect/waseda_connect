@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:waseda_connect/components/FormModalComponent.dart';
+import 'package:waseda_connect/components/ModalComponent.dart';
 import 'package:waseda_connect/components/classDetailComponent.dart';
 import 'package:waseda_connect/constants/Dict.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
@@ -60,12 +61,12 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     print("よんだよね");
   }
 
-  Future<void> _addDummyLesson(String name, int day, int period) async {
+  Future<void> _addDummyLesson(String name, int day, int period, TimeTableModel? timeTableData) async {
     final LessonLogic instance = LessonLogic();
-    await instance.insertDummyLesson(name, day, period);
+    await instance.insertDummyLesson(name, day, period, timeTableData);
   }
 
-  void _showAddLessonModal(int day, int period) {
+  void _showAddLessonModal(int day, int period, TimeTableModel? timeTableData) {
     showDialog(
         context: context, // showDialogにはBuildContextが必要です
         builder: (BuildContext context) {
@@ -79,8 +80,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
             onConfirm: () {
               // int count = 0;
               // Navigator.popUntil(context, (_) => count++ >= 2);
-              _addDummyLesson(_textFieldController.text, day, period);
-              print("追加");
+              _addDummyLesson(_textFieldController.text, day, period, timeTableData);
+              print("追加aaa");
               ref.read(updateTimeTableProvider.notifier).state = true;
 
               Navigator.of(context).popUntil((route) => route.isFirst);
@@ -93,6 +94,35 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           );
         });
   }
+  Future<void> _deleteDummyLesson(int day, int period, TimeTableModel? timeTableData) async {
+    final LessonLogic instance = LessonLogic();
+    await instance.deleteDummyLesson(day, period, timeTableData);
+  }
+
+  void _showDeleteDummyLessonModal(int day, int period, TimeTableModel? timeTableData) {
+    showDialog(
+        context: context, // showDialogにはBuildContextが必要です
+        builder: (BuildContext context) {
+          return ModalComponent(
+            title: '授業の登録',
+            content: '本当に削除しますか',
+            onConfirm: () {
+              // int count = 0;
+              // Navigator.popUntil(context, (_) => count++ >= 2);
+              _deleteDummyLesson(day, period, timeTableData);
+              print("ダミーデータ削除");
+              ref.read(updateTimeTableProvider.notifier).state = true;
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+            onCancel: () {
+              print("キャンセル");
+              Navigator.pop(context);
+            },
+            yesText: "削除する",
+          );
+        });
+  }
+
 
   void _onLongFacultyChanged(String? id) {
     // 長押しされた項目に基づいて何かアクションを行う
@@ -119,16 +149,22 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     });
   }
 
-  void _onFacultyChanged(String? selected, int day, int period) {
+  void _onFacultyChanged(String? selected, int day, int period, TimeTableModel? timeTableData) {
     // 選択された項目に基づいて何かアクションを行う
     print(selected);
+    print("day");
     print(day);
+    print("period");
     print(period);
     if (selected == "") {
       //空の場合
-      _showAddLessonModal(day, period);
+      _showAddLessonModal(day, period, timeTableData);
     }
-    if (selected != null && selected != "") {
+    if(selected == "dummy"){ //ダミーデータ
+      print('ダミ0');
+      _showDeleteDummyLessonModal(day, period, timeTableData);
+
+    }else if (selected != null && selected != "") {
       print("a${selected}a");
       Navigator.push(
         context,
@@ -172,6 +208,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         ref.read(updateTimeTableProvider.notifier).state = false;
       });
     }
+    
 
     return Scaffold(
         appBar: AppBar(
@@ -204,8 +241,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                 toolbarHeight: 30,
               ),
               body: TimeTableComponent(
-                lessonData:
-                    allLessonData?[index], // index番目のタイムテーブルに対応するレッスンデータ
+                lessonData: allLessonData?[index], // index番目のタイムテーブルに対応するレッスンデータ
                 timeTableData: allTimeTablesData?[index], // index番目のタイムテーブルデータ
                 // 選択されたレッスンデータ
                 onSelected: _onFacultyChanged,
