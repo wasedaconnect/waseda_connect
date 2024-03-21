@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waseda_connect/main.dart';
 import 'package:waseda_connect/provider/provider.dart';
 
-
 class Tutorial extends ConsumerStatefulWidget {
   @override
   _TutorialState createState() => _TutorialState();
@@ -80,12 +79,7 @@ class _TutorialState extends ConsumerState<Tutorial> {
 
                     await prefs.setBool('tutorialShown', true);
                     ref.read(updateTimeTableProvider.notifier).state = true;
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              MyHomePage()), // NewPageに遷移ソフトウェア
-                      (Route<dynamic> route) => false,
-                    );
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                 ),
               ),

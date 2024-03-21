@@ -7,6 +7,7 @@ import 'package:waseda_connect/models/ClassModel.dart';
 import 'package:waseda_connect/provider/provider.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/components/ModalComponent.dart';
+import 'package:waseda_connect/components/classDetailComponent.dart';
 
 class ClassListViewComponent extends StatefulWidget {
   final List<ClassModel>? allSyllabusData;
@@ -42,12 +43,6 @@ class SyllabusItemWidget extends ConsumerWidget {
 
   const SyllabusItemWidget({Key? key, required this.classData})
       : super(key: key);
-
-  Future<void> onItemTap(String pKey) async {
-    final LessonLogic instance = LessonLogic();
-    await instance.insertLesson(pKey);
-    print("完了");
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,6 +84,15 @@ class SyllabusItemWidget extends ConsumerWidget {
                             ),
                             SizedBox(height: 8.0),
                             Text(
+                              '${departments[classData.department]}',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.grey[700],
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
                               classData.instructor,
                               style: TextStyle(
                                 fontSize: 14.0,
@@ -98,7 +102,11 @@ class SyllabusItemWidget extends ConsumerWidget {
                             ),
                             SizedBox(height: 8.0),
                             Text(
-                              '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${classData.classStart1}',
+                              '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${periodMap[classData.classStart1]}' +
+                                  (classData.classDay2 != 0 ||
+                                          classData.classStart2 != 0
+                                      ? ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]}'
+                                      : ''),
                               style: TextStyle(
                                 fontSize: 14.0,
                                 color: Colors.grey[700],
@@ -110,34 +118,15 @@ class SyllabusItemWidget extends ConsumerWidget {
                     ),
                   ],
                 ),
-                onTap: () => showDialog(
-                  context: context, // showDialogにはBuildContextが必要です
-                  builder: (BuildContext context) {
-                    return ModalComponent(
-                      title: '${classData.courseName}を追加しますか',
-                      content: '${classData.courseName}をついかしますか',
-                      onConfirm: () async {
-                        onItemTap(classData.pKey);
-                        ref.read(updateTimeTableProvider.notifier).state = true;
-
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => MyHomePage()), // NewPageに遷移
-                          (Route<dynamic> route) =>
-                              false, // 条件がfalseを返すまで（つまり、すべてのルートを削除するまで）
-                        );
-                      },
-                      onCancel: () {
-                        print("キャンセル");
-                        ref.read(updateTimeTableProvider.notifier).state = true;
-
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
-                      },
-                      yesText: "追加",
-                    );
-                  },
-                ), // タップされたときの処理
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ClassDetailComponent(
+                      classId: classData.pKey,
+                      btnMode: ButtonMode.add,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
