@@ -126,6 +126,7 @@ final List<int> grades = [1, 2, 3, 4];
 final List<int> years = [5, 6];
 
 const Map<int, String> departments = {
+  0: '',
   1: '政治経済学部',
   2: '法学部',
   3: '教育学部',

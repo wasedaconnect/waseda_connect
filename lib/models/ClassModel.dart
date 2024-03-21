@@ -277,11 +277,13 @@ class ClassLogic {
   Future<List<ClassModel>> searchClasses(
       // 各変数を999で初期化
       // 引数があれば値を更新し検索条件とする
-      {int semester = 999,
-      int day = 999,
-      int time = 999,
-      int teachingMethod = 999,
-      int department = 999}) async {
+      {
+    int department = 999,
+    int semester = 999,
+    int day = 999,
+    int time = 999,
+    int teachingMethod = 999,
+  }) async {
     final db = await _dbHelper.classDatabase;
     List<String> whereClauses = [];
     List<dynamic> whereArgs = [];
