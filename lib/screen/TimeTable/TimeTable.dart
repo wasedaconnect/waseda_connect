@@ -82,6 +82,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
               _addDummyLesson(_textFieldController.text, day, period);
               print("追加");
               ref.read(updateTimeTableProvider.notifier).state = true;
+
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
             onCancel: () {
@@ -92,31 +93,31 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           );
         });
   }
-void _onLongFacultyChanged(String? id) {
-  // 長押しされた項目に基づいて何かアクションを行う
-  print(id);
-  final overlay = Overlay.of(context);
-  final renderBox = context.findRenderObject() as RenderBox;
-  final size = renderBox.size;
-  final offset = renderBox.localToGlobal(Offset.zero);
 
-  final overlayEntry = OverlayEntry(
-    builder: (context) => Positioned(
-      left: offset.dx,
-      top: offset.dy - size.height, // タップしたウィジェットの上に表示
-      width: size.width,
-      child: buildPopup(context),
-    ),
-  );
+  void _onLongFacultyChanged(String? id) {
+    // 長押しされた項目に基づいて何かアクションを行う
+    print(id);
+    final overlay = Overlay.of(context);
+    final renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+    final offset = renderBox.localToGlobal(Offset.zero);
 
-  overlay?.insert(overlayEntry);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: offset.dx,
+        top: offset.dy - size.height, // タップしたウィジェットの上に表示
+        width: size.width,
+        child: buildPopup(context),
+      ),
+    );
 
-  // どこかをタップしたらOverlayを消す
-  Future.delayed(Duration(seconds: 3), () {
-    overlayEntry.remove();
-  });
-}
+    overlay?.insert(overlayEntry);
 
+    // どこかをタップしたらOverlayを消す
+    Future.delayed(Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
+  }
 
   void _onFacultyChanged(String? selected, int day, int period) {
     // 選択された項目に基づいて何かアクションを行う
@@ -159,7 +160,6 @@ void _onLongFacultyChanged(String? id) {
 //じかんわり
   @override
   Widget build(BuildContext context) {
-    
     var appBarText = "${defaultYear}年度";
     final pageTransition = ref.watch(updateTimeTableProvider);
 
@@ -237,22 +237,22 @@ void _onLongFacultyChanged(String? id) {
       }
     });
   }
-  Widget buildPopup(BuildContext context) {
-  return Material(
-    color: Colors.transparent,
-    child: Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.only(top: 5), // 吹き出しの矢印部分のスペースを作る
-      decoration: BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        'ここに情報を表示',
-        style: TextStyle(color: Colors.white),
-      ),
-    ),
-  );
-}
 
+  Widget buildPopup(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        padding: EdgeInsets.all(8),
+        margin: EdgeInsets.only(top: 5), // 吹き出しの矢印部分のスペースを作る
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          'ここに情報を表示',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
 }

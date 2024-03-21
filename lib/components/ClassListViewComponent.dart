@@ -104,6 +104,13 @@ class SyllabusItemWidget extends ConsumerWidget {
                                 color: Colors.grey[700],
                               ),
                             ),
+                            Text(
+                              '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${classData.classStart1}',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.grey[700],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -114,10 +121,12 @@ class SyllabusItemWidget extends ConsumerWidget {
                   context: context, // showDialogにはBuildContextが必要です
                   builder: (BuildContext context) {
                     return ModalComponent(
-                      title: '${classData.courseName}を追加しますか',
-                      content: '${classData.courseName}をついかしますか',
+                      title: '${classData.courseName}を追加',
+                      content: '${classData.courseName}を追加しますか',
                       onConfirm: () async {
-                        onItemTap(classData.pKey);
+                        await onItemTap(classData.pKey);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("${classData.courseName}が追加されました")));
                         ref.read(updateTimeTableProvider.notifier).state = true;
 
                         Navigator.of(context).pushAndRemoveUntil(

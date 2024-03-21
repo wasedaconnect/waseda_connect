@@ -81,10 +81,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final prefs = await SharedPreferences.getInstance();
     final tutorialShown = prefs.getBool('tutorialShown') ?? false;
     if (!tutorialShown) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => Tutorial()), // NewPageに遷移
-        (Route<dynamic> route) => false,
-      );
+      Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+           Tutorial(),
+      ),
+    );
     }
   }
 
