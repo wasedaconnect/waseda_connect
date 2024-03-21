@@ -123,6 +123,7 @@ final Map<int, String> numToDay = {
   0: '無'
 };
 const Map<int, String> departments = {
+  0: '',
   1: '政治経済学部',
   2: '法学部',
   3: '教育学部',
