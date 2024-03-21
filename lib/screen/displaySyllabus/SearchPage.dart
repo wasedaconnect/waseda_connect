@@ -60,8 +60,8 @@ class SearchFormWithSelect extends StatefulWidget {
 class _SyllabusSearchSelectState extends State<SearchFormWithSelect> {
   List<ClassModel>? SearchSelectResult;
   int selectedDepartments = 0;
-  int selectedSemester = 1;
-  int selectedDay = 1;
+  int selectedSemester = 0;
+  int selectedDay = 0;
   int selectedPeriod = 0;
 
   Future<void> _searchSyllabus(
@@ -155,7 +155,7 @@ class _SyllabusSearchSelectState extends State<SearchFormWithSelect> {
               value: periodMap.keys.firstWhere(
                   (key) => periodMap[key] == selectedDay,
                   orElse: () => 0),
-              decoration: InputDecoration(labelText: '曜日'),
+              decoration: InputDecoration(labelText: '時限'),
               items: periodMap.keys.map((int key) {
                 return DropdownMenuItem<int>(
                   value: key,

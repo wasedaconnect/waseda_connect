@@ -278,11 +278,11 @@ class ClassLogic {
       // 各変数を999で初期化
       // 引数があれば値を更新し検索条件とする
       {
-    int department = 999,
-    int semester = 999,
-    int day = 999,
-    int time = 999,
-    int teachingMethod = 999,
+    int department = 0,
+    int semester = 0,
+    int day = 0,
+    int time = 0,
+    int teachingMethod = 0,
   }) async {
     final db = await _dbHelper.classDatabase;
     List<String> whereClauses = [];
@@ -291,23 +291,23 @@ class ClassLogic {
     print('searchClasses: $semester : $day : $time');
 
     // 条件を動的に構築
-    if (semester != 999) {
+    if (semester != 0) {
       whereClauses.add('semester = ?');
       whereArgs.add(semester);
     }
-    if (day != 999) {
+    if (day != 0) {
       whereClauses.add('(classDay1 = ? OR classDay2 = ?)');
       whereArgs.addAll([day, day]);
     }
-    if (time != 999) {
+    if (time != 0) {
       whereClauses.add('(classStart1 = ? OR classStart2 = ?)');
       whereArgs.addAll([time, time]);
     }
-    if (teachingMethod != 999) {
+    if (teachingMethod != 0) {
       whereClauses.add('teachingMethod = ?');
       whereArgs.add(teachingMethod);
     }
-    if (department != 999) {
+    if (department != 0) {
       whereClauses.add('department = ?');
       whereArgs.add(department);
     }
