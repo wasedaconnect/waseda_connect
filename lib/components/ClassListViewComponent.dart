@@ -102,7 +102,11 @@ class SyllabusItemWidget extends ConsumerWidget {
                             ),
                             SizedBox(height: 8.0),
                             Text(
-                              '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${classData.classStart1}',
+                              '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${periodMap[classData.classStart1]}' +
+                                  (classData.classDay2 != 0 ||
+                                          classData.classStart2 != 0
+                                      ? ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]}'
+                                      : ''),
                               style: TextStyle(
                                 fontSize: 14.0,
                                 color: Colors.grey[700],

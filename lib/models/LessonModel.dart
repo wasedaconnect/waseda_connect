@@ -98,7 +98,6 @@ class LessonLogic {
       }
       if (classData.classTime2 > 0) {
         //週に二個以上ある科目かどうか
-      } else {
         for (int i = 0; i < classData.classTime2; i++) {
           var lessonWithUlid = LessonModel(
               id: Ulid().toString(), // ULIDを生成して文字列に変換
