@@ -61,9 +61,11 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     print("よんだよね");
   }
 
-  Future<void> _addDummyLesson(String name, int day, int period, TimeTableModel? timeTableData) async {
+  Future<void> _addDummyLesson(String name, int day, int period, TimeTableModel? timeTableData, context) async {
     final LessonLogic instance = LessonLogic();
     await instance.insertDummyLesson(name, day, period, timeTableData);
+    ref.read(updateTimeTableProvider.notifier).state = true;
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   void _showAddLessonModal(int day, int period, TimeTableModel? timeTableData) {
@@ -81,9 +83,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
               // int count = 0;
               // Navigator.popUntil(context, (_) => count++ >= 2);
               print("追加aaa");
-              ref.read(updateTimeTableProvider.notifier).state = true;
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              _addDummyLesson(_textFieldController.text, day, period, timeTableData);
+              _addDummyLesson(_textFieldController.text, day, period, timeTableData, context);
             },
             onCancel: () {
               print("キャンセル");
