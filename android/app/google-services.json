@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "229447664218",
+    "project_id": "waseda-connect",
+    "storage_bucket": "waseda-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229447664218:android:51ba924e4bec2d9bf8ce63",
+        "android_client_info": {
+          "package_name": "com.example.waseda_connect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4ZkAP6TzcONqLHcL99CoaLNV5vMCz-WY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

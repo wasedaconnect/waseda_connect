@@ -13,6 +13,9 @@ import 'Screen/TimeTable/TimeTable.dart';
 import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screen/Tutorial/Tutorial.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:waseda_connect/provider/analytics_repository.dart';
 // 必要なページをimportします。例: Syllabus.dart
 //やること
 //ロード中画面を創る
@@ -20,7 +23,13 @@ import 'Screen/Tutorial/Tutorial.dart';
 //ポップアップメッセージ機能を創る
 //終わったら、classデータとlessonデータを紐づける。
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     ProviderScope(
       child: MyApp(),
@@ -28,11 +37,15 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var analytics = ref.watch(analyticsRepository);
+    var analyticsObserver = ref.watch(analyticsObserverRepository);
+
+    analytics.logAppOpen();
     return MaterialApp(
       title: 'Waseda Connect',
       theme: ThemeData(
@@ -41,9 +54,26 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: MyHomePage(),
+      navigatorObservers: [analyticsObserver],
     );
   }
 }
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Waseda Connect',
+//       theme: ThemeData(
+//         colorScheme:
+//             ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 0, 0)),
+//         useMaterial3: true,
+//       ),
+//       home: MyHomePage(),
+//     );
+//   }
+// }
 
 class MyHomePage extends StatefulWidget {
   @override
