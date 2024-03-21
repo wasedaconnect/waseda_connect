@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:waseda_connect/components/ListForm.dart';
 import 'package:waseda_connect/constants/Dict.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:waseda_connect/main.dart';
 import 'package:waseda_connect/provider/provider.dart';
-import 'package:waseda_connect/screen/Tutorial/Tutorial2.dart';
+
 
 class Tutorial extends ConsumerStatefulWidget {
   @override
@@ -66,7 +67,7 @@ class _TutorialState extends ConsumerState<Tutorial> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0), // 上下の余白を追加
                 child: ElevatedButton(
-                  child: Text('次へ'),
+                  child: Text('保存'),
                   onPressed: () async {
                     final prefs = await SharedPreferences.getInstance();
                     if (selectedFaculty != null) {
@@ -79,7 +80,12 @@ class _TutorialState extends ConsumerState<Tutorial> {
 
                     await prefs.setBool('tutorialShown', true);
                     ref.read(updateTimeTableProvider.notifier).state = true;
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MyHomePage()), // NewPageに遷移ソフトウェア
+                      (Route<dynamic> route) => false,
+                    );
                   },
                 ),
               ),

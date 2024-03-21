@@ -1,9 +1,11 @@
-Map<String, String> gradesDict = {
-  '1': '1年生',
-  '2': '2年生',
-  '3': '3年生',
-  '4': '4年生',
-};
+import 'package:flutter/material.dart';
+
+// Map<String, String> gradesDict = {
+//   '1': '1年生',
+//   '2': '2年生',
+//   '3': '3年生',
+//   '4': '4年生',
+// };
 Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
   '政治経済学部': [
     '政治学科',
@@ -107,12 +109,6 @@ Map<String, List<String>> wasedaFacultiesAndDepartmentsDict = {
 };
 List<String> weekdays = ['月', '火', '水', '木', '金', '土', '他'];
 List<int> weekdays_num = [1, 2, 3, 4, 5, 6, 0];
-final startTime = ['08:50', '10:40', '13:10', '15:05', '17:00', '18:55'];
-final endTime = ['10:30', '12:20', '14:50', '16:45', '18:40', '20:35'];
-final List<String> semesters = ['春', '秋'];
-final List<int> grades = [1, 2, 3, 4];
-final List<int> years = [5, 6];
-
 final Map<int, String> numToDay = {
   1: '月',
   2: '火',
@@ -122,6 +118,13 @@ final Map<int, String> numToDay = {
   6: '土',
   0: '無'
 };
+
+final startTime = ['08:50', '10:40', '13:10', '15:05', '17:00', '18:55'];
+final endTime = ['10:30', '12:20', '14:50', '16:45', '18:40', '20:35'];
+final List<String> semesters = ['春', '秋'];
+final List<int> grades = [1, 2, 3, 4];
+final List<int> years = [5, 6];
+
 const Map<int, String> departments = {
   1: '政治経済学部',
   2: '法学部',
@@ -197,16 +200,16 @@ Map<int, String> termMap = {
 };
 
 Map<int, List<int>> termToSemester = {
-  0: [1, 2, 3, 4], //通年に変換
-  1: [1, 2], //春学期に変換
-  2: [3, 4],
+  0: [1, 2], //通年に変換
+  1: [1], //春学期に変換
+  2: [2],
   3: [1],
-  4: [2],
-  5: [1, 2],
-  6: [3],
-  7: [4],
-  8: [3, 4],
-  9: [3, 4]
+  4: [1],
+  5: [1],
+  6: [2],
+  7: [2],
+  8: [2],
+  9: [2]
 };
 Map<int, String> periodMap = {
   0: "",
@@ -220,3 +223,10 @@ Map<int, String> periodMap = {
   10: "フルオンデマンド",
   11: "その他"
 };
+
+//学期とその色
+List<String> semesterList = ["春学期", "秋学期"];
+List mainColor = [
+  const Color.fromARGB(255, 194, 224, 238),
+  const Color.fromARGB(255, 246, 179, 174)
+];

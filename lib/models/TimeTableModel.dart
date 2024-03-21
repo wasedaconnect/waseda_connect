@@ -57,10 +57,11 @@ class TimeTableLogic {
     await prefs.setInt('defaultYear', timeTable.year);
   }
 
+//デフォルトで2021~2025年の春　秋の時間割を生成。
   Future<void> initInsertTimeTable() async {
     final db = await _dbHelper.timeTableDatabase;
     final yearsList = [2021, 2022, 2023, 2024, 2025];
-    final semseterList = [1, 2, 3, 4];
+    final semseterList = [1, 2];
     for (var yearData in yearsList) {
       for (var semesterData in semseterList) {
         final idWithUlid = Ulid().toString();

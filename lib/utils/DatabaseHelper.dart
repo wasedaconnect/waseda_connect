@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:waseda_connect/constants/Version.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _databaseHelper =
@@ -18,20 +19,35 @@ class DatabaseHelper {
 //<lessonDB>
   //授業データベースの出力、もし存在しなかったら作る。
   Future<Database> get lessonDatabase async {
-    _lessonDatabase ??= await initializeLessonDatabase();
+//現在の番号を取得。
+    final int externalVersion = databaseVersion["lesson"]!;
+
+    // データベースが既に初期化されているかどうかをチェック
+    if (_lessonDatabase != null) {
+      // データベースの現在のバージョンを取得
+      final int currentVersion = await _lessonDatabase!.getVersion();
+      // 外部バージョンと現在のバージョンを比較
+      if (currentVersion < externalVersion) {
+        // 必要に応じてデータベースをアップグレード
+        _lessonDatabase = await initializeLessonDatabase(externalVersion);
+      }
+    } else {
+      // データベースが初期化されていない場合は、初期化を行う
+      _lessonDatabase = await initializeLessonDatabase(externalVersion);
+    }
+
     return _lessonDatabase!;
   }
 
   ///データベースの初期化
-  Future<Database> initializeLessonDatabase() async {
-    var documentsDirectory =
-        await getApplicationDocumentsDirectory(); // アプリの保存場所
-    String path = join(documentsDirectory.path, 'lesson.db'); // パスの作成
+  Future<Database> initializeLessonDatabase(int externalVersion) async {
+    var documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, 'lesson.db');
     var lessonDatabase = await openDatabase(
       path,
-      version: 2, // データベースのバージョンを更新
+      version: externalVersion, // 外部から取得したバージョン番号を使用
       onCreate: _createLessonDb,
-      onUpgrade: _onUpgradeLessonDb, // マイグレーション処理を追加
+      onUpgrade: _onUpgradeLessonDb,
     );
 
     return lessonDatabase;
@@ -49,21 +65,20 @@ class DatabaseHelper {
     period INTEGER,
     classroom TEXT,
     classId TEXT,
-    color INTEGER,
-    FOREIGN KEY (timeTableId) REFERENCES timeTables(id),
-    FOREIGN KEY (classId) REFERENCES classes(pKey)
+    color INTEGER
   )
 ''');
-  }
+  } //どっちにも追加しないといけない。
 
-  /// データベースのマイグレーション処理
+  /// データベースのマイグレーション処理バージョンが変わるごとにこの処理を行いたい。
   void _onUpgradeLessonDb(Database db, int oldVersion, int newVersion) async {
     print(oldVersion);
+    print(newVersion);
     if (oldVersion < 2) {
-      // 例: バージョン1から2へのマイグレーションで新しいカラムを追加
-      // await db.execute('ALTER TABLE lessons ADD COLUMN color INTEGER');
+      await db.execute(
+          'ALTER TABLE lessons ADD COLUMN color INTEGER'); //どっちにも追加しないといけない
     }
-    // さらに新しいバージョンへのマイグレーションが必要な場合は、ここに追加
+    // 他のバージョンアップの処理をここに追加
   }
 
   //</lessonDB>

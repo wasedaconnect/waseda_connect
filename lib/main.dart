@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:waseda_connect/models/ClassModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
 
 import 'Screen/displaySyllabus/SearchPage.dart';
@@ -37,18 +36,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Waseda Connect',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 0, 0)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Waseda Connect'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -60,7 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _checkAndShowTutorial(); //チュートリアル表示
+    _checkAndShowTutorial().then((_) {
+      //初めてアプリをダウンロードした人へ
+      setState(() {
+        _isLoading = false; // ロード完了
+      });
+    }); //チュートリアル表示
     _initLoad().then((_) {
       //初めてアプリをダウンロードした人へ
       setState(() {
@@ -79,8 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
     final prefs = await SharedPreferences.getInstance();
     final tutorialShown = prefs.getBool('tutorialShown') ?? false;
     if (!tutorialShown) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => Tutorial()),
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => Tutorial()), // NewPageに遷移
+        (Route<dynamic> route) => false,
       );
     }
   }
@@ -152,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
+          title: Text('Waseda Connect'),
         ),
         body: IndexedStack(
           index: _selectedIndex,

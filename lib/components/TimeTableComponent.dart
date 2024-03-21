@@ -5,18 +5,18 @@ import '../../constants/Dict.dart'; // 必要に応じてパスを調整して�
 
 class TimeTableComponent extends StatefulWidget {
   final List<LessonModel>? lessonData;
-  final Map<String, dynamic>? selectedLessonData;
 
   final TimeTableModel? timeTableData;
 
   final Function(String?, int, int)? onSelected;
+  final Function(String?)? onLongSelected;
 
   const TimeTableComponent({
     Key? key,
     required this.lessonData,
     required this.timeTableData,
-    required this.selectedLessonData,
     this.onSelected,
+    this.onLongSelected,
   }) : super(key: key);
 
   @override
@@ -34,76 +34,91 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
         width: 1,
       );
 
+  // 仮定で一日の最大時限数を6とします
+  final int maxPeriods = 6;
+  // 曜日のリスト
+
+  // 各時限の開始時間と終了時間（サンプル）
+  final List<String> startTime = [
+    '9:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00'
+  ];
+  final List<String> endTime = [
+    '9:50',
+    '10:50',
+    '11:50',
+    '12:50',
+    '13:50',
+    '14:50'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // 曜日ヘッダー
         Container(
-          color: Colors.white,
           child: Table(
-            columnWidths: columnWidths,
-            border: tableBorder,
             children: [
               TableRow(
                 children: [
-                  SizedBox(width: 64.0),
+                  SizedBox(width: 64.0), // 時限表示用の空白セル
                   for (var day in weekdays)
                     Center(
-                        child: Text(day,
-                            style: TextStyle(fontWeight: FontWeight.bold))),
+                      child: Text(day,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
                 ],
               ),
             ],
           ),
         ),
+        // 時限と授業セル
         Expanded(
           child: SingleChildScrollView(
             child: Table(
-              columnWidths: columnWidths,
-              border: tableBorder,
-              children: List.generate(
-                6, // 仮定で一日の最大時限数を6とします
-                (index) => _buildTableRow(
-                    index + 1, weekdays_num, startTime, endTime, context),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  TableRow _buildTableRow(int period, List<int> weekdays,
-      List<String> startTime, List<String> endTime, BuildContext context) {
-    return TableRow(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.11,
-          color: Colors.white,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // ここではstartTimeとendTimeを直接指定していますが、
-                // 実際にはwidget.timeTableDataから取得する必要があります
-                Text('${startTime[period - 1]}', style: TextStyle(fontSize: 8)),
-                SizedBox(height: 20),
-                Text('$period',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                SizedBox(height: 20),
-                Text('${endTime[period - 1]}', style: TextStyle(fontSize: 8)),
+              children: [
+                for (int period = 1; period <= maxPeriods; period++)
+                  TableRow(
+                    children: [
+                      // 時限表示セル
+                      Center(
+                        child: Column(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center, // 子ウィジェットを中央に配置
+                          children: <Widget>[
+                            Text('${startTime[period - 1]}',
+                                style: TextStyle(fontSize: 8)),
+                            SizedBox(height: 20),
+                            Text('$period',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                            SizedBox(height: 20),
+                            Text('${endTime[period - 1]}',
+                                style: TextStyle(fontSize: 8)),
+                          ],
+                        ),
+                      ), // 各曜日の授業セル
+                      for (var day in weekdays_num)
+                        if (day == 0)
+                          _othersBuildLessonCell(period, day)
+                        else
+                          _normalBuildLessonCell(period, day),
+                    ],
+                  ),
               ],
             ),
           ),
         ),
-        for (int i = 0; i < weekdays.length; i++)
-          _buildLessonCell(period, weekdays_num[i]),
       ],
     );
   }
 
-  Widget _buildLessonCell(int period, int day) {
+  Widget _normalBuildLessonCell(int period, int day) {
     // lessonDataがnullの場合は空のリストを使用
     final lessonData = widget.lessonData ?? [];
 
@@ -121,15 +136,48 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
           classId: "",
           color: 0),
     );
+    return _buildLessonCell(lesson);
+  }
 
-    // selectedLessonDataがnullの場合は空のマップを使用
-    final selectedLessonData = widget.selectedLessonData ?? {};
+  Widget _othersBuildLessonCell(int period, int day) {
+    // lessonDataがnullの場合は空のリストを使用
+    final lessonData = widget.lessonData ?? [];
 
-    bool isSelected = selectedLessonData['id'] == lesson.id;
+    // lessonDataから特定の曜日と時限に対応する授業を検索
+    var lessonsForDay =
+        lessonData.where((lesson) => lesson.day == day).toList();
 
-  
+    // LessonModelの変数を先に宣言し、条件に応じて値を代入
+    LessonModel lesson;
+
+    if (period - 1 < lessonsForDay.length) {
+      // 存在する場合は、そのレッスンを取得
+      lesson = lessonsForDay[period - 1];
+    } else {
+      // 存在しない場合は、空のLessonModelオブジェクトを返す
+      lesson = LessonModel(
+        id: "",
+        name: "",
+        timeTableId: "",
+        createdAt: "",
+        day: 0,
+        period: 0,
+        classroom: "",
+        classId: "",
+        color: 0,
+      );
+    }
+
+    // _buildLessonCellメソッドにlessonオブジェクトを渡してウィジェットを構築
+    return _buildLessonCell(lesson);
+  }
+
+  // selectedLessonDataがnullの場合は空のマップを使用
+  Widget _buildLessonCell(LessonModel lesson) {
     return InkWell(
-      onTap: () => widget.onSelected?.call(lesson.classId, day, period),
+      onTap: () =>
+          widget.onSelected?.call(lesson.classId, lesson.day, lesson.period),
+      onLongPress: () => widget.onLongSelected?.call(lesson.id),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.11,
         margin: EdgeInsets.all(4.0),
@@ -157,11 +205,12 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
             children: [
               Text(
                 lesson.name,
+                overflow: TextOverflow.ellipsis, // オーバーフロー時に...で省略
+                maxLines: 3, // テキストを1行に制限
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 7,
                   fontWeight: FontWeight.bold,
-                  // fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
               SizedBox(height: 8),

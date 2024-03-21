@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:waseda_connect/constants/Dict.dart';
+import 'package:waseda_connect/main.dart';
 import 'package:waseda_connect/models/ClassModel.dart';
 import 'package:waseda_connect/provider/provider.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
@@ -118,12 +119,18 @@ class SyllabusItemWidget extends ConsumerWidget {
                       onConfirm: () async {
                         onItemTap(classData.pKey);
                         ref.read(updateTimeTableProvider.notifier).state = true;
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
+
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => MyHomePage()), // NewPageに遷移
+                          (Route<dynamic> route) =>
+                              false, // 条件がfalseを返すまで（つまり、すべてのルートを削除するまで）
+                        );
                       },
                       onCancel: () {
                         print("キャンセル");
                         ref.read(updateTimeTableProvider.notifier).state = true;
+
                         Navigator.of(context)
                             .popUntil((route) => route.isFirst);
                       },

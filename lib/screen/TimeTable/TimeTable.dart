@@ -1,16 +1,13 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:waseda_connect/components/ModalComponent.dart';
 import 'package:waseda_connect/components/FormModalComponent.dart';
 import 'package:waseda_connect/components/classDetailComponent.dart';
+import 'package:waseda_connect/constants/Dict.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
 import 'package:waseda_connect/provider/provider.dart';
 
-import 'package:waseda_connect/screen/Tutorial/Tutorial2.dart';
 import '../../components/TimeTableComponent.dart'; // 正しいパスに置き換えてください
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,12 +26,6 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   // ダミーデータの定義
   List<List<LessonModel>>? allLessonData;
 
-  Map<String, dynamic> selectedLessonData = {
-    "id": "1",
-    "name": "数",
-    "day": "月",
-    "period": 1
-  };
   Map<String, dynamic>? timeTableData;
 
   int defaultYear = 2024;
@@ -64,8 +55,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       allTimeTablesData = newTimeTablesData;
       allLessonData = newAllLessonData;
     });
-    // print(allLessonData.length);
-    // print(allTimeTablesData.length);
+    print(allLessonData);
+    print(allTimeTablesData);
     print("よんだよね");
   }
 
@@ -101,6 +92,31 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           );
         });
   }
+void _onLongFacultyChanged(String? id) {
+  // 長押しされた項目に基づいて何かアクションを行う
+  print(id);
+  final overlay = Overlay.of(context);
+  final renderBox = context.findRenderObject() as RenderBox;
+  final size = renderBox.size;
+  final offset = renderBox.localToGlobal(Offset.zero);
+
+  final overlayEntry = OverlayEntry(
+    builder: (context) => Positioned(
+      left: offset.dx,
+      top: offset.dy - size.height, // タップしたウィジェットの上に表示
+      width: size.width,
+      child: buildPopup(context),
+    ),
+  );
+
+  overlay?.insert(overlayEntry);
+
+  // どこかをタップしたらOverlayを消す
+  Future.delayed(Duration(seconds: 3), () {
+    overlayEntry.remove();
+  });
+}
+
 
   void _onFacultyChanged(String? selected, int day, int period) {
     // 選択された項目に基づいて何かアクションを行う
@@ -143,8 +159,10 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 //じかんわり
   @override
   Widget build(BuildContext context) {
-    var appBarText = "${defaultYear ?? ""}年度";
+    
+    var appBarText = "${defaultYear}年度";
     final pageTransition = ref.watch(updateTimeTableProvider);
+
     if (pageTransition) {
       // ページ遷移が検知された場合に実行する関数
       WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -156,7 +174,11 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(appBarText),
+          title: Text(
+            appBarText,
+            textAlign: TextAlign.center,
+          ),
+          toolbarHeight: 30,
           actions: <Widget>[
             IconButton(
               onPressed: () {
@@ -167,24 +189,26 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           ],
         ),
         body: PageView.builder(
-          itemCount: 4, // 生成するページ数
+          itemCount: 2, // 生成するページ数
           itemBuilder: (context, index) {
-            // indexは0から始まり、ページ数-1までの値を取ります
-            // ここで、各ページのヘッダータイトルやその他のデータを設定できます
-            String appBarText = "ページ ${index + 1} のタイトル";
+            String appBarText = semesterList[index];
 
             // allLessonDataとallTimeTablesDataは、各ページに対応するデータのリストを想定
             // selectedLessonDataは、選択されたレッスンデータを想定（ページごとに異なる場合は、これもリストで管理する）
             return Scaffold(
+              backgroundColor: mainColor[index],
               appBar: AppBar(
                 title: Text(appBarText),
+                backgroundColor: mainColor[index],
+                toolbarHeight: 30,
               ),
               body: TimeTableComponent(
                 lessonData:
                     allLessonData?[index], // index番目のタイムテーブルに対応するレッスンデータ
                 timeTableData: allTimeTablesData?[index], // index番目のタイムテーブルデータ
-                selectedLessonData: selectedLessonData, // 選択されたレッスンデータ
+                // 選択されたレッスンデータ
                 onSelected: _onFacultyChanged,
+                onLongSelected: _onLongFacultyChanged,
               ),
             );
           },
@@ -213,4 +237,22 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       }
     });
   }
+  Widget buildPopup(BuildContext context) {
+  return Material(
+    color: Colors.transparent,
+    child: Container(
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.only(top: 5), // 吹き出しの矢印部分のスペースを作る
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        'ここに情報を表示',
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
+  );
+}
+
 }
