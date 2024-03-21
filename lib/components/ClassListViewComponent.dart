@@ -88,6 +88,15 @@ class SyllabusItemWidget extends ConsumerWidget {
                             ),
                             SizedBox(height: 8.0),
                             Text(
+                              '${departments[classData.department]}',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.grey[700],
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
                               classData.instructor,
                               style: TextStyle(
                                 fontSize: 14.0,

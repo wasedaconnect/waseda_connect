@@ -59,15 +59,19 @@ class SearchFormWithSelect extends StatefulWidget {
 
 class _SyllabusSearchSelectState extends State<SearchFormWithSelect> {
   List<ClassModel>? SearchSelectResult;
+  int selectedDepartments = 0;
   int selectedSemester = 1;
   int selectedDay = 1;
-  int selectedPeriod = 1;
+  int selectedPeriod = 0;
 
   Future<void> _searchSyllabus(
       int selectedSemester, int selectedDay, int selectedPeriod) async {
     final ClassLogic instance = ClassLogic();
     final newAllSyllabusData = await instance.searchClasses(
-        semester: selectedSemester, day: selectedDay, time: selectedPeriod);
+        department: selectedDepartments,
+        semester: selectedSemester,
+        day: selectedDay,
+        time: selectedPeriod);
     setState(() {
       SearchSelectResult = newAllSyllabusData;
     });
@@ -90,6 +94,25 @@ class _SyllabusSearchSelectState extends State<SearchFormWithSelect> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            DropdownButtonFormField<int>(
+              value: departments.keys.firstWhere(
+                  (key) => departments[key] == selectedDepartments,
+                  orElse: () => 0),
+              decoration: InputDecoration(labelText: '学部'),
+              items: departments.keys.map((int key) {
+                return DropdownMenuItem<int>(
+                  value: key,
+                  child: Text(departments[key]!),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  print(value);
+                  selectedDepartments = value!;
+                });
+              },
+            ),
+            SizedBox(height: 16),
             DropdownButtonFormField<int>(
               value: termMap.keys.firstWhere(
                   (key) => termMap[key] == selectedSemester,
