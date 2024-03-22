@@ -288,21 +288,33 @@ class ClassLogic {
     List<String> whereClauses = [];
     List<dynamic> whereArgs = [];
 
-    print('searchClasses: $semester : $day : $time');
+    print('searchClasses: $department : $semester : $day : $time');
 
     // 条件を動的に構築
     if (semester != 0) {
       whereClauses.add('semester = ?');
       whereArgs.add(semester);
     }
-    if (day != 0) {
+
+    if (day != 0 && time != 0) {
+      whereClauses.add(
+          '((classDay1 = ? AND classStart1 = ?) OR (classDay2 = ? AND classStart2 = ?))');
+      whereArgs.addAll([day, time, day, time]);
+    } else if (day != 0) {
       whereClauses.add('(classDay1 = ? OR classDay2 = ?)');
       whereArgs.addAll([day, day]);
-    }
-    if (time != 0) {
+    } else if (time != 0) {
       whereClauses.add('(classStart1 = ? OR classStart2 = ?)');
       whereArgs.addAll([time, time]);
     }
+    // if (day != 0) {
+    //   whereClauses.add('(classDay1 = ? OR classDay2 = ?)');
+    //   whereArgs.addAll([day, day]);
+    // }
+    // if (time != 0) {
+    //   whereClauses.add('(classStart1 = ? OR classStart2 = ?)');
+    //   whereArgs.addAll([time, time]);
+    // }
     if (teachingMethod != 0) {
       whereClauses.add('teachingMethod = ?');
       whereArgs.add(teachingMethod);
@@ -315,6 +327,8 @@ class ClassLogic {
     // WHERE句を組み立て
     String? whereClause =
         whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null;
+
+    print(whereClause);
 
     // クエリ実行
     final List<Map<String, dynamic>> maps = await db.query('classes',
