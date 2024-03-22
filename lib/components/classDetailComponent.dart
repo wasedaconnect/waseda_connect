@@ -247,7 +247,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                           DataCell(
                               Text('${periodMap[classData!.classStart1]}')),
                         ]),
-                        if (classData!.classDay2 != 0)
+                        if (classData!.classDay2 != 7)
                           DataRow(cells: [
                             DataCell(Text('曜日02')),
                             DataCell(Text('${numToDay[classData!.classDay2]}')),
