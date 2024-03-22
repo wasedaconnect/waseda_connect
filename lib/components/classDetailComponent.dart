@@ -60,6 +60,12 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     return (await instance.insertLesson(id));
   }
 
+  // db 'lesson'のidの授業に対してcolorを追加
+  Future<void> _changeLessonColor(String id, int colorId) async {
+    final LessonLogic instance = LessonLogic();
+    return (await instance.changeLessonColor(id, colorId));
+  }
+
   final _urlLaunchWithUri = UrlLaunchWithUri();
 
   void _showDeleteModal() {
@@ -120,6 +126,31 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     );
   }
 
+  Widget _colorButton(BuildContext context, int colorId) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          // クリックされたときの処理をここに追加
+          _changeLessonColor(classData!.pKey, colorId);
+          print('Selected colorId: $colorId');
+          print('Selected color: ${classColor[colorId]}');
+        },
+        style: ElevatedButton.styleFrom(
+          // primary: color, // ボタンの背景色を指定
+          minimumSize: Size(40, 40), // ボタンの最小サイズを指定
+        ).copyWith(
+          backgroundColor:
+              MaterialStateProperty.all<Color>(classColor[colorId]!), // 背景色を設定
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            CircleBorder(), // 円形のボタンを作成
+          ),
+        ),
+        child: Text(''), // ボタン内に表示するテキスト
+      ),
+    );
+  }
+
   Widget _buildButton() {
     if (widget.btnMode == ButtonMode.delete) {
       return ElevatedButton(
@@ -174,6 +205,24 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                         DataColumn(label: Text('情報')),
                       ],
                       rows: [
+                        // 登録されてる全ての色のボタンが表示されない点を直したい。
+                        if (widget.btnMode == ButtonMode.delete)
+                          DataRow(
+                            cells: [
+                              DataCell(Text('色の変更')),
+                              DataCell(
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal, // 横方向にスクロール
+                                  child: Row(
+                                    children: classColor.entries.map((entry) {
+                                      int index = entry.key;
+                                      return _colorButton(context, index);
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         DataRow(cells: [
                           DataCell(Text('ID')),
                           DataCell(Text(classData!.pKey)),

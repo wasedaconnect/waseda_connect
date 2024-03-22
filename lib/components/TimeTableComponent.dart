@@ -187,7 +187,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
         height: MediaQuery.of(context).size.height * 0.11,
         margin: EdgeInsets.all(4.0),
         decoration: BoxDecoration(
-          color: Colors.grey[350], // 授業セルの色
+          color: classColor[lesson.color], // 授業セルの色
           // border: Border.all(
           //   color: Colors.grey, // 枠線の色を設定
           // ),

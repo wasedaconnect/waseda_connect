@@ -234,5 +234,15 @@ Map<int, String> periodMap = {
 List<String> semesterList = ["春学期", "秋学期"];
 List mainColor = [
   const Color.fromARGB(255, 194, 224, 238),
-  const Color.fromARGB(255, 246, 179, 174)
+  const Color.fromARGB(255, 246, 179, 174),
 ];
+
+// 授業の背景色候補(最初の色「Colors.grey[300]」は授業が空の場合。)
+Map<int, Color> classColor = {
+  0: Color.fromRGBO(220, 220, 220, 1.0), // 授業が空の場合
+  1: Colors.red,
+  2: Colors.blue,
+  3: Colors.yellow,
+  4: Colors.green,
+  5: Colors.purple,
+};
