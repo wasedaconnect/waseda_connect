@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/Dict.dart';
+import 'package:waseda_connect/components/Utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class SettingPage extends StatefulWidget {
   @override
@@ -11,41 +11,46 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   String? selectedFaculty;
   String? selectedDepartment;
-  List<String>? departmentDict;
+  List<String>? departmentList;
 
   @override
   void initState() {
     super.initState();
     _fetchData();
-
   }
 
   Future<void> _fetchData() async {
-    if(selectedFaculty != null) return;
+    if (selectedFaculty != null) return;
     final prefs = await SharedPreferences.getInstance();
     selectedFaculty = prefs.getString('faculty');
     selectedDepartment = prefs.getString('department');
-    departmentDict = wasedaFacultiesAndDepartmentsDict[selectedFaculty];
+    departmentList = wasedaFacultiesAndDepartmentsDict[selectedFaculty];
   }
 
-  void _onFacultyChanged(String? newFaculty) {
+  void _onFacultyChanged(dynamic newFaculty) {
+    print(newFaculty);
     setState(() {
       selectedFaculty = newFaculty;
       // 学部が変更されたら、学科の選択をリセット
       selectedDepartment = null;
-      departmentDict = wasedaFacultiesAndDepartmentsDict[selectedFaculty];
+      departmentList = wasedaFacultiesAndDepartmentsDict[selectedFaculty];
+      print(departmentList);
     });
   }
 
-  void _saveFacultyAndDepartment(BuildContext context) async{
-    if(selectedFaculty == null || selectedDepartment == null){
+  void _saveFacultyAndDepartment(BuildContext context) async {
+    if (selectedFaculty == null || selectedDepartment == null) {
       print('保存不可');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('学部または学科が選択されていません。'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.red,
-          margin: EdgeInsets.only(top: 80.0, bottom:10.0, right: 20.0, left: 20.0), // 上部に表示するためのマージン調整
+          margin: EdgeInsets.only(
+              top: 80.0,
+              bottom: 10.0,
+              right: 20.0,
+              left: 20.0), // 上部に表示するためのマージン調整
         ),
       );
       return;
@@ -57,10 +62,11 @@ class _SettingPageState extends State<SettingPage> {
     // showTopSnackBar(context, '保存完了：${selectedFaculty}/${selectedDepartment}');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('保存完了：${selectedFaculty}/${selectedDepartment}'),
+        content: Text('保存完了：${selectedFaculty} / ${selectedDepartment}'),
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.green, // 色を変更
-        margin: EdgeInsets.only(top: 80.0, bottom:10.0, right: 20.0, left: 20.0), // 上部に表示
+        margin: EdgeInsets.only(
+            top: 80.0, bottom: 10.0, right: 20.0, left: 20.0), // 上部に表示
       ),
     );
   }
@@ -109,24 +115,12 @@ class _SettingPageState extends State<SettingPage> {
                 builder: (context, snapshot) {
                   // 非同期処理が完了したら、UIを表示
                   if (snapshot.connectionState == ConnectionState.done) {
-                    return DropdownButtonFormField<String>(
-                      decoration: InputDecoration(labelText: '学部'),
-                      value: wasedaFacultiesAndDepartmentsDict.keys.contains(selectedFaculty)
-                        ? selectedFaculty
-                        : null,
-                      items: wasedaFacultiesAndDepartmentsDict.keys.map((String key) {
-                        return DropdownMenuItem<String>(
-                          value: key,
-                          child: Text(key),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _onFacultyChanged(value);
-                          // 必要に応じて他の処理をここに追加
-                          print(value);
-                        });
-                      },
+                    return DropdownCustomComponent(
+                      value: selectedFaculty, //
+                      label: '学部を選択してください',
+                      onChanged: _onFacultyChanged,
+                      itemDict: departments,
+                      limmit: 14,
                     );
                   } else {
                     // 非同期処理中の場合はローディングインジケータを表示
@@ -139,24 +133,16 @@ class _SettingPageState extends State<SettingPage> {
                 builder: (context, snapshot) {
                   // 非同期処理が完了したら、UIを表示
                   if (snapshot.connectionState == ConnectionState.done) {
-                    return DropdownButtonFormField<String>(
-                      decoration: InputDecoration(labelText: '学科'),
-                      value: departmentDict!.contains(selectedDepartment)
-                        ? selectedDepartment
-                        : null,
-                      items: departmentDict?.map((String department) {
-                          return DropdownMenuItem<String>(
-                            value: department,
-                            child: Text(department),
-                          );
-                      }).toList(),
+                    return DropdownCustomComponent(
+                      value: selectedDepartment, //
+                      label: '学科を選択してください',
                       onChanged: (value) {
                         setState(() {
-                          selectedDepartment = value;
-                          // 必要に応じて他の処理をここに追加
                           print(value);
+                          selectedDepartment = value!;
                         });
                       },
+                      itemList: departmentList,
                     );
                   } else {
                     // 非同期処理中の場合はローディングインジケータを表示
@@ -165,15 +151,14 @@ class _SettingPageState extends State<SettingPage> {
                 },
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // 追加機能のロジックを実装
-                    _saveFacultyAndDepartment(context);
-                  },
-                  child: Text('保存'),
-                )
-              )
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // 追加機能のロジックを実装
+                      _saveFacultyAndDepartment(context);
+                    },
+                    child: Text('保存'),
+                  ))
             ],
           ),
         ),
