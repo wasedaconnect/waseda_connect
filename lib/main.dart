@@ -16,6 +16,8 @@ import 'Screen/Tutorial/Tutorial.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:waseda_connect/provider/analytics_repository.dart';
+import 'package:package_info/package_info.dart';
+
 // 必要なページをimportします。例: Syllabus.dart
 //やること
 //ロード中画面を創る
@@ -30,6 +32,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  String version = packageInfo.version;
+  String buildNumber = packageInfo.buildNumber;
+  print(version);
+  print(buildNumber);
+
   runApp(
     ProviderScope(
       child: MyApp(),
@@ -44,6 +52,22 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var analytics = ref.watch(analyticsRepository);
     var analyticsObserver = ref.watch(analyticsObserverRepository);
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   // アップデートがあった場合
+    //   if (updateRequestType != "") {
+    //     // 新しいバージョンがある場合はダイアログを表示する
+    //     // barrierDismissible はダイアログ表示時の背景をタップしたときにダイアログを閉じてよいかどうか
+    //     // updateの案内を勝手に閉じて欲しくないのでbarrierDismissibleはfalse
+    //     showDialog<void>(
+    //       context: context,
+    //       barrierDismissible: false,
+    //       builder: (context) {
+    //         return UpdateModal();
+    //       },
+    //     );
+    //   }
+    // });
 
     analytics.logAppOpen();
     return MaterialApp(
@@ -190,7 +214,8 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text('Waseda Connect'),
         ),
-        body: IndexedStack(
+        body: 
+        IndexedStack(
           index: _selectedIndex,
           children: _pages,
         ),

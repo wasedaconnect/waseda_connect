@@ -49,6 +49,10 @@ dependencies:
   firebase_core: ^2.27.1
   firebase_analytics: ^10.8.10
   hooks_riverpod: ^2.5.1
+  package_info: ^2.0.2
+  firebase_remote_config: ^4.3.18
+  get_it: ^7.6.7
+  version: ^3.0.2
 
 dev_dependencies:
   flutter_test:
