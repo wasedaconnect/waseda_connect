@@ -10,6 +10,7 @@ import 'package:waseda_connect/models/TimeTableModel.dart';
 import 'Screen/displaySyllabus/SearchPage.dart';
 
 import 'Screen/TimeTable/TimeTable.dart';
+import 'Screen/SettingPage/SettingPage.dart';
 import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screen/Tutorial/Tutorial.dart';
@@ -136,6 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // ここにページのウィジェットを追加
     TimeTable(),
     SearchPage(),
+    SettingPage(),
     Test(),
   ];
 
@@ -173,6 +175,10 @@ class _MyHomePageState extends State<MyHomePage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.business),
               label: 'シラバス',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: '設定',
             ),
             // BottomNavigationBarItem(
             //   icon: Icon(Icons.business),
