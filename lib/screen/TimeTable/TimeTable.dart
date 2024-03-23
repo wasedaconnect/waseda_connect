@@ -11,6 +11,8 @@ import 'package:waseda_connect/provider/provider.dart';
 
 import '../../components/TimeTableComponent.dart'; // 正しいパスに置き換えてください
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../provider/update_request_provider.dart';
+import '../../components/Update/UpdateModal.dart';
 
 class TimeTable extends ConsumerStatefulWidget {
   @override
@@ -61,10 +63,10 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     print("よんだよね");
   }
 
-  Future<void> _addDummyLesson(String name, int day, int period,
+  Future<void> _addDummyLesson(String name, String classRoom, int day, int period,
       TimeTableModel? timeTableData, context) async {
     final LessonLogic instance = LessonLogic();
-    await instance.insertDummyLesson(name, day, period, timeTableData);
+    await instance.insertDummyLesson(name, classRoom, day, period, timeTableData);
     ref.read(updateTimeTableProvider.notifier).state = true;
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
@@ -73,18 +75,30 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     showDialog(
         context: context, // showDialogにはBuildContextが必要です
         builder: (BuildContext context) {
-          TextEditingController _textFieldController = TextEditingController();
+          TextEditingController _className = TextEditingController();
+          TextEditingController _classRoom = TextEditingController();
           return FormModalComponent(
             title: '授業の登録',
-            content: TextField(
-              controller: _textFieldController,
-              decoration: InputDecoration(hintText: "授業名を入力してください"),
-            ),
+            content: SingleChildScrollView( // SingleChildScrollViewを使って、キーボード表示でコンテンツが隠れないようにする
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          TextField(
+                            controller: _className,
+                            decoration: InputDecoration(hintText: "授業名を入力してください"),
+                          ),
+                          SizedBox(height: 20), // フォーム間のスペース
+                          TextField(
+                            controller: _classRoom,
+                            decoration: InputDecoration(hintText: "教室を入力してください"),
+                          ),
+                        ],
+                      ),
+                    ),
             onConfirm: () {
               // int count = 0;
               // Navigator.popUntil(context, (_) => count++ >= 2);
-              print("追加aaa");
-              _addDummyLesson(_textFieldController.text, day, period,
+              _addDummyLesson(_className.text, _classRoom.text, day, period,
                   timeTableData, context);
             },
             onCancel: () {
@@ -108,7 +122,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         context: context, // showDialogにはBuildContextが必要です
         builder: (BuildContext context) {
           return ModalComponent(
-            title: '授業の登録',
+            title: '授業の削除',
             content: '本当に削除しますか',
             onConfirm: () {
               // int count = 0;
@@ -173,6 +187,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       Navigator.push(
         context,
         MaterialPageRoute(
+            settings: RouteSettings(name: '/classDetail'),
             builder: (context) => ClassDetailComponent(
                   classId: selected,
                   btnMode: ButtonMode.delete,
@@ -201,6 +216,26 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 //じかんわり
   @override
   Widget build(BuildContext context) {
+    ref.watch(updateRequesterProvider)
+    .when(data: (updateRequestFlag) {
+      if (updateRequestFlag) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => UpdateModal(),
+        );
+      });
+      }
+    },
+    loading: () => {
+      // ローディング中の処理をここに書く
+    },
+    error: (error, stack) => {
+      // エラーが発生した場合の処理をここに書く
+    },);
+    
+
     var appBarText = "${defaultYear}年度";
     final pageTransition = ref.watch(updateTimeTableProvider);
 

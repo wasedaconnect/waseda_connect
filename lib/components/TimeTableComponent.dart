@@ -201,7 +201,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
           widget.onSelected?.call(lesson.classId, day, period, timeTableData!),
       onLongPress: () => widget.onLongSelected?.call(lesson.id),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.11,
+        height: MediaQuery.of(context).size.height * 0.10,
         margin: EdgeInsets.all(4.0),
         decoration: BoxDecoration(
           color: classColor[lesson.color], // 授業セルの色
