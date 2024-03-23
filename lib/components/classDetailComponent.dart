@@ -146,7 +146,11 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
             CircleBorder(), // 円形のボタンを作成
           ),
         ),
-        child: Text(''), // ボタン内に表示するテキスト
+        child: Icon(
+          Icons.check,
+          size: 16, // チェックマークのアイコン
+          color: Colors.black, // チェックマークの色
+        ), // ボタン内に表示するテキスト
       ),
     );
   }
