@@ -14,10 +14,9 @@ class UpdateModal extends ConsumerWidget {
     super.key,
   });
 
+  static const WEB_SITE_URL = "https://jikanwari777.wixsite.com/waseda-connect";
   static const APP_STORE_URL =
-      'https://apps.apple.com/jp/app/id443904275?mt-8';
-  // static const APP_STORE_URL =
-  //     'https://apps.apple.com/jp/app/id[アプリのApple ID]?mt=8';
+      'https://apps.apple.com/jp/app/id[アプリのApple ID]?mt=8';
 
   // FIXME ストアにアプリを登録したらurlが入れられる
   static const PLAY_STORE_URL =
@@ -36,7 +35,7 @@ class UpdateModal extends ConsumerWidget {
             TextButton(
               onPressed: () {
                 // App Store or Google Play に飛ばす処理
-                _urlLaunchWithUri.launchUrlWithUri(context, APP_STORE_URL);
+                _urlLaunchWithUri.launchUrlWithUri(context, WEB_SITE_URL);
               },
               child: const Text('アップデートする'),
             ),
@@ -52,7 +51,7 @@ class UpdateModal extends ConsumerWidget {
             TextButton(
               onPressed: () {
                 // App Store or Google Play に飛ばす処理
-                _urlLaunchWithUri.launchUrlWithUri(context, PLAY_STORE_URL);
+                _urlLaunchWithUri.launchUrlWithUri(context, WEB_SITE_URL);
               },
               child: const Text('アップデートする'),
             ),

@@ -206,7 +206,6 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     ref.watch(updateRequesterProvider)
     .when(data: (updateRequestFlag) {
       if (updateRequestFlag) {
-        print("アプデある");
         WidgetsBinding.instance.addPostFrameCallback((_) {
         showDialog<void>(
           context: context,
