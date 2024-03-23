@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async'; 
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,12 @@ import 'Screen/SettingPage/SettingPage.dart';
 import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screen/Tutorial/Tutorial.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:waseda_connect/provider/analytics_repository.dart';
+import 'package:package_info/package_info.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 // 必要なページをimportします。例: Syllabus.dart
 //やること
 //ロード中画面を創る
@@ -21,30 +28,93 @@ import 'Screen/Tutorial/Tutorial.dart';
 //ポップアップメッセージ機能を創る
 //終わったら、classデータとlessonデータを紐づける。
 
-void main() {
-  runApp(
-    ProviderScope(
-      child: MyApp(),
-    ),
-  );
+
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+
+  runZonedGuarded<Future<void>>(() async {
+    /// Firebaseの初期化
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    /// クラッシュハンドラ(Flutterフレームワーク内でスローされたすべてのエラー)
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    /// runApp w/ Riverpod
+    runApp(const ProviderScope(child: MyApp()));
+  },
+
+      /// クラッシュハンドラ(Flutterフレームワーク内でキャッチされないエラー)
+      (error, stack) =>
+          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
+
+
+  // runApp(
+  //   ProviderScope(
+  //     child: MyApp(),
+  //   ),
+  // );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var analytics = ref.watch(analyticsRepository);
+    var analyticsObserver = ref.watch(analyticsObserverRepository);
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   // アップデートがあった場合
+    //   if (updateRequestType != "") {
+    //     // 新しいバージョンがある場合はダイアログを表示する
+    //     // barrierDismissible はダイアログ表示時の背景をタップしたときにダイアログを閉じてよいかどうか
+    //     // updateの案内を勝手に閉じて欲しくないのでbarrierDismissibleはfalse
+    //     showDialog<void>(
+    //       context: context,
+    //       barrierDismissible: false,
+    //       builder: (context) {
+    //         return UpdateModal();
+    //       },
+    //     );
+    //   }
+    // });
+
+    analytics.logAppOpen();
     return MaterialApp(
       title: 'Waseda Connect',
       theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 0, 0)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(0, 45, 171, 244)),
         useMaterial3: true,
       ),
       home: MyHomePage(),
+      navigatorObservers: [analyticsObserver],
     );
   }
 }
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Waseda Connect',
+//       theme: ThemeData(
+//         colorScheme:
+//             ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 0, 0)),
+//         useMaterial3: true,
+//       ),
+//       home: MyHomePage(),
+//     );
+//   }
+// }
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -80,12 +150,14 @@ class _MyHomePageState extends State<MyHomePage> {
 //最初にチュートリアル表示。
   Future<void> _checkAndShowTutorial() async {
     final prefs = await SharedPreferences.getInstance();
+    // await prefs.clear();
     final tutorialShown = prefs.getBool('tutorialShown') ?? false;
     if (!tutorialShown) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => Tutorial(),
+          settings: RouteSettings(name: '/tutorial')
         ),
       );
     }
@@ -106,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //初めてアプリをダウンロードした人へ
   Future<void> _initLoad() async {
     final prefs = await SharedPreferences.getInstance();
-    // prefs.clear();
+    // await prefs.clear();
     final isGetInitData = prefs.getBool('getInitData') ?? false;
     if (!isGetInitData) {
       //１データベース初期化
@@ -160,20 +232,26 @@ class _MyHomePageState extends State<MyHomePage> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text('Waseda Connect'),
+          title: Image.asset(
+            'assets/logo/WasedaConnect_home.png',
+            fit: BoxFit.cover, // 画像がAppBarの高さに合わせて適切にフィットするようにします
+            height: kToolbarHeight, // AppBarの高さに合わせます
+          ),
+          // title: Text('Waseda Connect'),
         ),
-        body: IndexedStack(
+        body: 
+        IndexedStack(
           index: _selectedIndex,
           children: _pages,
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.calendar_today_outlined),
               label: '時間割',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.search),
               label: 'シラバス',
             ),
             BottomNavigationBarItem(

@@ -12,7 +12,6 @@ import 'package:waseda_connect/components/classDetailComponent.dart';
 
 class ClassListViewComponent extends ConsumerStatefulWidget {
   final List<ClassModel>? allSyllabusData;
-
   const ClassListViewComponent({
     Key? key,
     required this.allSyllabusData,
