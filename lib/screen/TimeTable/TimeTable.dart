@@ -110,7 +110,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
         context: context, // showDialogにはBuildContextが必要です
         builder: (BuildContext context) {
           return ModalComponent(
-            title: '授業の登録',
+            title: '授業の削除',
             content: '本当に削除しますか',
             onConfirm: () {
               // int count = 0;
@@ -175,6 +175,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       Navigator.push(
         context,
         MaterialPageRoute(
+            settings: RouteSettings(name: '/classDetail'),
             builder: (context) => ClassDetailComponent(
                   classId: selected,
                   btnMode: ButtonMode.delete,

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async'; 
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:waseda_connect/provider/analytics_repository.dart';
 import 'package:package_info/package_info.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 // 必要なページをimportします。例: Syllabus.dart
 //やること
@@ -27,22 +29,36 @@ import 'package:package_info/package_info.dart';
 
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  String version = packageInfo.version;
-  String buildNumber = packageInfo.buildNumber;
-  print(version);
-  print(buildNumber);
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
 
-  runApp(
-    ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runZonedGuarded<Future<void>>(() async {
+    /// Firebaseの初期化
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    /// クラッシュハンドラ(Flutterフレームワーク内でスローされたすべてのエラー)
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    /// runApp w/ Riverpod
+    runApp(const ProviderScope(child: MyApp()));
+  },
+
+      /// クラッシュハンドラ(Flutterフレームワーク内でキャッチされないエラー)
+      (error, stack) =>
+          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
+
+
+  // runApp(
+  //   ProviderScope(
+  //     child: MyApp(),
+  //   ),
+  // );
 }
 
 class MyApp extends ConsumerWidget {
@@ -139,6 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
         context,
         MaterialPageRoute(
           builder: (context) => Tutorial(),
+          settings: RouteSettings(name: '/tutorial')
         ),
       );
     }

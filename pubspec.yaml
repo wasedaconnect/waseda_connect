@@ -53,6 +53,7 @@ dependencies:
   firebase_remote_config: ^4.3.18
   get_it: ^7.6.7
   version: ^3.0.2
+  firebase_crashlytics: ^3.4.19
 
 dev_dependencies:
   flutter_test:
