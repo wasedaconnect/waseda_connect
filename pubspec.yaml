@@ -126,5 +126,6 @@ flutter:
   assets:
     - assets/
     - assets/logo/wasedaconnect.png
+    - assets/logo/WasedaConnect_home.png
 
 
