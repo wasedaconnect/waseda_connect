@@ -232,7 +232,12 @@ class _MyHomePageState extends State<MyHomePage> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text('Waseda Connect'),
+          title: Image.asset(
+            'assets/logo/WasedaConnect_home.png',
+            fit: BoxFit.cover, // 画像がAppBarの高さに合わせて適切にフィットするようにします
+            height: kToolbarHeight, // AppBarの高さに合わせます
+          ),
+          // title: Text('Waseda Connect'),
         ),
         body: 
         IndexedStack(
@@ -242,11 +247,11 @@ class _MyHomePageState extends State<MyHomePage> {
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.calendar_today_outlined),
               label: '時間割',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.search),
               label: 'シラバス',
             ),
             BottomNavigationBarItem(
