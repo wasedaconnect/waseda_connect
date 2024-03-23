@@ -11,6 +11,7 @@ import 'package:waseda_connect/models/TimeTableModel.dart';
 import 'Screen/displaySyllabus/SearchPage.dart';
 
 import 'Screen/TimeTable/TimeTable.dart';
+import 'Screen/SettingPage/SettingPage.dart';
 import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screen/Tutorial/Tutorial.dart';
@@ -89,8 +90,8 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Waseda Connect',
       theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 0, 0)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(0, 45, 171, 244)),
         useMaterial3: true,
       ),
       home: MyHomePage(),
@@ -207,6 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // ここにページのウィジェットを追加
     TimeTable(),
     SearchPage(),
+    SettingPage(),
     Test(),
   ];
 
@@ -245,6 +247,10 @@ class _MyHomePageState extends State<MyHomePage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.business),
               label: 'シラバス',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: '設定',
             ),
             // BottomNavigationBarItem(
             //   icon: Icon(Icons.business),

@@ -21,23 +21,23 @@ class _SearchPageState extends State<SearchPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Search'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(text: 'Search1'),
-            Tab(text: 'Search2'),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: TabBar(
+            tabs: [
+              Tab(text: '条件検索'),
+              Tab(text: '自由検索'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            SearchFormWithSelect(),
+            SearchFormWithText(),
           ],
         ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          SearchFormWithSelect(),
-          SearchFormWithText(),
-        ],
       ),
     );
   }
@@ -213,7 +213,13 @@ class _SyllabusSearchTextState extends State<SearchFormWithText> {
   Future<void> _searchSyllabus(String value) async {
     // ここにテキストフィールドの入力値が変化したときの処理を記述
     final ClassLogic instance = ClassLogic();
-    final newAllSyllabusData = await instance.searchClassesByName(value);
+    List<ClassModel> newAllSyllabusData = [];
+
+    if (value.isNotEmpty) {
+      print('検索ワード' + value);
+      newAllSyllabusData = await instance.searchClassesByName(value);
+    }
+
     setState(() {
       allSyllabusData = newAllSyllabusData;
     });
