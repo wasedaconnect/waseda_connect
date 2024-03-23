@@ -123,6 +123,7 @@ class _TutorialState extends ConsumerState<Tutorial> {
 
                       await prefs.setBool('tutorialShown', true);
                       ref.read(updateTimeTableProvider.notifier).state = true;
+                      ref.read(updateSettingProvider.notifier).state = true;
                       Navigator.of(context).popUntil((route) => route.isFirst);
                     },
                   ),

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import '../../constants/Dict.dart';
 import 'package:waseda_connect/components/Utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:waseda_connect/provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingPage extends StatefulWidget {
+class SettingPage extends ConsumerStatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SettingPageState extends ConsumerState<SettingPage> {
   String? selectedFaculty;
   String? selectedDepartment;
   List<String>? departmentList;
@@ -100,6 +102,18 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final pageTransition = ref.watch(updateSettingProvider);
+
+    if (pageTransition) {
+      // ページ遷移が検知された場合に実行する関数
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _fetchData();
+        // 必要に応じて、状態をリセット
+        ref.read(updateSettingProvider.notifier).state = false;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('設定'),

@@ -14,7 +14,7 @@ class UpdateModal extends ConsumerWidget {
     super.key,
   });
 
-  static const WEB_SITE_URL = "https://jikanwari777.wixsite.com/waseda-connect";
+  static const WEB_SITE_URL = "https://www.waseda-connect.com/";
   static const APP_STORE_URL =
       'https://apps.apple.com/jp/app/id[アプリのApple ID]?mt=8';
 

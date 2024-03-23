@@ -150,6 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //最初にチュートリアル表示。
   Future<void> _checkAndShowTutorial() async {
     final prefs = await SharedPreferences.getInstance();
+    // await prefs.clear();
     final tutorialShown = prefs.getBool('tutorialShown') ?? false;
     if (!tutorialShown) {
       Navigator.push(
@@ -177,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //初めてアプリをダウンロードした人へ
   Future<void> _initLoad() async {
     final prefs = await SharedPreferences.getInstance();
-    // prefs.clear();
+    // await prefs.clear();
     final isGetInitData = prefs.getBool('getInitData') ?? false;
     if (!isGetInitData) {
       //１データベース初期化
