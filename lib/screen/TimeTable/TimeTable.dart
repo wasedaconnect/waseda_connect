@@ -187,7 +187,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     }
   }
 
-  //タイムテーブルの遷移。
+  //タイムテーブルの遷移。2024
   Future<void> _setTimeTable(int year) async {
     print(year);
 
@@ -214,7 +214,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     }
 
     return PageView.builder(
-      itemCount: 2, // 生成するページ数
+      itemCount: 4, 
+       controller: PageController(initialPage: 1),// 生成するページ数
       itemBuilder: (context, index) {
         String appBarByTimeTable = semesterList[index];
 

@@ -133,7 +133,7 @@ class ClassModel {
 
 class ClassLogic {
   final DatabaseHelper _dbHelper = DatabaseHelper();
-
+  //今は使っていないCSVインポート
   Future<void> insertClass() async {
     final rawData = await rootBundle.loadString('assets/ClassData.csv'); //テスト用
     // CSVデータをリストに変換（ヘッダーをスキップ）
@@ -203,7 +203,7 @@ class ClassLogic {
     });
   }
 
-//pKey
+//pKeyでサーチする。
   Future<ClassModel> searchClassesByPKey(String pKey) async {
     final db = await _dbHelper.classDatabase;
     final List<Map<String, dynamic>> maps = await db.query(
