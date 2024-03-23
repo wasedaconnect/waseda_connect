@@ -320,4 +320,18 @@ class LessonLogic {
 
     print("削除できました");
   }
+
+  // 授業の背景色の変更するメソッド
+  Future<void> changeLessonColor(String id, int colorId) async {
+    // LessonModelのcolorに数字を当てる感じ
+    print('授業の背景色の変更');
+    final db = await _dbHelper.lessonDatabase;
+
+    await db.update(
+      'lessons',
+      {'color': colorId}, // 更新するフィールドと値
+      where: 'classId = ?', // 更新する条件
+      whereArgs: [id], // 条件に対応する値
+    );
+  }
 }

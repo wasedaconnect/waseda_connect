@@ -66,12 +66,25 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
             children: [
               TableRow(
                 children: [
-                  SizedBox(width: 64.0), // 時限表示用の空白セル
+                  SizedBox(width: 30.0), // 時限表示用の空白セル
                   for (var day in weekdays)
-                    Center(
-                      child: Text(day,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
+                    Container(
+                      margin: EdgeInsets.all(2.0),
+                      decoration: BoxDecoration(
+                        // * ここ現在の日付とって値変えたい。
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Text(
+                            day,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
             ],
@@ -86,21 +99,25 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                   TableRow(
                     children: [
                       // 時限表示セル
-                      Center(
-                        child: Column(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center, // 子ウィジェットを中央に配置
-                          children: <Widget>[
-                            Text('${startTime[period - 1]}',
-                                style: TextStyle(fontSize: 8)),
-                            SizedBox(height: 20),
-                            Text('$period',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)),
-                            SizedBox(height: 20),
-                            Text('${endTime[period - 1]}',
-                                style: TextStyle(fontSize: 8)),
-                          ],
+                      SizedBox(
+                        width: 20,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center, // 子ウィジェットを中央に配置
+                            children: <Widget>[
+                              Text('${startTime[period - 1]}',
+                                  style: TextStyle(fontSize: 8)),
+                              SizedBox(height: 20),
+                              Text('$period',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(height: 20),
+                              Text('${endTime[period - 1]}',
+                                  style: TextStyle(fontSize: 8)),
+                            ],
+                          ),
                         ),
                       ), // 各曜日の授業セル
                       for (var day in weekdays_num)
@@ -187,10 +204,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
         height: MediaQuery.of(context).size.height * 0.11,
         margin: EdgeInsets.all(4.0),
         decoration: BoxDecoration(
-          color: Colors.grey[350], // 授業セルの色
-          // border: Border.all(
-          //   color: Colors.grey, // 枠線の色を設定
-          // ),
+          color: classColor[lesson.color], // 授業セルの色
           borderRadius: BorderRadius.circular(10.0), // 角丸
           boxShadow: [
             BoxShadow(

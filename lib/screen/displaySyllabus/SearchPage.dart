@@ -213,7 +213,13 @@ class _SyllabusSearchTextState extends State<SearchFormWithText> {
   Future<void> _searchSyllabus(String value) async {
     // ここにテキストフィールドの入力値が変化したときの処理を記述
     final ClassLogic instance = ClassLogic();
-    final newAllSyllabusData = await instance.searchClassesByName(value);
+    List<ClassModel> newAllSyllabusData = [];
+
+    if (value.isNotEmpty) {
+      print('検索ワード' + value);
+      newAllSyllabusData = await instance.searchClassesByName(value);
+    }
+
     setState(() {
       allSyllabusData = newAllSyllabusData;
     });

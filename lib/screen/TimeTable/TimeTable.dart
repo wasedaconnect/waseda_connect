@@ -213,53 +213,60 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       });
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            appBarText,
-            textAlign: TextAlign.center,
-          ),
-          toolbarHeight: 30,
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                _showTitleOptions(context);
-              },
-              icon: Icon(Icons.add),
-            ),
-          ],
-        ),
-        body: PageView.builder(
-          itemCount: 2, // 生成するページ数
-          itemBuilder: (context, index) {
-            String appBarText = semesterList[index];
+    return PageView.builder(
+      itemCount: 2, // 生成するページ数
+      itemBuilder: (context, index) {
+        String appBarByTimeTable = semesterList[index];
 
-            // allLessonDataとallTimeTablesDataは、各ページに対応するデータのリストを想定
-            // selectedLessonDataは、選択されたレッスンデータを想定（ページごとに異なる場合は、これもリストで管理する）
-            return Scaffold(
-              backgroundColor: mainColor[index],
-              appBar: AppBar(
-                title: Text(appBarText),
-                backgroundColor: mainColor[index],
-                toolbarHeight: 30,
+        // allLessonDataとallTimeTablesDataは、各ページに対応するデータのリストを想定
+        // selectedLessonDataは、選択されたレッスンデータを想定（ページごとに異なる場合は、これもリストで管理する）
+        return Scaffold(
+          // backgroundColor: mainColor[index],
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: Row(children: [
+              Text(
+                appBarText,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              body: TimeTableComponent(
-                lessonData:
-                    allLessonData?[index], // index番目のタイムテーブルに対応するレッスンデータ
-                timeTableData: allTimeTablesData?[index], // index番目のタイムテーブルデータ
-                // 選択されたレッスンデータ
-                onSelected: _onFacultyChanged,
-                onLongSelected: _onLongFacultyChanged,
+              IconButton(
+                onPressed: () {
+                  _showTitleOptions(context);
+                },
+                icon: Icon(Icons.keyboard_arrow_down),
               ),
-            );
-          },
-        ));
+              Text(
+                appBarByTimeTable,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ]),
+            backgroundColor: Colors.white,
+            toolbarHeight: 30,
+          ),
+          body: TimeTableComponent(
+            lessonData: allLessonData?[index], // index番目のタイムテーブルに対応するレッスンデータ
+            timeTableData: allTimeTablesData?[index], // index番目のタイムテーブルデータ
+            // 選択されたレッスンデータ
+            onSelected: _onFacultyChanged,
+            onLongSelected: _onLongFacultyChanged,
+          ),
+        );
+      },
+    );
   }
 
   void _showTitleOptions(BuildContext context) {
     showMenu<int>(
       context: context,
-      position: RelativeRect.fromLTRB(100, 80, 0, 20), // メニューの位置を調整
+      position: RelativeRect.fromLTRB(0, 140.0, 0, 0), // メニューの位置を調整
       items: [
         // 2021年から2025年までの数字をリストとして生成し、それぞれの年に対してPopupMenuEntryを作成
         ...List.generate(5, (index) {
