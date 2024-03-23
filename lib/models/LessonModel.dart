@@ -126,7 +126,7 @@ class LessonLogic {
 
   // ダミーデータを登録
   Future<void> insertDummyLesson(
-      String name, int day, int period, TimeTableModel? timeTableData) async {
+      String name, String classRoom, int day, int period, TimeTableModel? timeTableData) async {
     final db = await _dbHelper.lessonDatabase;
     final dbClass = await _dbHelper.classDatabase;
     final TimeTableLogic timeTableInstance = TimeTableLogic();
@@ -149,7 +149,7 @@ class LessonLogic {
         day: day,
         period: period,
         color: 1,
-        classroom: "",
+        classroom: classRoom,
         classId: "dummy");
 
     // var dummyClass = ClassModel(

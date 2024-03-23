@@ -63,10 +63,10 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     print("よんだよね");
   }
 
-  Future<void> _addDummyLesson(String name, int day, int period,
+  Future<void> _addDummyLesson(String name, String classRoom, int day, int period,
       TimeTableModel? timeTableData, context) async {
     final LessonLogic instance = LessonLogic();
-    await instance.insertDummyLesson(name, day, period, timeTableData);
+    await instance.insertDummyLesson(name, classRoom, day, period, timeTableData);
     ref.read(updateTimeTableProvider.notifier).state = true;
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
@@ -75,18 +75,30 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     showDialog(
         context: context, // showDialogにはBuildContextが必要です
         builder: (BuildContext context) {
-          TextEditingController _textFieldController = TextEditingController();
+          TextEditingController _className = TextEditingController();
+          TextEditingController _classRoom = TextEditingController();
           return FormModalComponent(
             title: '授業の登録',
-            content: TextField(
-              controller: _textFieldController,
-              decoration: InputDecoration(hintText: "授業名を入力してください"),
-            ),
+            content: SingleChildScrollView( // SingleChildScrollViewを使って、キーボード表示でコンテンツが隠れないようにする
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          TextField(
+                            controller: _className,
+                            decoration: InputDecoration(hintText: "授業名を入力してください"),
+                          ),
+                          SizedBox(height: 20), // フォーム間のスペース
+                          TextField(
+                            controller: _classRoom,
+                            decoration: InputDecoration(hintText: "教室を入力してください"),
+                          ),
+                        ],
+                      ),
+                    ),
             onConfirm: () {
               // int count = 0;
               // Navigator.popUntil(context, (_) => count++ >= 2);
-              print("追加aaa");
-              _addDummyLesson(_textFieldController.text, day, period,
+              _addDummyLesson(_className.text, _classRoom.text, day, period,
                   timeTableData, context);
             },
             onCancel: () {
