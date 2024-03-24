@@ -273,7 +273,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                 ),
               ),
               IconButton(

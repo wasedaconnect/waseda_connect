@@ -265,7 +265,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
+              spreadRadius: 1,
               blurRadius: 1,
               offset: Offset(0, 2), // 影のオフセット
             ),
@@ -288,8 +288,8 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                 maxLines: 3, // テキストを1行に制限
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 7,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                  // fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 8),

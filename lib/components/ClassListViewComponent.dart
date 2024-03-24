@@ -149,7 +149,11 @@ class SyllabusItemWidget extends ConsumerWidget {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: Row(children: [
+                        Icon(Icons.add),
+                        SizedBox(width: 5),
+                        Text('追加'),
+                      ]),
                       onPressed: () {
                         // 追加ボタンが押されたときの処理を記述
                         _showAddModal(context, ref);

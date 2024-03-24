@@ -245,7 +245,12 @@ Map<int, Color> classColor = {
   7: Colors.lightBlueAccent // # に変更
 };
 
-List<String> semesterList = ["春学期", "夏学期", "秋学期", "冬学期"];
+List<String> semesterList = [
+  "春学期（春クォーター）",
+  "春学期（夏クォーター）",
+  "秋学期（秋クォーター）",
+  "秋学期（冬クォーター）"
+];
 List mainColor = [
   const Color.fromARGB(255, 194, 224, 238),
   const Color.fromARGB(255, 246, 179, 174),
