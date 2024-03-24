@@ -315,7 +315,12 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                           fontSize: 17, // フォントサイズを17に設定
                         ),
                       )
-                    : Text('${classData!.courseName}'),
+                    : Text(
+                        '${classData!.courseName}',
+                        style: TextStyle(
+                          fontSize: 17.0, // フォントサイズを大きく
+                        ),
+                      ),
               ),
             ],
           ),
@@ -485,7 +490,12 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                           fontSize: 17, // フォントサイズを17に設定
                         ),
                       )
-                    : Text('${classData!.classroom}'),
+                    : Text(
+                        '${classData!.classroom}',
+                        style: TextStyle(
+                          fontSize: 17.0, // フォントサイズを大きく
+                        ),
+                      ),
               ),
             ],
           ),
