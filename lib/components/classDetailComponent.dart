@@ -193,7 +193,8 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
             color: Colors.grey[200], // ここで背景色を設定
             borderRadius: BorderRadius.circular(6), // 背景の角を丸くする
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3), // パディングを調整
+              padding:
+                  EdgeInsets.symmetric(horizontal: 5, vertical: 3), // パディングを調整
               child: Row(
                 mainAxisSize: MainAxisSize.min, // 子ウィジェットのサイズに合わせる
                 children: <Widget>[
@@ -210,514 +211,529 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     }
   }
 
-Widget baseInfoContents() {
-  return SingleChildScrollView(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0), // 
-              child: Text(
-                '学部',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+  Widget baseInfoContents() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0), //
+                child: Text(
+                  '学部',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  '${departments[classData!.department]}',
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '学期',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  '${termMap[classData!.semester]}',
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '曜日/時限',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]}',
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (classData!.classDay2 != 7)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                  child: Text(
+                    '曜日/時限 2',
+                    style: TextStyle(
+                      fontSize: 18.0, // フォントサイズを大きく
+                      fontWeight: FontWeight.bold, // フォントを太く
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity, // 横幅を最大限に
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 40.0, vertical: 18.0), // パディング
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                    ),
+                  ),
+                  child: Text(
+                    '${periodMap[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]}',
+                    style: TextStyle(
+                      fontSize: 17.0, // フォントサイズを大きく
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '教員名',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-              child: Text(
-                '${departments[classData!.department]}',
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.instructor,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '学期',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '教室',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.classroom,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-              child: Text(
-                '${termMap[classData!.semester]}',
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '使用言語',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '曜日/時限',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.languageUsed,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '授業形態',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-              child: Text(
-                '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]}',
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.classFormat,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        if (classData!.classDay2 != 7)
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '曜日/時限 2',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  'レベル',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.level,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-              child: Text(
-                '${periodMap[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]}',
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '配当年次',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '教員名',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  '${classData!.assignedYear}年以上',
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '形式',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-              child: Text(
-                classData!.instructor,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  '${classData!.teachingMethod}',
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '教室',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '科目区分',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.courseCategory,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-              child: Text(
-                classData!.classroom,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '大分野名称',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '使用言語',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.majorField,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '中分野名称',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-              child: Text(
-                classData!.languageUsed,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.subField,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '授業形態',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  '小分野名称',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.minorField,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-              child: Text(
-                classData!.classFormat,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
+                  'コースコード',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                'レベル',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: Text(
+                  classData!.courseCode,
+                  style: TextStyle(
+                    fontSize: 17.0, // フォントサイズを大きく
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                ),
-              ),
-              child: Text(
-                classData!.level,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '配当年次',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                ),
-              ),
-              child: Text(
-                '${classData!.assignedYear}年以上',
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '形式',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                ),
-              ),
-              child: Text(
-                '${classData!.teachingMethod}',
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '科目区分',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                ),
-              ),
-              child: Text(
-                classData!.courseCategory,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '大分野名称',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                ),
-              ),
-              child: Text(
-                classData!.majorField,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '中分野名称',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                ),
-              ),
-              child: Text(
-                classData!.subField,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                '小分野名称',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                ),
-              ),
-              child: Text(
-                classData!.minorField,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-              child: Text(
-                'コースコード',
-                style: TextStyle(
-                  fontSize: 18.0, // フォントサイズを大きく
-                  fontWeight: FontWeight.bold, // フォントを太く
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity, // 横幅を最大限に
-              padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 18.0), // パディング
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                ),
-              ),
-              child: Text(
-                classData!.courseCode,
-                style: TextStyle(
-                  fontSize: 17.0, // フォントサイズを大きく
-                ),
-              ),
-            ),
-          ],
-        ),
-        // 他の行も同様に追加...
-      ],
-    ),
-  );
-}
-
+            ],
+          ),
+          // 他の行も同様に追加...
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -730,7 +746,8 @@ Widget baseInfoContents() {
             child: GestureDetector(
               onTap: () {
                 // タップされたときの処理
-                final url = "https://www.wsl.waseda.jp/syllabus/JAA104.php?pKey=${classData!.pKey.replaceAll(RegExp(r'\r'), "")}";
+                final url =
+                    "https://www.wsl.waseda.jp/syllabus/JAA104.php?pKey=${classData!.pKey.replaceAll(RegExp(r'\r'), "")}";
                 print(url);
                 _urlLaunchWithUri.launchUrlWithUri(context, url);
               },
@@ -738,7 +755,8 @@ Widget baseInfoContents() {
                 color: Colors.grey[200], // ここで背景色を設定
                 borderRadius: BorderRadius.circular(6), // 背景の角を丸くする
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3), // パディングを調整
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 5, vertical: 3), // パディングを調整
                   child: Row(
                     mainAxisSize: MainAxisSize.min, // 子ウィジェットのサイズに合わせる
                     children: <Widget>[
@@ -755,53 +773,53 @@ Widget baseInfoContents() {
       body: classData == null
           ? Center(child: CircularProgressIndicator())
           : DefaultTabController(
-      length: 2, // タブの数を定義します
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center, // Columnの子ウィジェットを中央に配置
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center, // Rowの子ウィジェットを中央に配置
-            children: [
-              Expanded(
-                child: Text(
-                  ' ${classData!.courseName}', // クラスデータからコース名を取得
-                  style: TextStyle(
-                    fontSize: 24, // テキストのサイズを大きく
-                    fontWeight: FontWeight.bold, // テキストを太字に
+              length: 2, // タブの数を定義します
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.center, // Columnの子ウィジェットを中央に配置
+                children: [
+                  Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center, // Rowの子ウィジェットを中央に配置
+                    children: [
+                      Expanded(
+                        child: Text(
+                          ' ${classData!.courseName}', // クラスデータからコース名を取得
+                          style: TextStyle(
+                            fontSize: 24, // テキストのサイズを大きく
+                            fontWeight: FontWeight.bold, // テキストを太字に
+                          ),
+                          overflow:
+                              TextOverflow.ellipsis, // オーバーフロー時にはテキストの末尾に...を表示
+                          maxLines: 3,
+                        ),
+                      ),
+                      _buildButton()
+                    ],
                   ),
-                  overflow: TextOverflow.ellipsis, // オーバーフロー時にはテキストの末尾に...を表示
-                  maxLines: 3,
-                ),
+                  // ここにTabBarが続く
+                  TabBar(
+                    labelColor: Colors.blue[600], // 選択されたタブのテキスト色
+                    unselectedLabelColor: Colors.grey, // 選択されていないタブのテキスト色
+                    tabs: [
+                      Tab(text: '授業情報'),
+                      Tab(text: '基本情報'),
+                    ],
+                  ),
+                  // その他のウィジェットがここに続く...
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        // 1つ目のタブの内容
+                        Text('授業情報のコンテンツ'),
+                        // 2つ目のタブの内容
+                        baseInfoContents(),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              _buildButton()
-            ],
-          ),
-          // ここにTabBarが続く
-          TabBar(
-            labelColor: Colors.blue[600], // 選択されたタブのテキスト色
-            unselectedLabelColor: Colors.grey, // 選択されていないタブのテキスト色
-            tabs: [
-              Tab(text: '授業情報'),
-              Tab(text: '基本情報'),
-            ],
-          ),
-          // その他のウィジェットがここに続く...
-          Expanded(
-            child: TabBarView(
-              children: [
-                // 1つ目のタブの内容
-                Text('授業情報のコンテンツ'),
-                // 2つ目のタブの内容
-                baseInfoContents(),
-              ],
             ),
-          ),
-
-          
-
-        ],
-      ),
-    ),
       // body: classData == null
       //     ? Center(child: CircularProgressIndicator())
       //     : Column(

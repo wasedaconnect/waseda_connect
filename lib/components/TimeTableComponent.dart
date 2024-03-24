@@ -78,7 +78,10 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                       margin: EdgeInsets.all(2.0),
                       decoration: BoxDecoration(
                         // * ここ現在の日付とって値変えたい。
-                        color: day == weekdays[nowWeekday - 1] && nowWeekday != 7 ? Theme.of(context).colorScheme.inversePrimary : Colors.grey[100],
+                        color:
+                            day == weekdays[nowWeekday - 1] && nowWeekday != 7
+                                ? Theme.of(context).colorScheme.inversePrimary
+                                : Colors.grey[100],
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Center(
@@ -114,18 +117,45 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                             children: <Widget>[
                               Text('${startTime[period - 1]}',
                                   style: TextStyle(
-                                      color: formatter.parse(currentTime).isAfter(formatter.parse(startTime[period - 1])) && formatter.parse(currentTime).isBefore(formatter.parse(endTime[period - 1])) ? Colors.blue[600] : Colors.black,
+                                      color: formatter
+                                                  .parse(currentTime)
+                                                  .isAfter(formatter.parse(
+                                                      startTime[period - 1])) &&
+                                              formatter
+                                                  .parse(currentTime)
+                                                  .isBefore(formatter.parse(
+                                                      endTime[period - 1]))
+                                          ? Colors.blue[600]
+                                          : Colors.black,
                                       fontSize: 8)),
                               SizedBox(height: 20),
                               Text('$period',
                                   style: TextStyle(
-                                      color: formatter.parse(currentTime).isAfter(formatter.parse(startTime[period - 1])) && formatter.parse(currentTime).isBefore(formatter.parse(endTime[period - 1])) ? Colors.blue[600] : Colors.black,
+                                      color: formatter
+                                                  .parse(currentTime)
+                                                  .isAfter(formatter.parse(
+                                                      startTime[period - 1])) &&
+                                              formatter
+                                                  .parse(currentTime)
+                                                  .isBefore(formatter.parse(
+                                                      endTime[period - 1]))
+                                          ? Colors.blue[600]
+                                          : Colors.black,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold)),
                               SizedBox(height: 20),
                               Text('${endTime[period - 1]}',
                                   style: TextStyle(
-                                      color: formatter.parse(currentTime).isAfter(formatter.parse(startTime[period - 1])) && formatter.parse(currentTime).isBefore(formatter.parse(endTime[period - 1])) ? Colors.blue[600] : Colors.black,
+                                      color: formatter
+                                                  .parse(currentTime)
+                                                  .isAfter(formatter.parse(
+                                                      startTime[period - 1])) &&
+                                              formatter
+                                                  .parse(currentTime)
+                                                  .isBefore(formatter.parse(
+                                                      endTime[period - 1]))
+                                          ? Colors.blue[600]
+                                          : Colors.black,
                                       fontSize: 8)),
                             ],
                           ),

@@ -205,16 +205,16 @@ Map<int, String> termMap = {
 
 Map<int, List<int>> termToSemester = {
 //通年に変換
-  1: [1], //春学期に変換
-  2: [2],
+  1: [1, 2], //春学期に変換
+  2: [3, 4],
   3: [1],
-  4: [1],
-  5: [1],
-  6: [2],
-  7: [2],
-  8: [2],
-  9: [2],
-  10: [1, 2],
+  4: [2],
+  5: [1, 2],
+  6: [4],
+  7: [3],
+  8: [3, 4],
+  9: [3, 4],
+  10: [1, 2, 3, 4],
 };
 
 Map<int, String> periodMap = {
@@ -231,11 +231,6 @@ Map<int, String> periodMap = {
 };
 
 //学期とその色
-List<String> semesterList = ["春学期", "秋学期"];
-// List mainColor = [
-//   const Color.fromARGB(255, 194, 224, 238),
-//   const Color.fromARGB(255, 246, 179, 174),
-// ];
 
 // 授業の背景色候補(最初の色「Colors.grey[300]」は授業が空の場合。)
 Map<int, Color> classColor = {
@@ -246,3 +241,11 @@ Map<int, Color> classColor = {
   3: Color.fromRGBO(0, 0, 0, 1.0), // # に変更
   4: Color.fromRGBO(27, 17, 17, 1), // # に変更
 };
+
+List<String> semesterList = ["春学期", "夏学期", "秋学期", "冬学期"];
+List mainColor = [
+  const Color.fromARGB(255, 194, 224, 238),
+  const Color.fromARGB(255, 246, 179, 174),
+  const Color.fromARGB(255, 194, 224, 238),
+  const Color.fromARGB(255, 246, 179, 174)
+];

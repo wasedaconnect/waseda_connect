@@ -12,7 +12,7 @@ final updateRequesterProvider = FutureProvider<bool>((ref) async {
   await remoteConfig.fetchAndActivate();
   // Firebase の RemoteConfigコンソールで指定したキーを使って値を取得
   final requiredVersion = remoteConfig.getString('requiredVersion');
-  if (requiredVersion.isEmpty) { 
+  if (requiredVersion.isEmpty) {
     return false;
   }
   // JSON to Map
@@ -21,10 +21,9 @@ final updateRequesterProvider = FutureProvider<bool>((ref) async {
   final appPackageInfo = await PackageInfo.fromPlatform();
   final appVersion = appPackageInfo.version;
 
-
-
   // 現在のバージョンより新しいバージョンが指定されているか
-  final hasNewVersion = Version.parse(requiredVersion) > Version.parse(appVersion);
+  final hasNewVersion =
+      Version.parse(requiredVersion) > Version.parse(appVersion);
 
   if (!hasNewVersion) {
     return false;

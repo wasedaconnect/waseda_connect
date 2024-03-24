@@ -26,37 +26,37 @@ class UpdateModal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final _urlLaunchWithUri = UrlLaunchWithUri();
     return Platform.isIOS
-      ? PopScope(
-        // AndroidのBackボタンで閉じられないようにする
-        canPop: false,
-        child: CupertinoAlertDialog(
-          title: const Text('アプリが更新されました。\n\n最新バージョンのダウンロードをお願いします。'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // App Store or Google Play に飛ばす処理
-                _urlLaunchWithUri.launchUrlWithUri(context, WEB_SITE_URL);
-              },
-              child: const Text('アップデートする'),
+        ? PopScope(
+            // AndroidのBackボタンで閉じられないようにする
+            canPop: false,
+            child: CupertinoAlertDialog(
+              title: const Text('アプリが更新されました。\n\n最新バージョンのダウンロードをお願いします。'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    // App Store or Google Play に飛ばす処理
+                    _urlLaunchWithUri.launchUrlWithUri(context, WEB_SITE_URL);
+                  },
+                  child: const Text('アップデートする'),
+                ),
+              ],
             ),
-          ],
-        ),
-      )
-      : PopScope(
-        // AndroidのBackボタンで閉じられないようにする
-        canPop: false,
-        child: CupertinoAlertDialog(
-          title: const Text('アプリが更新されました。\n\n最新バージョンのダウンロードをお願いします。'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // App Store or Google Play に飛ばす処理
-                _urlLaunchWithUri.launchUrlWithUri(context, WEB_SITE_URL);
-              },
-              child: const Text('アップデートする'),
+          )
+        : PopScope(
+            // AndroidのBackボタンで閉じられないようにする
+            canPop: false,
+            child: CupertinoAlertDialog(
+              title: const Text('アプリが更新されました。\n\n最新バージョンのダウンロードをお願いします。'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    // App Store or Google Play に飛ばす処理
+                    _urlLaunchWithUri.launchUrlWithUri(context, WEB_SITE_URL);
+                  },
+                  child: const Text('アップデートする'),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
+          );
   }
 }

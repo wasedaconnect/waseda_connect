@@ -102,7 +102,6 @@ class _SettingPageState extends ConsumerState<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-
     final pageTransition = ref.watch(updateSettingProvider);
 
     if (pageTransition) {

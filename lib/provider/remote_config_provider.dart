@@ -1,5 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 // remote configのprovider
 final remoteConfigProvider = FutureProvider<FirebaseRemoteConfig>(
   (ref) async {
