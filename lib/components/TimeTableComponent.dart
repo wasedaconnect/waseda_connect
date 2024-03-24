@@ -309,8 +309,10 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                       child: Text(
                         lesson.classroom,
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 7,
                         ),
+                        overflow: TextOverflow.ellipsis, // オーバーフロー時に...で省略
+                        maxLines: 2,
                       ),
                       // child: Text(
                       //   lesson.classroom.isEmpty || lesson.classroom == null
