@@ -124,35 +124,59 @@ class SyllabusItemWidget extends ConsumerWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 4.0),
-                            Text(
-                              '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${periodMap[classData.classStart1]}' +
-                                  (classData.classDay2 != 7 ||
-                                          classData.classStart2 != 0
-                                      ? ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]}'
-                                      : ''),
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.grey[700],
-                              ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  size: 16,
+                                  color: Colors.grey[700],
+                                ), // Iconを追加
+                                SizedBox(width: 4), // アイコンとテキストの間隔を調整
+                                Text(
+                                  '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${periodMap[classData.classStart1]}' +
+                                      (classData.classDay2 != 7 ||
+                                              classData.classStart2 != 0
+                                          ? ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]}'
+                                          : ''),
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 4.0),
-                            Text(
-                              '${departments[classData.department]} / ${classData.instructor}',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.grey[700],
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.school_outlined,
+                                  size: 16,
+                                  color: Colors.grey[700],
+                                ),
+                                SizedBox(width: 4.0),
+                                Expanded(
+                                  child: Text(
+                                    '${departments[classData.department]} / ${classData.instructor}',
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Colors.grey[700],
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: Row(children: [
+                    ElevatedButton(
+                      child: Row(children: [
                         Icon(Icons.add),
-                        SizedBox(width: 5),
-                        Text('追加'),
+                        // SizedBox(width: 5),
+                        Text(
+                          '追加',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ]),
                       onPressed: () {
                         // 追加ボタンが押されたときの処理を記述

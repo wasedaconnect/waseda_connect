@@ -205,26 +205,26 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     if (widget.btnMode == ButtonMode.delete) {
       return Container(
         margin: EdgeInsets.only(right: 10),
-        child: GestureDetector(
-          onTap: () {
+        child: ElevatedButton(
+          onPressed: () {
             // タップされたときの処理
             print('削除ボタンが押されました');
             _showDeleteModal(); // 追加モーダルを表示する関数
           },
-          child: Material(
-            color: Colors.grey[200], // ここで背景色を設定
-            borderRadius: BorderRadius.circular(6), // 背景の角を丸くする
-            child: Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 5, vertical: 3), // パディングを調整
-              child: Row(
-                mainAxisSize: MainAxisSize.min, // 子ウィジェットのサイズに合わせる
-                children: <Widget>[
-                  Icon(Icons.delete), // アイコンの色も調整可能
-                  Text('削除'), // テキストの色を白に設定
-                ],
-              ),
+          style: ElevatedButton.styleFrom(
+            // primary: Colors.grey[200], // 背景色を設定
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6), // 背景の角を丸くする
             ),
+            padding:
+                EdgeInsets.symmetric(horizontal: 5, vertical: 3), // パディングを調整
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min, // 子ウィジェットのサイズに合わせる
+            children: <Widget>[
+              Icon(Icons.delete), // アイコンの色も調整可能
+              Text('削除'), // テキストの色を白に設定
+            ],
           ),
         ),
       );
@@ -244,30 +244,29 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
       //   ],
       // );
       return Container(
-        margin: EdgeInsets.only(right: 10),
-        child: GestureDetector(
-          onTap: () {
-            // タップされたときの処理
-            print('追加ボタンが押されました');
-            _showAddModal(); // 追加モーダルを表示する関数
-          },
-          child: Material(
-            color: Colors.grey[200], // ここで背景色を設定
-            borderRadius: BorderRadius.circular(6), // 背景の角を丸くする
-            child: Padding(
+          margin: EdgeInsets.symmetric(horizontal: 8),
+          child: ElevatedButton(
+            onPressed: () {
+              // タップされたときの処理
+              print('追加ボタンが押されました');
+              _showAddModal(); // 追加モーダルを表示する関数
+            },
+            style: ElevatedButton.styleFrom(
+              // primary: Colors.grey[200], // 背景色を設定
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6), // 背景の角を丸くする
+              ),
               padding:
                   EdgeInsets.symmetric(horizontal: 5, vertical: 3), // パディングを調整
-              child: Row(
-                mainAxisSize: MainAxisSize.min, // 子ウィジェットのサイズに合わせる
-                children: <Widget>[
-                  Icon(Icons.add), // アイコンの色も調整可能
-                  Text('追加'), // テキストの色を白に設定
-                ],
-              ),
             ),
-          ),
-        ),
-      );
+            child: Row(
+              mainAxisSize: MainAxisSize.min, // 子ウィジェットのサイズに合わせる
+              children: <Widget>[
+                Icon(Icons.add), // アイコンの色も調整可能
+                Text('追加'), // テキストの色を白に設定
+              ],
+            ),
+          ));
     } else {
       return SizedBox(); // ボタンを非表示にするための空のSizedBox
     }
@@ -441,7 +440,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                     ),
                   ),
                   child: Text(
-                    '${periodMap[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]}',
+                    '${numToDay[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]}',
                     style: TextStyle(
                       fontSize: 17.0, // フォントサイズを大きく
                     ),
@@ -866,27 +865,28 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () {
-                // タップされたときの処理
+            child: ElevatedButton(
+              onPressed: () {
                 final url =
                     "https://www.wsl.waseda.jp/syllabus/JAA104.php?pKey=${classData!.pKey.replaceAll(RegExp(r'\r'), "")}";
                 print(url);
                 _urlLaunchWithUri.launchUrlWithUri(context, url);
               },
-              child: Material(
-                color: Colors.grey[200], // ここで背景色を設定
-                borderRadius: BorderRadius.circular(6), // 背景の角を丸くする
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 5, vertical: 3), // パディングを調整
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min, // 子ウィジェットのサイズに合わせる
-                    children: <Widget>[
-                      Text('シラバス'), // テキストの色を白に設定
-                      Icon(Icons.launch), // アイコンの色も調整可能
-                    ],
-                  ),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('シラバス'),
+                    SizedBox(width: 5), // アイコンとテキストの間隔を調整
+                    Icon(Icons.launch),
+                  ],
                 ),
               ),
             ),
@@ -928,15 +928,20 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                         MainAxisAlignment.center, // Rowの子ウィジェットを中央に配置
                     children: [
                       Expanded(
-                        child: Text(
-                          ' ${classData!.courseName}', // クラスデータからコース名を取得
-                          style: TextStyle(
-                            fontSize: 24, // テキストのサイズを大きく
-                            fontWeight: FontWeight.bold, // テキストを太字に
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 20,
                           ),
-                          overflow:
-                              TextOverflow.ellipsis, // オーバーフロー時にはテキストの末尾に...を表示
-                          maxLines: 3,
+                          child: Text(
+                            '${classData!.courseName}', // クラスデータからコース名を取得
+                            style: TextStyle(
+                              fontSize: 24, // テキストのサイズを大きく
+                              fontWeight: FontWeight.bold, // テキストを太字に
+                            ),
+                            overflow: TextOverflow
+                                .ellipsis, // オーバーフロー時にはテキストの末尾に...を表示
+                            maxLines: 3,
+                          ),
                         ),
                       ),
                       _buildButton()
