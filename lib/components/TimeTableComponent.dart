@@ -139,7 +139,8 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                                               formatter
                                                   .parse(currentTime)
                                                   .isBefore(formatter.parse(
-                                                      endTime[period - 1]))
+                                                      endTime[period - 1])) &&
+                                              nowWeekday != 7
                                           ? Colors.blue[600]
                                           : Colors.black,
                                       fontSize: 8)),
@@ -153,7 +154,8 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                                               formatter
                                                   .parse(currentTime)
                                                   .isBefore(formatter.parse(
-                                                      endTime[period - 1]))
+                                                      endTime[period - 1])) &&
+                                              nowWeekday != 7
                                           ? Colors.blue[600]
                                           : Colors.black,
                                       fontSize: 16,
@@ -168,7 +170,8 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                                               formatter
                                                   .parse(currentTime)
                                                   .isBefore(formatter.parse(
-                                                      endTime[period - 1]))
+                                                      endTime[period - 1])) &&
+                                              nowWeekday != 7
                                           ? Colors.blue[600]
                                           : Colors.black,
                                       fontSize: 8)),
