@@ -224,6 +224,9 @@ class LessonLogic {
 
   // 授業をIDから取得するメソッド
   Future<LessonModel?> getLessonById(String id) async {
+    print('getLessonById');
+    print(id);
+
     final db = await _dbHelper.lessonDatabase;
 
     final List<Map<String, dynamic>> maps = await db.query(
@@ -231,6 +234,27 @@ class LessonLogic {
       where: 'id = ?',
       whereArgs: [id],
     );
+    print(maps);
+
+    if (maps.isNotEmpty) {
+      return LessonModel.fromMap(maps.first);
+    }
+    return null; // 該当する授業が見つからない場合はnullを返す
+  }
+
+  // 授業をIDから取得するメソッド
+  Future<LessonModel?> getLessonByPKey(String pKey) async {
+    print('getLessonById');
+    print(pKey);
+
+    final db = await _dbHelper.lessonDatabase;
+
+    final List<Map<String, dynamic>> maps = await db.query(
+      'lessons',
+      where: 'classId = ?',
+      whereArgs: [pKey],
+    );
+    print(maps);
 
     if (maps.isNotEmpty) {
       return LessonModel.fromMap(maps.first);
@@ -330,6 +354,32 @@ class LessonLogic {
     await db.update(
       'lessons',
       {'color': colorId}, // 更新するフィールドと値
+      where: 'classId = ?', // 更新する条件
+      whereArgs: [id], // 条件に対応する値
+    );
+  }
+
+  Future<void> changeLessonName(String id, String value) async {
+    print('授業の表示名の変更');
+    print(id);
+    print(value);
+    final db = await _dbHelper.lessonDatabase;
+
+    final a = await db.update(
+      'lessons',
+      {'name': value}, // 更新するフィールドと値
+      where: 'classId = ?', // 更新する条件
+      whereArgs: [id], // 条件に対応する値
+    );
+    print(a);
+  }
+
+  Future<void> changeLessonClassroom(String id, String value) async {
+    print('教室の表示名の変更');
+    final db = await _dbHelper.lessonDatabase;
+    await db.update(
+      'lessons',
+      {'classroom': value}, // 更新するフィールドと値
       where: 'classId = ?', // 更新する条件
       whereArgs: [id], // 条件に対応する値
     );

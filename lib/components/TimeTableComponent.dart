@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
+import 'package:waseda_connect/models/ClassModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
 import '../../constants/Dict.dart'; // 必要に応じてパスを調整してください
 import 'package:intl/intl.dart';
@@ -39,23 +40,37 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
   final int maxPeriods = 6;
   // 曜日のリスト
 
-  // 各時限の開始時間と終了時間（サンプル）
-  final List<String> startTime = [
-    '9:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00'
-  ];
-  final List<String> endTime = [
-    '9:50',
-    '10:50',
-    '11:50',
-    '12:50',
-    '13:50',
-    '14:50'
-  ];
+  // // 各時限の開始時間と終了時間（サンプル）
+  // final List<String> startTime = [
+  //   '9:00',
+  //   '10:00',
+  //   '11:00',
+  //   '12:00',
+  //   '13:00',
+  //   '14:00'
+  // ];
+  // final List<String> endTime = [
+  //   '9:50',
+  //   '10:50',
+  //   '11:50',
+  //   '12:50',
+  //   '13:50',
+  //   '14:50'
+  // ];
+
+  // Future<String> _getClassNameByPKey(String pkey) async {
+  //   final ClassLogic instance = ClassLogic();
+  //   print('_getClassNameByPKey');
+  //   print(pkey);
+  //   print('_getClassNameByPKey');
+  //   return 'aaa';
+  //   return (await instance.getClassStringByPKey(pkey, 'courseName'));
+  // }
+
+  // Future<String> _getClassroomByPKey(String pkey) async {
+  //   final ClassLogic instance = ClassLogic();
+  //   return (await instance.getClassStringByPKey(pkey, 'classroom'));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -265,6 +280,10 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
             children: [
               Text(
                 lesson.name,
+                // _getClassNameByPKey(lesson.classId),
+                // lesson.name.isEmpty || lesson.name == null
+                //     ? (_getClassNameByPKey(lesson.classId) as String ?? '')
+                //     : (lesson.name != null ? lesson.name : ''),
                 overflow: TextOverflow.ellipsis, // オーバーフロー時に...で省略
                 maxLines: 3, // テキストを1行に制限
                 textAlign: TextAlign.center,
@@ -286,11 +305,22 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                       ),
                       child: Text(
                         lesson.classroom,
-                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 8,
                         ),
                       ),
+                      // child: Text(
+                      //   lesson.classroom.isEmpty || lesson.classroom == null
+                      //       ? (_getClassroomByPKey(lesson.classId) as String ??
+                      //           '') // nullの場合は空文字列を返す
+                      //       : (lesson.classroom != null
+                      //           ? lesson.classroom
+                      //           : ''), // lesson.classroomがnullでないことを確認してから表示する
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     fontSize: 8,
+                      //   ),
+                      // ),
                     ),
             ],
           ),

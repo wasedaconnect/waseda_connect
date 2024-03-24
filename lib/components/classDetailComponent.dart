@@ -36,19 +36,36 @@ class ClassDetailComponent extends ConsumerStatefulWidget {
 
 class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
   ClassModel? classData;
+  LessonModel? lessonData;
+  int? clickedBtn;
 
   @override
   void initState() {
     super.initState();
     _fetchClassInfoById(widget.classId);
+    _fetchLessonInfoById(widget.classId);
   }
 
   Future<void> _fetchClassInfoById(String classId) async {
+    print('fetch ClassData');
     final ClassLogic instance = ClassLogic();
     final ClassModel newClassData = await instance.searchClassesByPKey(classId);
     setState(() {
       classData = newClassData;
     });
+  }
+
+  Future<void> _fetchLessonInfoById(String classId) async {
+    print('fetch LessonData');
+    print(classId);
+    final LessonLogic instance = LessonLogic();
+    final LessonModel? newLessonData = await instance.getLessonByPKey(classId);
+    setState(() {
+      lessonData = newLessonData;
+    });
+    clickedBtn = lessonData?.color;
+    print('clickedBtn');
+    print(clickedBtn);
   }
 
   Future<void> _deleteLessonById(String id) async {
@@ -61,10 +78,32 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     return (await instance.insertLesson(id));
   }
 
-  // db 'lesson'のidの授業に対してcolorを追加
+  // db 'lesson'のidの授業に対してcolorを更新
   Future<void> _changeLessonColor(String id, int colorId) async {
     final LessonLogic instance = LessonLogic();
     return (await instance.changeLessonColor(id, colorId));
+  }
+
+  // db 'lesson'のidの授業に対してnameを更新
+  Future<void> _changeLessonName(String id, String value) async {
+    final LessonLogic lessonInstance = LessonLogic();
+    final ClassLogic classInstance = ClassLogic();
+    if (value != '' && value != Null) {
+      return (await lessonInstance.changeLessonName(id, value));
+    } else {
+      return (await classInstance.updateLessonClassname(id));
+    }
+  }
+
+  // db 'lesson'のidの授業に対してclassroomを更新
+  Future<void> _changeLessonClassRoom(String id, String value) async {
+    final LessonLogic lessonInstance = LessonLogic();
+    final ClassLogic classInstance = ClassLogic();
+    if (value != '' && value != Null) {
+      return (await lessonInstance.changeLessonClassroom(id, value));
+    } else {
+      return (await classInstance.updateLessonClassroom(id));
+    }
   }
 
   final _urlLaunchWithUri = UrlLaunchWithUri();
@@ -127,31 +166,37 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     );
   }
 
-  Widget _colorButton(BuildContext context, int colorId) {
+  Widget _colorButton(BuildContext context, int colorId, bool isSelected,
+      Function(int) onColorClick) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         onPressed: () {
-          // クリックされたときの処理をここに追加
+          onColorClick(colorId); // Call the callback function with colorId
           _changeLessonColor(classData!.pKey, colorId);
           print('Selected colorId: $colorId');
           print('Selected color: ${classColor[colorId]}');
         },
         style: ElevatedButton.styleFrom(
-          // primary: color, // ボタンの背景色を指定
-          minimumSize: Size(40, 40), // ボタンの最小サイズを指定
+          minimumSize: Size(40, 40),
         ).copyWith(
           backgroundColor:
-              MaterialStateProperty.all<Color>(classColor[colorId]!), // 背景色を設定
+              MaterialStateProperty.all<Color>(classColor[colorId]!),
           shape: MaterialStateProperty.all<OutlinedBorder>(
-            CircleBorder(), // 円形のボタンを作成
+            CircleBorder(),
           ),
         ),
-        child: Icon(
-          Icons.check,
-          size: 16, // チェックマークのアイコン
-          color: Colors.black, // チェックマークの色
-        ), // ボタン内に表示するテキスト
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            if (isSelected) // Check if this button is selected
+              Icon(
+                Icons.check,
+                size: 16,
+                color: Colors.black,
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -211,11 +256,53 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     }
   }
 
-  Widget baseInfoContents() {
+  Widget baseContents() {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
         children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0), //
+                child: Text(
+                  '表示名',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: widget.btnMode == ButtonMode.delete
+                    ? TextFormField(
+                        initialValue: lessonData!.name, // 初期値を設定する場合
+                        onChanged: (newValue) {
+                          print(newValue);
+                          _changeLessonName(lessonData!.classId, newValue);
+                        },
+                        decoration: InputDecoration(
+                          hintText:
+                              '${classData!.courseName}', // ヒントテキストを設定する場合
+                        ),
+                        style: TextStyle(
+                          fontSize: 17, // フォントサイズを17に設定
+                        ),
+                      )
+                    : Text('${classData!.courseName}'),
+              ),
+            ],
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
             children: [
@@ -352,6 +439,57 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                 width: double.infinity,
                 padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
                 child: Text(
+                  '教室',
+                  style: TextStyle(
+                    fontSize: 18.0, // フォントサイズを大きく
+                    fontWeight: FontWeight.bold, // フォントを太く
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity, // 横幅を最大限に
+                padding: EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 18.0), // パディング
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                  ),
+                ),
+                child: widget.btnMode == ButtonMode.delete
+                    ? TextFormField(
+                        initialValue: lessonData!.classroom, // 初期値を設定する場合
+                        onChanged: (newValue) {
+                          print(newValue);
+                          _changeLessonClassRoom(lessonData!.classId, newValue);
+                        },
+                        decoration: InputDecoration(
+                          hintText: '${classData!.classroom}', // ヒントテキストを設定する場合
+                        ),
+                        style: TextStyle(
+                          fontSize: 17, // フォントサイズを17に設定
+                        ),
+                      )
+                    : Text('${classData!.classroom}'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget baseInfoContents() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                child: Text(
                   '教員名',
                   style: TextStyle(
                     fontSize: 18.0, // フォントサイズを大きく
@@ -370,38 +508,6 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                 ),
                 child: Text(
                   classData!.instructor,
-                  style: TextStyle(
-                    fontSize: 17.0, // フォントサイズを大きく
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-            children: [
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-                child: Text(
-                  '教室',
-                  style: TextStyle(
-                    fontSize: 18.0, // フォントサイズを大きく
-                    fontWeight: FontWeight.bold, // フォントを太く
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity, // 横幅を最大限に
-                padding: EdgeInsets.symmetric(
-                    horizontal: 40.0, vertical: 18.0), // パディング
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                  ),
-                ),
-                child: Text(
-                  classData!.classroom,
                   style: TextStyle(
                     fontSize: 17.0, // フォントサイズを大きく
                   ),
@@ -775,9 +881,31 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
           : DefaultTabController(
               length: 2, // タブの数を定義します
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment:
                     CrossAxisAlignment.center, // Columnの子ウィジェットを中央に配置
                 children: [
+                  widget.btnMode == ButtonMode.delete
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.horizontal, // 横方向にスクロール
+                          child: Row(
+                            children: classColor.entries.map((entry) {
+                              int index = entry.key;
+                              return _colorButton(
+                                context,
+                                index,
+                                clickedBtn == index,
+                                (selectedColorId) {
+                                  setState(() {
+                                    clickedBtn =
+                                        selectedColorId; // Update clickedBtn with the selected color ID
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        )
+                      : SizedBox(height: 0),
                   Row(
                     mainAxisAlignment:
                         MainAxisAlignment.center, // Rowの子ウィジェットを中央に配置
@@ -811,7 +939,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                     child: TabBarView(
                       children: [
                         // 1つ目のタブの内容
-                        Text('授業情報のコンテンツ'),
+                        baseContents(),
                         // 2つ目のタブの内容
                         baseInfoContents(),
                       ],

@@ -1,4 +1,5 @@
 import 'package:csv/csv.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -334,9 +335,66 @@ class ClassLogic {
     final List<Map<String, dynamic>> maps = await db.query('classes',
         where: whereClause,
         whereArgs: whereArgs.isNotEmpty ? whereArgs : null,
-        limit: 30000);
+        limit: 35000);
 
     // 結果をClassModelのリストに変換
     return List<ClassModel>.from(maps.map((map) => ClassModel.fromMap(map)));
+  }
+
+  // pkeyから授業名をStringで取得し、lesson(授業の表示名)に更新する処理
+  Future<void> updateLessonClassname(String pkey) async {
+    print('授業の表示名の変更(値が空の時)');
+
+    final class_db = await _dbHelper.classDatabase;
+    final lesson_db = await _dbHelper.lessonDatabase;
+
+    final List<Map<String, dynamic>> queryResult = await class_db.query(
+      'classes', // テーブル名
+      columns: ['courseName'], // 取得したいカラムのリスト
+      where: 'pKey = ?', // 条件
+      whereArgs: [pkey], // 条件に使う値のリスト
+    );
+    print(queryResult);
+    String classname = "";
+    if (queryResult.isNotEmpty) {
+      classname = queryResult.first['courseName'] as String;
+    } else {
+      classname = '';
+    }
+
+    await lesson_db.update(
+      'lessons',
+      {'name': classname}, // 更新するフィールドと値
+      where: 'classId = ?', // 更新する条件
+      whereArgs: [pkey], // 条件に対応する値
+    );
+  }
+
+  // pkeyから教室名をStringで取得し、lesson(教室)に更新する処理
+  Future<void> updateLessonClassroom(String pkey) async {
+    print('教室の表示名の変更(値が空の時)');
+    final class_db = await _dbHelper.classDatabase;
+    final lesson_db = await _dbHelper.lessonDatabase;
+
+    final List<Map<String, dynamic>> queryResult = await class_db.query(
+      'classes', // テーブル名
+      columns: ['classroom'], // 取得したいカラムのリスト
+      where: 'pKey = ?', // 条件
+      whereArgs: [pkey], // 条件に使う値のリスト
+    );
+    print('a');
+    String classroom = "";
+    if (queryResult.isNotEmpty) {
+      classroom = queryResult.first['classroom'] as String;
+      // classroomには、指定したpKeyを持つ行のclassroomカラムの値が格納されます。
+    } else {
+      classroom = '';
+    }
+    await lesson_db.update(
+      'lessons',
+      {'classroom': classroom}, // 更新するフィールドと値
+      where: 'classId = ?', // 更新する条件
+      whereArgs: [pkey], // 条件に対応する値
+    );
   }
 }
