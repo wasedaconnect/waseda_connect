@@ -23,6 +23,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   @override
   void initState() {
     super.initState();
+
+    // 非同期処理を実行
     _fetchData();
   }
 
@@ -37,9 +39,12 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 
   Future<void> _fetchData() async {
     final prefs = await SharedPreferences.getInstance();
+
     setState(() {
       defaultYear = prefs.getInt('defaultYear') ?? 2024;
+      prefs.setInt('defaultYear', defaultYear);
     });
+
     //時間割
     final TimeTableLogic instance = TimeTableLogic();
     var newTimeTablesData = await instance.getTimeTablesByYear(defaultYear);
@@ -63,10 +68,11 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     print("よんだよね");
   }
 
-  Future<void> _addDummyLesson(String name, String classRoom, int day, int period,
-      TimeTableModel? timeTableData, context) async {
+  Future<void> _addDummyLesson(String name, String classRoom, int day,
+      int period, TimeTableModel? timeTableData, context) async {
     final LessonLogic instance = LessonLogic();
-    await instance.insertDummyLesson(name, classRoom, day, period, timeTableData);
+    await instance.insertDummyLesson(
+        name, classRoom, day, period, timeTableData);
     ref.read(updateTimeTableProvider.notifier).state = true;
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
@@ -79,22 +85,23 @@ class _TimeTableState extends ConsumerState<TimeTable> {
           TextEditingController _classRoom = TextEditingController();
           return FormModalComponent(
             title: '授業の登録',
-            content: SingleChildScrollView( // SingleChildScrollViewを使って、キーボード表示でコンテンツが隠れないようにする
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          TextField(
-                            controller: _className,
-                            decoration: InputDecoration(hintText: "授業名を入力してください"),
-                          ),
-                          SizedBox(height: 20), // フォーム間のスペース
-                          TextField(
-                            controller: _classRoom,
-                            decoration: InputDecoration(hintText: "教室を入力してください"),
-                          ),
-                        ],
-                      ),
-                    ),
+            content: SingleChildScrollView(
+              // SingleChildScrollViewを使って、キーボード表示でコンテンツが隠れないようにする
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    controller: _className,
+                    decoration: InputDecoration(hintText: "授業名を入力してください"),
+                  ),
+                  SizedBox(height: 20), // フォーム間のスペース
+                  TextField(
+                    controller: _classRoom,
+                    decoration: InputDecoration(hintText: "教室を入力してください"),
+                  ),
+                ],
+              ),
+            ),
             onConfirm: () {
               // int count = 0;
               // Navigator.popUntil(context, (_) => count++ >= 2);
@@ -202,7 +209,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     }
   }
 
-  //タイムテーブルの遷移。
+  //タイムテーブルの遷移。2024
   Future<void> _setTimeTable(int year) async {
     print(year);
 
@@ -216,25 +223,25 @@ class _TimeTableState extends ConsumerState<TimeTable> {
 //じかんわり
   @override
   Widget build(BuildContext context) {
-    ref.watch(updateRequesterProvider)
-    .when(data: (updateRequestFlag) {
-      if (updateRequestFlag) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog<void>(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => UpdateModal(),
+    ref.watch(updateRequesterProvider).when(
+          data: (updateRequestFlag) {
+            if (updateRequestFlag) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showDialog<void>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => UpdateModal(),
+                );
+              });
+            }
+          },
+          loading: () => {
+            // ローディング中の処理をここに書く
+          },
+          error: (error, stack) => {
+            // エラーが発生した場合の処理をここに書く
+          },
         );
-      });
-      }
-    },
-    loading: () => {
-      // ローディング中の処理をここに書く
-    },
-    error: (error, stack) => {
-      // エラーが発生した場合の処理をここに書く
-    },);
-    
 
     var appBarText = "${defaultYear}年度";
     final pageTransition = ref.watch(updateTimeTableProvider);
@@ -249,7 +256,8 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     }
 
     return PageView.builder(
-      itemCount: 2, // 生成するページ数
+      itemCount: 4,
+      controller: PageController(initialPage: 1), // 生成するページ数
       itemBuilder: (context, index) {
         String appBarByTimeTable = semesterList[index];
 

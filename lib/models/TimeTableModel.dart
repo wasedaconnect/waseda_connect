@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:ulid/ulid.dart';
-import 'package:waseda_connect/constants/Dict.dart';
+
 import '../utils/DatabaseHelper.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +61,7 @@ class TimeTableLogic {
   Future<void> initInsertTimeTable() async {
     final db = await _dbHelper.timeTableDatabase;
     final yearsList = [2021, 2022, 2023, 2024, 2025];
-    final semseterList = [1, 2];
+    final semseterList = [1, 2, 3, 4];
     for (var yearData in yearsList) {
       for (var semesterData in semseterList) {
         final idWithUlid = Ulid().toString();

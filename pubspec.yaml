@@ -125,7 +125,7 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/
-    - assets/logo/wasedaconnect.png
-    - assets/logo/WasedaConnect_home.png
+    - assets/logo/
+
 
 

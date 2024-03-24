@@ -73,7 +73,7 @@ class LessonLogic {
     final ClassLogic instance = ClassLogic();
     final classData = await instance.searchClassesByPKey(classId);
     final prefs = await SharedPreferences.getInstance();
-    final int defaultYear = prefs.getInt('defaultYesr') ?? 2024;
+    final int defaultYear = prefs.getInt('defaultYear')!;
     final TimeTableLogic timeTableInstance = TimeTableLogic();
     final timeTableData =
         await timeTableInstance.getTimeTablesByYear(defaultYear);
@@ -131,7 +131,7 @@ class LessonLogic {
     final dbClass = await _dbHelper.classDatabase;
     final TimeTableLogic timeTableInstance = TimeTableLogic();
     final prefs = await SharedPreferences.getInstance();
-    final int defaultYear = prefs.getInt('defaultYear') ?? 2024;
+    final int defaultYear = prefs.getInt('defaultYear')!;
     var newTimeTablesData =
         await timeTableInstance.getTimeTablesByYear(defaultYear);
     print("timetableid");
@@ -290,7 +290,7 @@ class LessonLogic {
     final ClassLogic instance = ClassLogic();
     final classData = await instance.searchClassesByPKey(classId);
     final prefs = await SharedPreferences.getInstance();
-    final int defaultYear = prefs.getInt('defaultYesr') ?? 2024;
+    final int defaultYear = prefs.getInt('defaultYear') ?? 2024;
     final TimeTableLogic timeTableInstance = TimeTableLogic();
     final timeTableData =
         await timeTableInstance.getTimeTablesByYear(defaultYear);

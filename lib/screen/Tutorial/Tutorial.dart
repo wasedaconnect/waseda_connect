@@ -66,7 +66,7 @@ class _TutorialState extends ConsumerState<Tutorial> {
                       bottomLeft: Radius.circular(20.0),
                     ),
                     child: Image.asset(
-                      'assets/logo/WasedaConnect.png',
+                      'assets/logo/wasedaconnect.png',
                       width: 150,
                       height: 150,
                     ),

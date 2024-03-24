@@ -56,5 +56,4 @@ class DropdownCustomComponent extends StatelessWidget {
   }
 }
 
-
-// 2. 
+// 2.
