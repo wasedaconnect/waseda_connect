@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Waseda Connect',
       theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 0, 0)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 45, 171, 244)),
         useMaterial3: true,
       ),
       home: MyHomePage(),
