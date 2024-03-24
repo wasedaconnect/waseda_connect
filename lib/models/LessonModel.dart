@@ -73,7 +73,7 @@ class LessonLogic {
     final ClassLogic instance = ClassLogic();
     final classData = await instance.searchClassesByPKey(classId);
     final prefs = await SharedPreferences.getInstance();
-    final int defaultYear = prefs.getInt('defaultYear') !;
+    final int defaultYear = prefs.getInt('defaultYear')!;
     final TimeTableLogic timeTableInstance = TimeTableLogic();
     final timeTableData =
         await timeTableInstance.getTimeTablesByYear(defaultYear);
@@ -125,13 +125,13 @@ class LessonLogic {
   }
 
   // ダミーデータを登録
-  Future<void> insertDummyLesson(
-      String name, String classRoom, int day, int period, TimeTableModel? timeTableData) async {
+  Future<void> insertDummyLesson(String name, String classRoom, int day,
+      int period, TimeTableModel? timeTableData) async {
     final db = await _dbHelper.lessonDatabase;
     final dbClass = await _dbHelper.classDatabase;
     final TimeTableLogic timeTableInstance = TimeTableLogic();
     final prefs = await SharedPreferences.getInstance();
-    final int defaultYear = prefs.getInt('defaultYear') !;
+    final int defaultYear = prefs.getInt('defaultYear')!;
     var newTimeTablesData =
         await timeTableInstance.getTimeTablesByYear(defaultYear);
     print("timetableid");

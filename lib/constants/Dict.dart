@@ -205,16 +205,16 @@ Map<int, String> termMap = {
 
 Map<int, List<int>> termToSemester = {
 //通年に変換
-  1: [1,2], //春学期に変換
-  2: [3,4],
+  1: [1, 2], //春学期に変換
+  2: [3, 4],
   3: [1],
   4: [2],
-  5: [1,2],
+  5: [1, 2],
   6: [4],
   7: [3],
-  8: [3,4],
-  9: [3,4],
-  10: [1, 2,3,4],
+  8: [3, 4],
+  9: [3, 4],
+  10: [1, 2, 3, 4],
 };
 
 Map<int, String> periodMap = {
@@ -242,11 +242,10 @@ Map<int, Color> classColor = {
   4: Color.fromRGBO(27, 17, 17, 1), // # に変更
 };
 
-List<String> semesterList = ["春学期", "夏学期","秋学期","冬学期"];
+List<String> semesterList = ["春学期", "夏学期", "秋学期", "冬学期"];
 List mainColor = [
   const Color.fromARGB(255, 194, 224, 238),
   const Color.fromARGB(255, 246, 179, 174),
-   const Color.fromARGB(255, 194, 224, 238),
+  const Color.fromARGB(255, 194, 224, 238),
   const Color.fromARGB(255, 246, 179, 174)
 ];
-
