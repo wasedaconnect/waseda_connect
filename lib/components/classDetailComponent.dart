@@ -203,13 +203,30 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
 
   Widget _buildButton() {
     if (widget.btnMode == ButtonMode.delete) {
-      return IconButton(
-        onPressed: () {
-          // 削除機能のロジックを実装
-          print('削除ボタンが押されました');
-          _showDeleteModal(); // 削除モーダルを表示する関数
-        },
-        icon: Icon(Icons.delete),
+      return Container(
+        margin: EdgeInsets.only(right: 10),
+        child: GestureDetector(
+          onTap: () {
+            // タップされたときの処理
+            print('削除ボタンが押されました');
+            _showDeleteModal(); // 追加モーダルを表示する関数
+          },
+          child: Material(
+            color: Colors.grey[200], // ここで背景色を設定
+            borderRadius: BorderRadius.circular(6), // 背景の角を丸くする
+            child: Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: 5, vertical: 3), // パディングを調整
+              child: Row(
+                mainAxisSize: MainAxisSize.min, // 子ウィジェットのサイズに合わせる
+                children: <Widget>[
+                  Icon(Icons.delete), // アイコンの色も調整可能
+                  Text('削除'), // テキストの色を白に設定
+                ],
+              ),
+            ),
+          ),
+        ),
       );
     } else if (widget.btnMode == ButtonMode.add) {
       // return Row(
