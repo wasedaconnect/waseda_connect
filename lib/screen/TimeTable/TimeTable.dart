@@ -23,7 +23,10 @@ class _TimeTableState extends ConsumerState<TimeTable> {
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    
+    // 非同期処理を実行
+   _fetchData();
+
   }
 
   // ダミーデータの定義
@@ -241,14 +244,14 @@ class _TimeTableState extends ConsumerState<TimeTable> {
     var appBarText = "${defaultYear}年度";
     final pageTransition = ref.watch(updateTimeTableProvider);
 
-    if (pageTransition) {
-      // ページ遷移が検知された場合に実行する関数
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await _fetchData();
-        // 必要に応じて、状態をリセット
-        ref.read(updateTimeTableProvider.notifier).state = false;
-      });
-    }
+ if (pageTransition) {
+  // ページ遷移が検知された場合に実行する関数
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    await _fetchData();
+    // 必要に応じて、状態をリセット
+    ref.read(updateTimeTableProvider.notifier).state = false;
+  });
+}
 
     return PageView.builder(
       itemCount: 4,

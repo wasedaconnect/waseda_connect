@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
 import '../../constants/Dict.dart'; // 必要に応じてパスを調整してください
+import 'package:intl/intl.dart';
 
 class TimeTableComponent extends StatefulWidget {
   final List<LessonModel>? lessonData;
@@ -58,6 +59,11 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
 
   @override
   Widget build(BuildContext context) {
+    var now = DateTime.now();
+    var nowWeekday = now.weekday;
+    final DateFormat formatter = DateFormat('H:mm'); // 'HH:mm'形式で時間をフォーマット
+    final String currentTime = formatter.format(now);
+
     return Column(
       children: [
         // 曜日ヘッダー
@@ -72,7 +78,10 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                       margin: EdgeInsets.all(2.0),
                       decoration: BoxDecoration(
                         // * ここ現在の日付とって値変えたい。
-                        color: Colors.grey[100],
+                        color:
+                            day == weekdays[nowWeekday - 1] && nowWeekday != 7
+                                ? Theme.of(context).colorScheme.inversePrimary
+                                : Colors.grey[100],
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Center(
@@ -107,15 +116,47 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
                                 MainAxisAlignment.center, // 子ウィジェットを中央に配置
                             children: <Widget>[
                               Text('${startTime[period - 1]}',
-                                  style: TextStyle(fontSize: 8)),
+                                  style: TextStyle(
+                                      color: formatter
+                                                  .parse(currentTime)
+                                                  .isAfter(formatter.parse(
+                                                      startTime[period - 1])) &&
+                                              formatter
+                                                  .parse(currentTime)
+                                                  .isBefore(formatter.parse(
+                                                      endTime[period - 1]))
+                                          ? Colors.blue[600]
+                                          : Colors.black,
+                                      fontSize: 8)),
                               SizedBox(height: 20),
                               Text('$period',
                                   style: TextStyle(
+                                      color: formatter
+                                                  .parse(currentTime)
+                                                  .isAfter(formatter.parse(
+                                                      startTime[period - 1])) &&
+                                              formatter
+                                                  .parse(currentTime)
+                                                  .isBefore(formatter.parse(
+                                                      endTime[period - 1]))
+                                          ? Colors.blue[600]
+                                          : Colors.black,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold)),
                               SizedBox(height: 20),
                               Text('${endTime[period - 1]}',
-                                  style: TextStyle(fontSize: 8)),
+                                  style: TextStyle(
+                                      color: formatter
+                                                  .parse(currentTime)
+                                                  .isAfter(formatter.parse(
+                                                      startTime[period - 1])) &&
+                                              formatter
+                                                  .parse(currentTime)
+                                                  .isBefore(formatter.parse(
+                                                      endTime[period - 1]))
+                                          ? Colors.blue[600]
+                                          : Colors.black,
+                                      fontSize: 8)),
                             ],
                           ),
                         ),
