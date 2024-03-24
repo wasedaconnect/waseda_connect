@@ -37,6 +37,7 @@ class ClassDetailComponent extends ConsumerStatefulWidget {
 class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
   ClassModel? classData;
   LessonModel? lessonData;
+  int? clickedBtn;
 
   @override
   void initState() {
@@ -62,6 +63,9 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     setState(() {
       lessonData = newLessonData;
     });
+    clickedBtn = lessonData?.color;
+    print('clickedBtn');
+    print(clickedBtn);
   }
 
   Future<void> _deleteLessonById(String id) async {
@@ -162,12 +166,13 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     );
   }
 
-  Widget _colorButton(BuildContext context, int colorId, bool isSelected) {
+  Widget _colorButton(BuildContext context, int colorId, bool isSelected,
+      Function(int) onColorClick) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         onPressed: () {
-          // クリックされたときの処理をここに追加
+          onColorClick(colorId); // Call the callback function with colorId
           _changeLessonColor(classData!.pKey, colorId);
           print('Selected colorId: $colorId');
           print('Selected color: ${classColor[colorId]}');
@@ -184,7 +189,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            if (isSelected) // isSelected が true のときにチェックマークを表示
+            if (isSelected) // Check if this button is selected
               Icon(
                 Icons.check,
                 size: 16,
@@ -887,7 +892,16 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                             children: classColor.entries.map((entry) {
                               int index = entry.key;
                               return _colorButton(
-                                  context, index, lessonData!.color == index);
+                                context,
+                                index,
+                                clickedBtn == index,
+                                (selectedColorId) {
+                                  setState(() {
+                                    clickedBtn =
+                                        selectedColorId; // Update clickedBtn with the selected color ID
+                                  });
+                                },
+                              );
                             }).toList(),
                           ),
                         )
@@ -906,149 +920,6 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                           overflow:
                               TextOverflow.ellipsis, // オーバーフロー時にはテキストの末尾に...を表示
                           maxLines: 3,
-                          // : Column(
-                          //     children: [
-                          //       Expanded(
-                          //         child: SingleChildScrollView(
-                          //             child: Column(children: [
-                          //           // 登録されてる全ての色のボタンが表示されない点を直したい。
-                          //           if (widget.btnMode == ButtonMode.delete)
-                          //             SingleChildScrollView(
-                          //               scrollDirection: Axis.horizontal, // 横方向にスクロール
-                          //               child: Row(
-                          //                 children: classColor.entries.map((entry) {
-                          //                   int index = entry.key;
-                          //                   return _colorButton(
-                          //                       context, index, lessonData!.color == index);
-                          //                 }).toList(),
-                          //               ),
-                          //             ),
-                          //           DataTable(
-                          //             columns: const [
-                          //               DataColumn(label: Text('属性')),
-                          //               DataColumn(label: Text('情報')),
-                          //             ],
-                          //             rows: [
-                          //               // DataRow(cells: [
-                          //               //   DataCell(Text('ID')),
-                          //               //   DataCell(Text(classData!.pKey)),
-                          //               // ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('コース名')),
-                          //                 DataCell(Text(classData!.courseName)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('表示名')),
-                          //                 DataCell(
-                          //                   widget.btnMode == ButtonMode.delete
-                          //                       ? TextFormField(
-                          //                           initialValue:
-                          //                               lessonData!.name, // 初期値を設定する場合
-                          //                           onChanged: (newValue) {
-                          //                             print(newValue);
-                          //                             _changeLessonName(
-                          //                                 lessonData!.classId, newValue);
-                          //                             // 入力された値をclassDataに反映させる処理を追加することができます
-                          //                             // 例: classData.classroom = newValue;
-                          //                           },
-                          //                           decoration: InputDecoration(
-                          //                             hintText:
-                          //                                 '表示名を入力してください', // ヒントテキストを設定する場合
-                          //                           ),
-                          //                         )
-                          //                       : Text(classData!.courseName),
-                          //                 ),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('講師')),
-                          //                 DataCell(Text(classData!.instructor)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('学期')),
-                          //                 DataCell(Text('${termMap[classData!.semester]}')),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('曜日/時限')),
-                          //                 DataCell(Text(
-                          //                     '${numToDay[classData!.classDay1]} / ${periodMap[classData!.classStart1]}')),
-                          //               ]),
-                          //               if (classData!.classDay2 != 7 ||
-                          //                   classData!.classStart2 != 0)
-                          //                 DataRow(cells: [
-                          //                   DataCell(Text('曜日/時限(2)')),
-                          //                   DataCell(Text(
-                          //                       '${numToDay[classData!.classDay2]} / ${periodMap[classData!.classStart2]}')),
-                          //                 ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('科目区分')),
-                          //                 DataCell(Text(classData!.courseCategory)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('配当年次')),
-                          //                 DataCell(Text('${classData!.assignedYear}年以上')),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('教室')),
-                          //                 DataCell(
-                          //                   widget.btnMode == ButtonMode.delete
-                          //                       ? TextFormField(
-                          //                           initialValue:
-                          //                               lessonData!.classroom, // 初期値を設定する場合
-                          //                           onChanged: (newValue) {
-                          //                             print(newValue);
-                          //                             // 入力された値をclassDataに反映させる処理を追加することができます
-                          //                             _changeLessonClassRoom(
-                          //                                 lessonData!.classId, newValue);
-                          //                           },
-                          //                           decoration: InputDecoration(
-                          //                             hintText:
-                          //                                 '${classData!.classroom}', // ヒントテキストを設定する場合
-                          //                           ),
-                          //                         )
-                          //                       : Text('${classData!.classroom}'),
-                          //                 ),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('キャンパス')),
-                          //                 DataCell(Text(classData!.campus)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('使用言語')),
-                          //                 DataCell(Text(classData!.languageUsed)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('形式')),
-                          //                 DataCell(Text(
-                          //                     '${classFormatDict[classData!.teachingMethod]}')),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('コースコード')),
-                          //                 DataCell(Text(classData!.courseCode)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('大分野名称')),
-                          //                 DataCell(Text(classData!.majorField)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('中分野名称')),
-                          //                 DataCell(Text(classData!.subField)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('小分野名称')),
-                          //                 DataCell(Text(classData!.minorField)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('レベル')),
-                          //                 DataCell(Text(classData!.level)),
-                          //               ]),
-                          //               DataRow(cells: [
-                          //                 DataCell(Text('授業形態')),
-                          //                 DataCell(Text(classData!.classFormat)),
-                          //               ]),
-                          //             ],
-                          //             dataTextStyle: TextStyle(fontSize: 12),
-                          //           ),
-                          //         ])),
                         ),
                       ),
                       _buildButton()

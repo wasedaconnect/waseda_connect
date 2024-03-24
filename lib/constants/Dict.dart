@@ -243,6 +243,9 @@ Map<int, Color> classColor = {
   0: Color.fromRGBO(231, 231, 231, 1),
   1: Color.fromRGBO(230, 226, 254, 1.0),
   2: Color.fromRGBO(188, 236, 248, 1.0),
-  3: Color.fromRGBO(0, 0, 0, 1.0), // # に変更
-  4: Color.fromRGBO(27, 17, 17, 1), // # に変更
+  3: Colors.red, // # に変更
+  4: Colors.purple,
+  5: Colors.pink,
+  6: Colors.green, // # に変更
+  7: Colors.lightBlueAccent // # に変更
 };
