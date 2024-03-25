@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async'; 
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,20 +15,41 @@ import 'Screen/SettingPage/SettingPage.dart';
 import 'Screen/Test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Screen/Tutorial/Tutorial.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'provider/analytics_repository.dart';
 
 void main() {
-  runApp(
-    ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runZonedGuarded<Future<void>>(() async {
+    /// Firebaseの初期化
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    /// クラッシュハンドラ(Flutterフレームワーク内でスローされたすべてのエラー)
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    /// runApp w/ Riverpod
+    runApp(const ProviderScope(child: MyApp()));
+  },
+
+      /// クラッシュハンドラ(Flutterフレームワーク内でキャッチされないエラー)
+      (error, stack) =>
+          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var analytics = ref.watch(analyticsRepository);
+    var analyticsObserver = ref.watch(analyticsObserverRepository);
+    
+    // アプリが開かれたことをFirebaseAnalyticsに送信
+    analytics.logAppOpen();
     return MaterialApp(
       title: 'Waseda Connect',
       theme: ThemeData(

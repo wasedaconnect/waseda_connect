@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA4ZkAP6TzcONqLHcL99CoaLNV5vMCz-WY',
-    appId: '1:229447664218:android:51ba924e4bec2d9bf8ce63',
-    messagingSenderId: '229447664218',
-    projectId: 'waseda-connect',
-    storageBucket: 'waseda-connect.appspot.com',
+    apiKey: 'AIzaSyAkyOpXfDLf8MAZR7e-BboUNZdM-Z9tws0',
+    appId: '1:1051911712828:android:9cf913be2e7bb1dda9d339',
+    messagingSenderId: '1051911712828',
+    projectId: 'wasedaconnect',
+    storageBucket: 'wasedaconnect.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCJfJbDR3x9smuya8ZSa_VpeZ5ZhxB3_Ig',
-    appId: '1:229447664218:ios:5fbc629b207d78cff8ce63',
-    messagingSenderId: '229447664218',
-    projectId: 'waseda-connect',
-    storageBucket: 'waseda-connect.appspot.com',
-    iosBundleId: 'com.example.wasedaConnect',
+    apiKey: 'AIzaSyDx1PzWC-ZHVmw9TcD0dZfSV8cen9QsLdA',
+    appId: '1:1051911712828:ios:106550ee6824af7ca9d339',
+    messagingSenderId: '1051911712828',
+    projectId: 'wasedaconnect',
+    storageBucket: 'wasedaconnect.appspot.com',
+    iosBundleId: 'com.name.wasedaconnect',
   );
 }

@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:229447664218:ios:5fbc629b207d78cff8ce63",
-  "FIREBASE_PROJECT_ID": "waseda-connect",
-  "GCM_SENDER_ID": "229447664218"
+  "GOOGLE_APP_ID": "1:1051911712828:ios:106550ee6824af7ca9d339",
+  "FIREBASE_PROJECT_ID": "wasedaconnect",
+  "GCM_SENDER_ID": "1051911712828"
 }
