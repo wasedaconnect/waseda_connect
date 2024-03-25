@@ -302,14 +302,12 @@ class ClassLogic {
           '((classDay1 = ? AND classStart1 = ?) OR (classDay2 = ? AND classStart2 = ?))');
       whereArgs.addAll([day, time, day, time]);
     } else if (day != 0) {
-      if(day == 7){
-        whereClauses.add('(classDay1 = ?)');
+      if (day == 7) {
+        whereClauses.add('classDay1 = ?');
         whereArgs.addAll([day]);
-
       } else {
         whereClauses.add('(classDay1 = ? OR classDay2 = ?)');
         whereArgs.addAll([day, day]);
-
       }
     } else if (time != 0) {
       whereClauses.add('(classStart1 = ? OR classStart2 = ?)');

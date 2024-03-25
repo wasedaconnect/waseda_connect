@@ -58,6 +58,11 @@ class _SettingPageState extends ConsumerState<SettingPage> {
       return;
     }
     final prefs = await SharedPreferences.getInstance();
+    if (selectedFaculty == prefs.getString('faculty') &&
+        selectedDepartment == prefs.getString('department')) {
+      print('すでに登録済み');
+      return;
+    }
     await prefs.setString('faculty', selectedFaculty!);
     await prefs.setString('department', selectedDepartment!);
     print("保存完了：${selectedFaculty}/${selectedDepartment}");
