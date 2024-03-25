@@ -330,6 +330,17 @@ class LessonLogic {
           }
         }
       }
+      if(classData.classDay1 == 7){ //オンデマ科目
+        final List<Map<String, dynamic>> result = await db.query(
+          'lessons', // ここには検索するテーブル名を指定
+          where: 'classId = ? AND timeTableId = ?',
+          whereArgs: [classData.pKey, timeTableData[semesterData - 1].id],
+        );
+        if(result.isNotEmpty){ //すでに存在している
+          return false;
+        }
+
+      }
     }
     return true;
   }
