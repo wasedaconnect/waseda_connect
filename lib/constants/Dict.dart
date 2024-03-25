@@ -257,3 +257,11 @@ List mainColor = [
   const Color.fromARGB(255, 194, 224, 238),
   const Color.fromARGB(255, 246, 179, 174)
 ];
+
+Map<int, int> DaytoSemester = {
+  // 終了日時とセメスター
+  20240603: 0,
+  20240920: 1,
+  20241125: 2,
+  20250331: 3,
+};
