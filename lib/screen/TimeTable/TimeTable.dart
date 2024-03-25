@@ -9,6 +9,7 @@ import 'package:waseda_connect/models/LessonModel.dart';
 import 'package:waseda_connect/models/TimeTableModel.dart';
 import 'package:waseda_connect/provider/provider.dart';
 
+import 'package:intl/intl.dart';
 import '../../components/TimeTableComponent.dart'; // 正しいパスに置き換えてください
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../provider/update_request_provider.dart';
@@ -190,7 +191,7 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       print('ダミ0');
       _showDeleteDummyLessonModal(day, period, timeTableData);
     } else if (selected != null && selected != "") {
-      print("a${selected}a");
+      print("aaaaa ${selected} aaaaaa");
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -255,9 +256,35 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       });
     }
 
+    int findSemester(int date) {
+      // Sorting the keys in the map to get the closest semester end date
+      List<int> sortedKeys = DaytoSemester.keys.toList()..sort();
+
+      // Finding the semester for the given date
+      int semester = 0;
+      for (int i = 0; i < sortedKeys.length; i++) {
+        if (date <= sortedKeys[i]) {
+          semester = DaytoSemester[sortedKeys[i]] ?? 0;
+          print('findSemester : ${semester}');
+          break;
+        }
+      }
+      return semester;
+    }
+
+    var now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyyMMdd');
+    final String formattedDate = formatter.format(now);
+    final int dateAsInteger = int.parse(formattedDate);
+    // final int dateAsInteger = 20241126; // 初期に表示する時間割画面のテスト用
+    print(dateAsInteger);
+
+    final initialpage = findSemester(dateAsInteger);
+
     return PageView.builder(
       itemCount: 4,
-      controller: PageController(initialPage: 1), // 生成するページ数
+      controller:
+          PageController(initialPage: initialpage), // * 現在の日付に応じたクォーターを表示したい
       itemBuilder: (context, index) {
         String appBarByTimeTable = semesterList[index];
 

@@ -133,11 +133,31 @@ class SyllabusItemWidget extends ConsumerWidget {
                                 ), // Iconを追加
                                 SizedBox(width: 4), // アイコンとテキストの間隔を調整
                                 Text(
-                                  '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${periodMap[classData.classStart1]}' +
-                                      (classData.classDay2 != 7 ||
-                                              classData.classStart2 != 0
-                                          ? ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]}'
-                                          : ''),
+                                  classData.classTime1 == 1
+                                      // * 1コマの授業の場合
+                                      ? '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${periodMap[classData.classStart1]}' +
+                                          (classData.classDay2 != 7 ||
+                                                  classData.classStart2 != 0
+                                              // * 週2回の授業の場合
+                                              ? classData.classTime2 == 1
+                                                  // * 2回目の授業が1コマ授業の場合
+                                                  ? ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]}'
+                                                  // * 2回目の授業が複数コマ授業の場合
+                                                  : ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2 + classData.classTime2 - 1]}'
+                                              // 週1回の授業の場合
+                                              : '')
+                                      // * 複数コマ連続の授業の場合
+                                      : '${termMap[classData.semester]} ${numToDay[classData.classDay1]} ${periodMap[classData.classStart1]} ー ${periodMap[classData.classStart1 + classData.classTime1 - 1]}' +
+                                          (classData.classDay2 != 7 ||
+                                                  classData.classStart2 != 0
+                                              // 週2回の授業の場合
+                                              ? classData.classTime2 == 1
+                                                  // * 2回目の授業が1コマ授業の場合
+                                                  ? ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]}'
+                                                  // * 2回目の授業が複数コマ授業の場合
+                                                  : ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]} ー ${periodMap[classData.classStart2 + classData.classTime2 - 1]}'
+                                              // 週1回の授業の場合
+                                              : ''),
                                   style: TextStyle(
                                     fontSize: 12.0,
                                     color: Colors.grey[700],

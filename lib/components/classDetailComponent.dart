@@ -445,7 +445,9 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   ),
                 ),
                 child: Text(
-                  '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]}',
+                  classData!.classTime1 == 1
+                      ? '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]}'
+                      : '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]} ー ${periodMap[classData!.classStart1 + classData!.classTime1 - 1]}',
                   style: TextStyle(
                     fontSize: 17.0, // フォントサイズを大きく
                   ),
@@ -478,7 +480,9 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                     ),
                   ),
                   child: Text(
-                    '${numToDay[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]}',
+                    classData!.classTime1 == 1
+                        ? '${numToDay[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]}'
+                        : '${numToDay[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]} ー ${periodMap[classData!.classStart2 + classData!.classTime2 - 1]}',
                     style: TextStyle(
                       fontSize: 17.0, // フォントサイズを大きく
                     ),
