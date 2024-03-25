@@ -1,4 +1,4 @@
-package com.example.waseda_connect
+package com.name.wasedaconnect
 
 import io.flutter.embedding.android.FlutterActivity
 
