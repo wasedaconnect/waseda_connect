@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:ulid/ulid.dart';
@@ -280,8 +281,13 @@ class LessonLogic {
 // 特定の授業を削除する機能
   Future<void> deleteLessonByClassId(String classId) async {
     final db = await _dbHelper.lessonDatabase;
-
-    await db.delete('lessons', where: 'classId = ? ', whereArgs: [classId]);
+    final prefs = await SharedPreferences.getInstance();
+    final int defaultYear = prefs.getInt('defaultYear') ?? 2024;
+    final TimeTableLogic tableInstance = TimeTableLogic();
+    var timeTablesDatas = await tableInstance.getTimeTablesByYear(defaultYear);
+    for (var timeTableData in timeTablesDatas) {
+      await db.delete('lessons', where: 'classId = ? AND timeTableId = ?', whereArgs: [classId, timeTableData.id]);
+    }
     print("削除できました");
   }
 
