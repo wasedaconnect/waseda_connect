@@ -166,8 +166,42 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
     );
   }
 
+  // Widget _colorButton(BuildContext context, int colorId, bool isSelected,
+  //     Function(int) onColorClick) {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: ElevatedButton(
+  //       onPressed: () {
+  //         onColorClick(colorId); // Call the callback function with colorId
+  //         _changeLessonColor(classData!.pKey, colorId);
+  //         print('Selected colorId: $colorId');
+  //         print('Selected color: ${classColor[colorId]}');
+  //       },
+  //       style: ElevatedButton.styleFrom(
+  //         minimumSize: Size(40, 40),
+  //       ).copyWith(
+  //         backgroundColor:
+  //             MaterialStateProperty.all<Color>(classColor[colorId]!),
+  //         shape: MaterialStateProperty.all<OutlinedBorder>(
+  //           CircleBorder(),
+  //         ),
+  //       ),
+  //       child: Stack(
+  //         alignment: Alignment.center,
+  //         children: [
+  //           if (isSelected) // Check if this button is selected
+  //             Icon(
+  //               Icons.check,
+  //               size: 16,
+  //               color: Colors.black,
+  //             ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget _colorButton(BuildContext context, int colorId, bool isSelected,
-      Function(int) onColorClick) {
+    Function(int) onColorClick) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
@@ -189,12 +223,11 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            if (isSelected) // Check if this button is selected
-              Icon(
-                Icons.check,
-                size: 16,
-                color: Colors.black,
-              ),
+            Icon(
+              isSelected ? Icons.check : Icons.circle, // `Icons.circle` は透明なアイコンに置き換えてください。
+              size: 16,
+              color: isSelected ? Colors.black : Colors.transparent, // 選択されていなければ透明
+            ),
           ],
         ),
       ),
@@ -693,7 +726,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   ),
                 ),
                 child: Text(
-                  '${classData!.teachingMethod}',
+                  '${classFormatDict[classData!.teachingMethod]}',
                   style: TextStyle(
                     fontSize: 17.0, // フォントサイズを大きく
                   ),
