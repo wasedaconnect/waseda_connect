@@ -155,7 +155,7 @@ class SyllabusItemWidget extends ConsumerWidget {
                                                   // * 2回目の授業が1コマ授業の場合
                                                   ? ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]}'
                                                   // * 2回目の授業が複数コマ授業の場合
-                                                  : ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2 + classData.classTime2 - 1]} ー ${periodMap[classData.classStart2 + classData.classTime2 - 1]}'
+                                                  : ' / ${numToDay[classData.classDay2]} ${periodMap[classData.classStart2]} ー ${periodMap[classData.classStart2 + classData.classTime2 - 1]}'
                                               // 週1回の授業の場合
                                               : ''),
                                   style: TextStyle(

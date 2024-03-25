@@ -297,10 +297,31 @@ class ClassLogic {
       whereArgs.add(semester);
     }
 
+    // 曜日と時限が両方とも選択されている場合
+    // 複数コマ連続の授業を検索するため、classTimeを組み合わせたクエリを作成し、ORで接続している
     if (day != 0 && time != 0) {
-      whereClauses.add(
-          '((classDay1 = ? AND classStart1 = ?) OR (classDay2 = ? AND classStart2 = ?))');
+      // 普通に1コマの授業のクエリ
+      String innerClause =
+          '((classDay1 = ? AND classStart1 = ?) OR (classDay2 = ? AND classStart2 = ?))';
       whereArgs.addAll([day, time, day, time]);
+
+      // classTimeの組み合わせのクエリを作成
+      // 例えば「月4」で検索された場合
+      //    1つ目のループで月3,月2,月1を作成 (最大の連続コマが4コマなので検索された時限から遡り最大3つ分をループ)
+      //    2つ目のループで授業のコマ数(classTime)を作成(検索された時限-対象の次元-1+2で初期値を取れる。そこから最大コマ4までをループでクエリ生成)
+      for (int i = time - 1; i >= (time - 3 > 0 ? time - 3 : 1); i--) {
+        // classTimeの開始値を計算する
+        int startTime = 2 + (time - 1 - i);
+
+        for (int classTime = startTime; classTime <= 4; classTime++) {
+          innerClause += " OR ";
+
+          innerClause +=
+              "((classDay1 = ? AND classStart1 = ? AND classTime1 = ?) OR (classDay2 = ? AND classStart2 = ? AND classTime2 = ?))";
+          whereArgs.addAll([day, i, classTime, day, i, classTime]);
+        }
+      }
+      whereClauses.add('($innerClause)');
     } else if (day != 0) {
       if (day == 7) {
         whereClauses.add('classDay1 = ?');
@@ -310,17 +331,23 @@ class ClassLogic {
         whereArgs.addAll([day, day]);
       }
     } else if (time != 0) {
-      whereClauses.add('(classStart1 = ? OR classStart2 = ?)');
+      // 時限だけが入力されている場合のクエリの作成
+      // アルゴリズムに着いては上記記載の両方入力されている場合を参照
+      String innerClause = '(classStart1 = ? OR classStart2 = ?)';
       whereArgs.addAll([time, time]);
+
+      for (int i = time - 1; i >= (time - 3 > 0 ? time - 3 : 1); i--) {
+        int startTime = 2 + (time - 1 - i);
+
+        for (int classTime = startTime; classTime <= 4; classTime++) {
+          innerClause += " OR ";
+          innerClause +=
+              "((classStart1 = ? AND classTime1 = ?) OR (classStart2 = ? AND classTime1 = ?))";
+          whereArgs.addAll([i, classTime, i, classTime]);
+        }
+      }
+      whereClauses.add('($innerClause)');
     }
-    // if (day != 0) {
-    //   whereClauses.add('(classDay1 = ? OR classDay2 = ?)');
-    //   whereArgs.addAll([day, day]);
-    // }
-    // if (time != 0) {
-    //   whereClauses.add('(classStart1 = ? OR classStart2 = ?)');
-    //   whereArgs.addAll([time, time]);
-    // }
     if (teachingMethod != 0) {
       whereClauses.add('teachingMethod = ?');
       whereArgs.add(teachingMethod);
