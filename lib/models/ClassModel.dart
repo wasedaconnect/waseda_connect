@@ -296,7 +296,6 @@ class ClassLogic {
       whereClauses.add('semester = ?');
       whereArgs.add(semester);
     }
-
     // 曜日と時限が両方とも選択されている場合
     // 複数コマ連続の授業を検索するため、classTimeを組み合わせたクエリを作成し、ORで接続している
     if (day != 0 && time != 0) {
@@ -368,6 +367,40 @@ class ClassLogic {
         where: whereClause,
         whereArgs: whereArgs.isNotEmpty ? whereArgs : null,
         limit: 35000);
+
+    final List<Map<String, dynamic>> results = [];
+    if(time != 0){
+      for(var map in maps){
+        print(map["courseName"]);
+        if((map["classTime1"] == 1 && map["classStart1"] == time) || (map["classTime2"] == 1 && map["classStart2"] == time)){ //1時限分しかない
+          results.add(map);
+        }
+        if(map["classTime1"] != 1 || map["classTime2"] != 1){
+          List<int> sequence1 = List.generate(map["classTime1"], (i) => map["classStart1"] + i);
+          List<int> sequence2 = List.generate(map["classTime2"], (i) => map["classStart2"] + i);
+          if(sequence1.contains(time) || sequence2.contains(time)){
+            bool alreadyExists = results.any((existingMap) => existingMap["pKey"] == map["pKey"]);
+            // まだ追加されていない場合にのみ追加
+            if (!alreadyExists) {
+              results.add(map);
+            }
+          }
+        }
+        // if(map["classTime1"] != 1){
+        //   List<int> sequence = List.generate(map["classTime1"], (i) => map["classStart1"] + i);
+        //   if(sequence.contains(time)){
+        //     results.add(map);
+        //   }
+        // }
+        // if(map["classTime2"] != 1){
+        //   List<int> sequence = List.generate(map["classTime2"], (i) => map["classStart2"] + i);
+        //   if(sequence.contains(time)){
+        //     results.add(map);
+        //   }
+        // }
+      }
+      return List<ClassModel>.from(results.map((result) => ClassModel.fromMap(result)));
+    }
 
     // 結果をClassModelのリストに変換
     return List<ClassModel>.from(maps.map((map) => ClassModel.fromMap(map)));

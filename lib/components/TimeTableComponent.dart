@@ -37,7 +37,7 @@ class _TimeTableComponentState extends State<TimeTableComponent> {
       );
 
   // 仮定で一日の最大時限数を6とします
-  final int maxPeriods = 6;
+  final int maxPeriods = 7;
   // 曜日のリスト
 
   // // 各時限の開始時間と終了時間（サンプル）
