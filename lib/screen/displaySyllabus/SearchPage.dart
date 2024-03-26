@@ -193,7 +193,7 @@ class SearchSelectResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Search Results'),
+          title: Text('検索結果'),
         ),
         body: ClassListViewComponent(allSyllabusData: searchResult));
   }

@@ -73,7 +73,7 @@ class _TutorialState extends ConsumerState<Tutorial> {
                   ), // 画像を追加
                 ),
                 SizedBox(height: 64.0),
-                Text('初期設定',
+                Text('初回ログイン',
                     style:
                         TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
                 Padding(

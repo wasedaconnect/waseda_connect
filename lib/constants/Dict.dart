@@ -121,7 +121,15 @@ final Map<int, String> numToDay = {
   7: '他',
 };
 
-final startTime = ['08:50', '10:40', '13:10', '15:05', '17:00', '18:55', '20:45'];
+final startTime = [
+  '08:50',
+  '10:40',
+  '13:10',
+  '15:05',
+  '17:00',
+  '18:55',
+  '20:45'
+];
 final endTime = ['10:30', '12:20', '14:50', '16:45', '18:40', '20:35', '21:35'];
 final List<String> semesters = ['春', '秋'];
 final List<int> grades = [1, 2, 3, 4];
@@ -235,14 +243,13 @@ Map<int, String> periodMap = {
 // 授業の背景色候補(最初の色「Colors.grey[300]」は授業が空の場合。)
 Map<int, Color> classColor = {
   // 授業が空の場合
-  0: Color.fromRGBO(231, 231, 231, 1),
-  1: Color.fromRGBO(230, 226, 254, 1.0),
-  2: Color.fromRGBO(188, 236, 248, 1.0),
-  3: Colors.red, // # に変更
-  4: Colors.purple,
-  5: Colors.pink,
-  6: Colors.green, // # に変更
-  7: Colors.lightBlueAccent // # に変更
+  0: Color.fromARGB(255, 238, 238, 238),
+  1: Color.fromARGB(255, 170, 170, 238),
+  2: Color.fromARGB(255, 170, 238, 238),
+  3: Color.fromARGB(255, 170, 238, 170),
+  4: Color.fromARGB(255, 238, 238, 170),
+  5: Color.fromARGB(255, 238, 170, 170),
+  6: Color.fromARGB(255, 238, 170, 238),
 };
 
 List<String> semesterList = [

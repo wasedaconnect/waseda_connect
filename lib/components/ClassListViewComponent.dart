@@ -101,6 +101,7 @@ class SyllabusItemWidget extends ConsumerWidget {
                   MaterialPageRoute(
                     builder: (context) => ClassDetailComponent(
                       classId: classData.pKey,
+                      isDummy: false,
                       btnMode: ButtonMode.add,
                     ),
                   ),
