@@ -250,16 +250,24 @@ class LessonLogic {
 
     final db = await _dbHelper.lessonDatabase;
 
-    final List<Map<String, dynamic>> maps = await db.query(
-      'lessons',
-      where: 'classId = ?',
-      whereArgs: [pKey],
-    );
-    print(maps);
+    final prefs = await SharedPreferences.getInstance();
+    final int defaultYear = prefs.getInt('defaultYear') ?? 2024;
+    final TimeTableLogic tableInstance = TimeTableLogic();
+    var timeTablesDatas = await tableInstance.getTimeTablesByYear(defaultYear);
+    print(timeTablesDatas);
 
-    if (maps.isNotEmpty) {
-      return LessonModel.fromMap(maps.first);
+    List<Map<String, dynamic>> maps = [];
+    for (var timeTableData in timeTablesDatas) {
+      maps = await db.query(
+        'lessons',
+        where: 'classId = ? AND timeTableId = ?',
+        whereArgs: [pKey, timeTableData.id],
+      );
+      if (maps.isNotEmpty) {
+        return LessonModel.fromMap(maps.first);
+      }
     }
+
     return null; // 該当する授業が見つからない場合はnullを返す
   }
 
@@ -286,7 +294,9 @@ class LessonLogic {
     final TimeTableLogic tableInstance = TimeTableLogic();
     var timeTablesDatas = await tableInstance.getTimeTablesByYear(defaultYear);
     for (var timeTableData in timeTablesDatas) {
-      await db.delete('lessons', where: 'classId = ? AND timeTableId = ?', whereArgs: [classId, timeTableData.id]);
+      await db.delete('lessons',
+          where: 'classId = ? AND timeTableId = ?',
+          whereArgs: [classId, timeTableData.id]);
     }
     print("削除できました");
   }
@@ -336,16 +346,17 @@ class LessonLogic {
           }
         }
       }
-      if(classData.classDay1 == 7){ //オンデマ科目
+      if (classData.classDay1 == 7) {
+        //オンデマ科目
         final List<Map<String, dynamic>> result = await db.query(
           'lessons', // ここには検索するテーブル名を指定
           where: 'classId = ? AND timeTableId = ?',
           whereArgs: [classData.pKey, timeTableData[semesterData - 1].id],
         );
-        if(result.isNotEmpty){ //すでに存在している
+        if (result.isNotEmpty) {
+          //すでに存在している
           return false;
         }
-
       }
     }
     return true;
@@ -368,12 +379,23 @@ class LessonLogic {
     print('授業の背景色の変更');
     final db = await _dbHelper.lessonDatabase;
 
-    await db.update(
-      'lessons',
-      {'color': colorId}, // 更新するフィールドと値
-      where: 'classId = ?', // 更新する条件
-      whereArgs: [id], // 条件に対応する値
-    );
+    final prefs = await SharedPreferences.getInstance();
+    final int defaultYear = prefs.getInt('defaultYear') ?? 2024;
+    final TimeTableLogic tableInstance = TimeTableLogic();
+    var timeTablesDatas = await tableInstance.getTimeTablesByYear(defaultYear);
+    print(id); //dummydataの時にどうするか
+    print(timeTablesDatas);
+
+    for (var timeTableData in timeTablesDatas) {
+      print(timeTableData.id);
+      await db.update(
+        'lessons',
+        {'color': colorId},
+        where: 'classId = ? AND timeTableId = ?',
+        whereArgs: [id, timeTableData.id],
+      );
+    }
+    print("色の変更完了");
   }
 
   Future<void> changeLessonName(String id, String value) async {
