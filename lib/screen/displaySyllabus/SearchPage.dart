@@ -98,7 +98,10 @@ class _SyllabusSearchSelectState extends State<SearchFormWithSelect> {
               value: departments.keys.firstWhere(
                   (key) => departments[key] == selectedDepartments,
                   orElse: () => 0),
-              decoration: InputDecoration(labelText: '学部'),
+              decoration: InputDecoration(
+                labelText: '学部',
+              ),
+              menuMaxHeight: 510,
               items: departments.keys.map((int key) {
                 return DropdownMenuItem<int>(
                   value: key,
