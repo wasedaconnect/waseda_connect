@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,11 +23,13 @@ enum ButtonMode {
 
 class ClassDetailComponent extends ConsumerStatefulWidget {
   final String classId; // 表示する詳細画面のpKey
+  final bool isDummy; // ダミーデータかどうか
   final ButtonMode btnMode; // 詳細画面におけるボタンの役割 ButtonModeに定義
 
   ClassDetailComponent({
     Key? key,
     required this.classId,
+    required this.isDummy,
     required this.btnMode,
   }) : super(key: key);
 
@@ -201,7 +204,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
   //   );
   // }
   Widget _colorButton(BuildContext context, int colorId, bool isSelected,
-    Function(int) onColorClick) {
+      Function(int) onColorClick) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
@@ -224,9 +227,13 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
           alignment: Alignment.center,
           children: [
             Icon(
-              isSelected ? Icons.check : Icons.circle, // `Icons.circle` は透明なアイコンに置き換えてください。
+              isSelected
+                  ? Icons.check
+                  : Icons.circle, // `Icons.circle` は透明なアイコンに置き換えてください。
               size: 16,
-              color: isSelected ? Colors.black : Colors.transparent, // 選択されていなければ透明
+              color: isSelected
+                  ? Colors.black
+                  : Colors.transparent, // 選択されていなければ透明
             ),
           ],
         ),
@@ -334,20 +341,31 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   ),
                 ),
                 child: widget.btnMode == ButtonMode.delete
-                    ? TextFormField(
-                        initialValue: lessonData!.name, // 初期値を設定する場合
-                        onChanged: (newValue) {
-                          print(newValue);
-                          _changeLessonName(lessonData!.classId, newValue);
-                        },
-                        decoration: InputDecoration(
-                          hintText:
-                              '${classData!.courseName}', // ヒントテキストを設定する場合
+                    ? Row(children: [
+                        Icon(
+                          Icons.edit_note_outlined,
+                          size: 30,
                         ),
-                        style: TextStyle(
-                          fontSize: 17, // フォントサイズを17に設定
+                        SizedBox(
+                          width: 10,
                         ),
-                      )
+                        Expanded(
+                          child: TextFormField(
+                            initialValue: lessonData!.name, // 初期値を設定する場合
+                            onChanged: (newValue) {
+                              print(newValue);
+                              _changeLessonName(lessonData!.classId, newValue);
+                            },
+                            decoration: InputDecoration(
+                              hintText:
+                                  '${classData!.courseName}', // ヒントテキストを設定する場合
+                            ),
+                            style: TextStyle(
+                              fontSize: 17, // フォントサイズを17に設定
+                            ),
+                          ),
+                        ),
+                      ])
                     : Text(
                         '${classData!.courseName}',
                         style: TextStyle(
@@ -357,105 +375,40 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
               ),
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-            children: [
-              Container(
-                width: double.infinity, // 横幅を最大限に
-                padding: EdgeInsets.fromLTRB(10, 6, 0, 0), //
-                child: Text(
-                  '学部',
-                  style: TextStyle(
-                    fontSize: 18.0, // フォントサイズを大きく
-                    fontWeight: FontWeight.bold, // フォントを太く
+          if (!widget.isDummy)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+              children: [
+                Container(
+                  width: double.infinity, // 横幅を最大限に
+                  padding: EdgeInsets.fromLTRB(10, 6, 0, 0), //
+                  child: Text(
+                    '学部',
+                    style: TextStyle(
+                      fontSize: 18.0, // フォントサイズを大きく
+                      fontWeight: FontWeight.bold, // フォントを太く
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: double.infinity, // 横幅を最大限に
-                padding: EdgeInsets.symmetric(
-                    horizontal: 40.0, vertical: 18.0), // パディング
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                Container(
+                  width: double.infinity, // 横幅を最大限に
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 40.0, vertical: 18.0), // パディング
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                    ),
+                  ),
+                  child: Text(
+                    '${departments[classData!.department]}',
+                    style: TextStyle(
+                      fontSize: 17.0, // フォントサイズを大きく
+                    ),
                   ),
                 ),
-                child: Text(
-                  '${departments[classData!.department]}',
-                  style: TextStyle(
-                    fontSize: 17.0, // フォントサイズを大きく
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-            children: [
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-                child: Text(
-                  '学期',
-                  style: TextStyle(
-                    fontSize: 18.0, // フォントサイズを大きく
-                    fontWeight: FontWeight.bold, // フォントを太く
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity, // 横幅を最大限に
-                padding: EdgeInsets.symmetric(
-                    horizontal: 40.0, vertical: 18.0), // パディング
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                  ),
-                ),
-                child: Text(
-                  '${termMap[classData!.semester]}',
-                  style: TextStyle(
-                    fontSize: 17.0, // フォントサイズを大きく
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
-            children: [
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
-                child: Text(
-                  '曜日/時限',
-                  style: TextStyle(
-                    fontSize: 18.0, // フォントサイズを大きく
-                    fontWeight: FontWeight.bold, // フォントを太く
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity, // 横幅を最大限に
-                padding: EdgeInsets.symmetric(
-                    horizontal: 40.0, vertical: 18.0), // パディング
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
-                  ),
-                ),
-                child: Text(
-                  classData!.classTime1 == 1
-                      ? '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]}'
-                      : '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]} ー ${periodMap[classData!.classStart1 + classData!.classTime1 - 1]}',
-                  style: TextStyle(
-                    fontSize: 17.0, // フォントサイズを大きく
-                  ),
-                ),
-              ),
-            ],
-          ),
-          if (classData!.classDay2 != 7)
+              ],
+            ),
+          if (!widget.isDummy)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
               children: [
@@ -463,7 +416,40 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   width: double.infinity,
                   padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
                   child: Text(
-                    '曜日/時限 2',
+                    '学期',
+                    style: TextStyle(
+                      fontSize: 18.0, // フォントサイズを大きく
+                      fontWeight: FontWeight.bold, // フォントを太く
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity, // 横幅を最大限に
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 40.0, vertical: 18.0), // パディング
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(width: 1.0, color: Colors.grey), // 下線
+                    ),
+                  ),
+                  child: Text(
+                    '${termMap[classData!.semester]}',
+                    style: TextStyle(
+                      fontSize: 17.0, // フォントサイズを大きく
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          if (!widget.isDummy)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                  child: Text(
+                    '曜日/時限',
                     style: TextStyle(
                       fontSize: 18.0, // フォントサイズを大きく
                       fontWeight: FontWeight.bold, // フォントを太く
@@ -481,8 +467,8 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   ),
                   child: Text(
                     classData!.classTime1 == 1
-                        ? '${numToDay[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]}'
-                        : '${numToDay[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]} ー ${periodMap[classData!.classStart2 + classData!.classTime2 - 1]}',
+                        ? '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]}'
+                        : '${numToDay[classData!.classDay1]}曜日 / ${periodMap[classData!.classStart1]} ー ${periodMap[classData!.classStart1 + classData!.classTime1 - 1]}',
                     style: TextStyle(
                       fontSize: 17.0, // フォントサイズを大きく
                     ),
@@ -490,6 +476,43 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                 ),
               ],
             ),
+          if (!widget.isDummy)
+            if (classData!.classDay2 != 7)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(10, 6, 0, 0),
+                    child: Text(
+                      '曜日/時限 2',
+                      style: TextStyle(
+                        fontSize: 18.0, // フォントサイズを大きく
+                        fontWeight: FontWeight.bold, // フォントを太く
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity, // 横幅を最大限に
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 18.0), // パディング
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom:
+                            BorderSide(width: 1.0, color: Colors.grey), // 下線
+                      ),
+                    ),
+                    child: Text(
+                      classData!.classTime1 == 1
+                          ? '${numToDay[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]}'
+                          : '${numToDay[classData!.classDay2]}曜日 / ${periodMap[classData!.classStart2]} ー ${periodMap[classData!.classStart2 + classData!.classTime2 - 1]}',
+                      style: TextStyle(
+                        fontSize: 17.0, // フォントサイズを大きく
+                      ),
+                    ),
+                  ),
+                ],
+              ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start, // 子ウィジェットを左揃えに
             children: [
@@ -514,19 +537,31 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   ),
                 ),
                 child: widget.btnMode == ButtonMode.delete
-                    ? TextFormField(
-                        initialValue: lessonData!.classroom, // 初期値を設定する場合
-                        onChanged: (newValue) {
-                          print(newValue);
-                          _changeLessonClassRoom(lessonData!.classId, newValue);
-                        },
-                        decoration: InputDecoration(
-                          hintText: '${classData!.classroom}', // ヒントテキストを設定する場合
+                    ? Row(children: [
+                        Icon(
+                          Icons.edit_note_outlined,
+                          size: 30,
                         ),
-                        style: TextStyle(
-                          fontSize: 17, // フォントサイズを17に設定
+                        SizedBox(
+                          width: 10,
                         ),
-                      )
+                        Expanded(
+                            child: TextFormField(
+                          initialValue: lessonData!.classroom, // 初期値を設定する場合
+                          onChanged: (newValue) {
+                            print(newValue);
+                            _changeLessonClassRoom(
+                                lessonData!.classId, newValue);
+                          },
+                          decoration: InputDecoration(
+                            hintText:
+                                '${classData!.classroom}', // ヒントテキストを設定する場合
+                          ),
+                          style: TextStyle(
+                            fontSize: 17, // フォントサイズを17に設定
+                          ),
+                        )),
+                      ])
                     : Text(
                         '${classData!.classroom}',
                         style: TextStyle(
@@ -943,7 +978,7 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
       body: classData == null
           ? Center(child: CircularProgressIndicator())
           : DefaultTabController(
-              length: 2, // タブの数を定義します
+              length: widget.isDummy ? 1 : 2, // タブの数を定義します
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment:
@@ -996,24 +1031,22 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   ),
                   // ここにTabBarが続く
                   TabBar(
-                    labelColor: Colors.blue[600], // 選択されたタブのテキスト色
-                    unselectedLabelColor: Colors.grey, // 選択されていないタブのテキスト色
+                    labelColor: const Color.fromRGBO(30, 136, 229, 1),
+                    unselectedLabelColor: Colors.grey,
                     tabs: [
                       Tab(text: '授業情報'),
-                      Tab(text: '基本情報'),
+                      if (!widget.isDummy) Tab(text: '基本情報'),
                     ],
                   ),
-                  // その他のウィジェットがここに続く...
                   Expanded(
                     child: TabBarView(
                       children: [
-                        // 1つ目のタブの内容
-                        baseContents(),
-                        // 2つ目のタブの内容
-                        baseInfoContents(),
+                        baseContents(), // Always add this child
+                        if (!widget.isDummy)
+                          baseInfoContents(), // Add this child conditionally
                       ],
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

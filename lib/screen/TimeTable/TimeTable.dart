@@ -186,20 +186,28 @@ class _TimeTableState extends ConsumerState<TimeTable> {
       //空の場合
       _showAddLessonModal(day, period, timeTableData);
     }
-    if (selected == "dummy") {
-      //ダミーデータ
-      print('ダミ0');
-      _showDeleteDummyLessonModal(day, period, timeTableData);
-    } else if (selected != null && selected != "") {
-      print("aaaaa ${selected} aaaaaa");
+    // if (selected == "dummy") {
+    //   //ダミーデータ
+    //   print('ダミ0');
+
+    //   // _showDeleteDummyLessonModal(day, period, timeTableData);
+    // } else
+    if (selected != null && selected != "") {
+      bool isDummy = false; // isDummy変数を定義し、初期値をfalseに設定します。
+      if (selected == "dummy") {
+        print('click DummyData');
+        isDummy = true; // selectedが"dummy"の場合、isDummyをtrueに設定します。
+      }
       Navigator.push(
         context,
         MaterialPageRoute(
-            settings: RouteSettings(name: '/classDetail'),
-            builder: (context) => ClassDetailComponent(
-                  classId: selected,
-                  btnMode: ButtonMode.delete,
-                )),
+          settings: RouteSettings(name: '/classDetail'),
+          builder: (context) => ClassDetailComponent(
+            classId: selected,
+            isDummy: isDummy, // ClassDetailComponentにisDummyを渡します。
+            btnMode: ButtonMode.delete,
+          ),
+        ),
       ).then((value) {
         // 再描画
         setState(() {
