@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -340,20 +341,31 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   ),
                 ),
                 child: widget.btnMode == ButtonMode.delete
-                    ? TextFormField(
-                        initialValue: lessonData!.name, // 初期値を設定する場合
-                        onChanged: (newValue) {
-                          print(newValue);
-                          _changeLessonName(lessonData!.classId, newValue);
-                        },
-                        decoration: InputDecoration(
-                          hintText:
-                              '${classData!.courseName}', // ヒントテキストを設定する場合
+                    ? Row(children: [
+                        Icon(
+                          Icons.edit_note_outlined,
+                          size: 30,
                         ),
-                        style: TextStyle(
-                          fontSize: 17, // フォントサイズを17に設定
+                        SizedBox(
+                          width: 10,
                         ),
-                      )
+                        Expanded(
+                          child: TextFormField(
+                            initialValue: lessonData!.name, // 初期値を設定する場合
+                            onChanged: (newValue) {
+                              print(newValue);
+                              _changeLessonName(lessonData!.classId, newValue);
+                            },
+                            decoration: InputDecoration(
+                              hintText:
+                                  '${classData!.courseName}', // ヒントテキストを設定する場合
+                            ),
+                            style: TextStyle(
+                              fontSize: 17, // フォントサイズを17に設定
+                            ),
+                          ),
+                        ),
+                      ])
                     : Text(
                         '${classData!.courseName}',
                         style: TextStyle(
@@ -525,19 +537,31 @@ class _ClassDetailComponentState extends ConsumerState<ClassDetailComponent> {
                   ),
                 ),
                 child: widget.btnMode == ButtonMode.delete
-                    ? TextFormField(
-                        initialValue: lessonData!.classroom, // 初期値を設定する場合
-                        onChanged: (newValue) {
-                          print(newValue);
-                          _changeLessonClassRoom(lessonData!.classId, newValue);
-                        },
-                        decoration: InputDecoration(
-                          hintText: '${classData!.classroom}', // ヒントテキストを設定する場合
+                    ? Row(children: [
+                        Icon(
+                          Icons.edit_note_outlined,
+                          size: 30,
                         ),
-                        style: TextStyle(
-                          fontSize: 17, // フォントサイズを17に設定
+                        SizedBox(
+                          width: 10,
                         ),
-                      )
+                        Expanded(
+                            child: TextFormField(
+                          initialValue: lessonData!.classroom, // 初期値を設定する場合
+                          onChanged: (newValue) {
+                            print(newValue);
+                            _changeLessonClassRoom(
+                                lessonData!.classId, newValue);
+                          },
+                          decoration: InputDecoration(
+                            hintText:
+                                '${classData!.classroom}', // ヒントテキストを設定する場合
+                          ),
+                          style: TextStyle(
+                            fontSize: 17, // フォントサイズを17に設定
+                          ),
+                        )),
+                      ])
                     : Text(
                         '${classData!.classroom}',
                         style: TextStyle(
